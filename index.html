@@ -72,9 +72,12 @@
   .badge { border-radius: 999px; padding: .1rem .5rem; font-size: .6rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
   .badge.cryptpad { background: #e0f2fe; color: #0369a1; }
   .badge.mytrueintent { background: #ffe4e6; color: #be123c; }
+  .badge.mobilize { background: #fef3c7; color: #b45309; }
   .badge.web { background: #f5f5f5; color: #737373; }
   body.dark .badge.cryptpad { background: #0c2a3a; color: #7dd3fc; }
   body.dark .badge.mytrueintent { background: #3b0d1c; color: #fda4af; }
+  body.dark .badge.mobilize { background: #362208; color: #fcd34d; }
+  body.dark .badge.mobilize { background: #362208; color: #fcd34d; }
   body.dark .badge.web { background: #262626; color: #a3a3a3; }
   .catbadge { flex-shrink: 0; border: 1px solid; border-radius: 999px; padding: .1rem .6rem; font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
   #empty { text-align: center; font-size: .85rem; color: #a3a3a3; margin-top: 3rem; display: none; }
@@ -160,7 +163,7 @@
   </div>
 
   <main>
-    <noscript><p style="padding:2rem;text-align:center;color:#b91c1c;font-weight:600">JavaScript is disabled or not running — the event list cannot load. Open this file in Safari/Chrome (not in a chat preview) and enable JavaScript.</p></noscript>
+    <noscript><p style="padding:2rem;text-align:center;color:#b91c1c;font-weight:600">JavaScript is disabled or not running &#8212; the event list cannot load. Open this file in Safari/Chrome (not in a chat preview) and enable JavaScript.</p></noscript>
     <p id="count"></p>
     <p id="empty">Nothing matches &#8212; try another day, search or filter.</p>
     <ul id="list"></ul>
@@ -172,6 +175,8 @@
     <p class="src-title">Sources <b style="font-size:.9rem">*</b></p>
     <p><strong>&#128241; Gigs</strong> &#8212; the <em>Berlin-Gigs</em> community pad on Cryptpad, a DIY community list of concerts with time, price, genre, smoke-free and wheelchair info. Covers Sep&#8211;Dec 2026.</p>
     <p><strong>&#127928; MTI</strong> &#8212; <a href="https://mytrueintent.blogspot.com" target="_blank" rel="noreferrer">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog. Imported from its spreadsheet export: ~2,100 shows, Oct 2026 &#8211; May 2027, with notes (sold out, postponed, cancelled &#8212; excluded).</p>
+    <p><strong>&#127914; Mob</strong> &#8212; <a href="https://mobilize.berlin" target="_blank" rel="noreferrer">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.</p>
+    <p><strong>&#127914; Mob</strong> &#8212; <a href="https://mobilize.berlin" target="_blank" rel="noreferrer">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.</p>
     <p><strong>&#127760; Web</strong> &#8212; curated picks from official sites and venues; each event links directly to its source page.</p>
     <p>Events appearing in more than one source are automatically deduplicated (same title + date) and marked with all matching source badges.</p>
     <p class="disclaimer">&#9888;&#65039; <strong>This is an experimental site, a constant work in progress &#8212; it is by no means exhaustive, just an attempt to aggregate lesser-known events in one place.</strong> Always double-check dates, times and tickets with the organizers or venues before going. This site aggregates external sources and assumes no responsibility for errors, changes or cancellations.</p>
@@ -2504,6 +2509,33 @@ const EVENTS = [
   { date: "2027-07-16", title: "Wolfcity Fest", venue: "Neue Zukunft", link: "https://mytrueintent.blogspot.com", source: "mytrueintent" },
   { date: "2026-10-16", title: "Nice One Weekender", venue: "Zenner", link: "https://mytrueintent.blogspot.com", source: "mytrueintent" },
   { date: "2026-10-22", title: "Female Fronted Is Not A Genre - Hardcore / Punk Festival", venue: "SO36", link: "https://mytrueintent.blogspot.com", source: "mytrueintent" },
+// \u2500\u2500 mobilize.berlin (Mobilizon, DIY/federated platform) \u2500\u2500
+  { date: "2026-10-09", time: "20:00", title: "Gur Liraz Trio", venue: "Little Stage", category: "Music", description: "Peppi Guggenheim Exil Musikprogramm @ Little Stage Club Neuk\u00f6lln Gur Liraz - Guitar Tal Blashai - Organ Tilman Person - Drums Im Gur Liraz Organ Trio verbindet der Gitarrist seine Liebe zum Jazz de...", link: "https://mobilize.berlin/events/85349992-7e79-4d0a-8b37-0c04583f9fd5", source: "mobilize" },
+  { date: "2026-10-09", time: "21:30", title: "Konzert", venue: "Supamolly", category: "Music", description: "Missstand, Endlich Schlechte Musik und Pommes oder Pizza (Punk Rock) Supamolly Jessnerstr. 41 10247 BerlinGermany", link: "https://mobilize.berlin/events/73026e48-737a-4a78-a518-ca2a350b0212", source: "mobilize" },
+  { date: "2026-10-10", time: "21:00", title: "Konzert im K (A)", venue: "K (A)", category: "Music", description: "'Death Gasp' (Stench Crust, Pittsburgh, US) - 'Krime' (Hardcore Punk, Netherlands) - 'Sense' (Punk, Bremen) K K\u00f6penicker Stra\u00dfe BerlinGermany", link: "https://mobilize.berlin/events/0837e0ec-7609-4b72-980b-ba1cc81671a4", source: "mobilize" },
+  { date: "2026-10-10", time: "21:30", title: "Konzert", venue: "Supamolly", category: "Music", description: "Marthaverskan (Post Punk Indie Pop aus G\u00f6teburg) Supamolly Jessnerstr. 41 10247 BerlinGermany", link: "https://mobilize.berlin/events/56cb4700-abb5-42e9-b24d-e7539bd09845", source: "mobilize" },
+  { date: "2026-10-15", time: "19:00", title: "Hate the Media, Become the Media", venue: "Erreichbar", category: "Theatre", description: "Anf\u00e4nglich wurde das Internet als dezentrales Medium f\u00fcr demokratische Partizipation gefeiert. Im Laufe seiner kurzen Geschichte entwickelte es sich allerdings zum zentralen Medium zur Durchsetzung...", link: "https://mobilize.berlin/events/c5017ed8-bfc8-46eb-891d-da3a5e82cac3", source: "mobilize" },
+  { date: "2026-10-16", time: "20:00", title: "Hear Now Where", venue: "Little Stage", category: "Music", description: "Peppi Guggenheim Exil Musikprogramm @ Little Stage Club Neuk\u00f6lln Edith Steyer - alto saxophone, clarinet Christian K\u00fchn - guitar Antti Virttaranta - bass Marcello Busato - drums 'Das Quartett spiel...", link: "https://mobilize.berlin/events/50c11459-5775-45ea-9c0f-fe39924352e8", source: "mobilize" },
+  { date: "2026-10-16", time: "21:00", title: "Konzert im K (A)", venue: "K (A)", category: "Music", description: "'Minenfeld' (Death Metal, Osnabr\u00fcck) - 'Obsequial Sceptre' (Anarchist Black Metal, Nicosia, Cyprus) - 'Sadistic Goatmessiah' (Speed Black Metal) - 'Dungeon Keeper' (Black Metal, Osnabr\u00fcck) K K\u00f6peni...", link: "https://mobilize.berlin/events/c211f21c-2524-4bb7-b941-55a1eea94cf2", source: "mobilize" },
+  { date: "2026-10-16", time: "21:30", title: "Konzert", venue: "Supamolly", category: "Music", description: "TisDass (Rock Touareg from Niger) Supamolly Jessnerstr. 41 10247 BerlinGermany", link: "https://mobilize.berlin/events/aad96619-3dc7-41fa-9786-bb374cbf9914", source: "mobilize" },
+  { date: "2026-10-17", time: "20:00", title: "Bidar", venue: "Little Stage", category: "Music", description: "Peppi Guggenheim Exil Musikprogramm @ Little Stage Club Neuk\u00f6lln B\u00eedar \u2013 vocals, synth Bernhard Ludescher \u2013 keys \u00d6zg\u00fcn Tuncer \u2013 tenor saxophone Durul Canberk \u0130res \u2013 electric guitar Bo Keijmel \u2013 ele...", link: "https://mobilize.berlin/events/a5a60a38-c42a-43aa-8c4b-3638dae2b61a", source: "mobilize" },
+  { date: "2026-10-17", time: "21:30", title: "Konzert", venue: "Supamolly", category: "Music", description: "Flowers of Romance: DjTerror Wave (synth wave minimal electro ndw postpunk) Live: MNGLXMPLR (electro-minimal-melodic sound of the 80s) Supamolly Jessnerstr. 41 10247 BerlinGermany", link: "https://mobilize.berlin/events/1860982e-251e-4f17-bcf9-5dd8bbebf997", source: "mobilize" },
+  { date: "2026-10-18", time: "21:00", title: "Konzert", venue: "Supamolly", category: "Music", description: "Bebawinigi (experimental singer, composer, multi-instrumentalist) Supamolly Jessnerstr. 41 10247 BerlinGermany", link: "https://mobilize.berlin/events/a924124d-8a14-4f30-a93b-5f3a997880b6", source: "mobilize" },
+  { date: "2026-10-20", time: "20:00", title: "Konzert im K (A)", venue: "K (A)", category: "Music", description: "'Languid' (Raw Hardcore Punk, Canada) - 'Electric Masochist' (Raw Punk, Berlin) K K\u00f6penicker Stra\u00dfe BerlinGermany", link: "https://mobilize.berlin/events/6591884c-bac4-4186-8723-f4543bdaef26", source: "mobilize" },
+  { date: "2026-10-22", time: "20:00", title: "Hate the Media, Become the Media", venue: "Kleinod", category: "Theatre", link: "https://mobilize.berlin/events/71e3edd8-9bbf-40ba-9ede-634154f5bef2", source: "mobilize" },
+  { date: "2026-10-23", time: "20:00", title: "OkuSteinHuffMills", venue: "Little Stage", category: "Music", description: "Peppi Guggenheim Exil Musikprogramm @ Little Stage Bar Neuk\u00f6lln Peter Van Huffel - alto,bari Rieko Okuda - synth Kellen Mills - bass Joe Hertenstein - drums Four musicians connected through Berlin\u2019...", link: "https://mobilize.berlin/events/f95f149d-dd55-4db9-b5ce-6d91f0a3c785", source: "mobilize" },
+  { date: "2026-10-23", time: "21:00", title: "Konzert im K (A)", venue: "K (A)", category: "Music", description: "'Escalpo' (D-Beatl Metal Punk, Brazil) - 'Crowskin' (Sludge Hardcore, Potsdam) K K\u00f6penicker Stra\u00dfe BerlinGermany", link: "https://mobilize.berlin/events/1b6a448f-08b1-4e09-9997-13e6beed71e5", source: "mobilize" },
+  { date: "2026-10-23", time: "21:30", title: "Konzert", venue: "Supamolly", category: "Music", description: "Zusammhalt (Punk Rock) und Borgelt Beat (Punk Rock) Supamolly Jessnerstr. 41 10247 BerlinGermany", link: "https://mobilize.berlin/events/87f7c1cb-ef9a-49e4-a782-bf9c19b2caa0", source: "mobilize" },
+  { date: "2026-10-24", time: "20:00", title: "FBJR Ronja Rose Andresson", venue: "Little Stage Club", category: "Music", description: "Peppi Guggenheim Exil Musikprogramm @ Little Stage Bar Neuk\u00f6lln Female Bandleaders Jazz Row: Ronja Rose Andresson Ronja Rose Andersson - Saxophone Vocal Svetlana Marinchenko - Synths Andi Haberl - ...", link: "https://mobilize.berlin/events/c63f2051-17d9-42e6-b3f5-52d2b5c8218b", source: "mobilize" },
+  { date: "2026-10-24", time: "21:30", title: "Soliparty", venue: "Supamolly", category: "Music", description: "Sea Punks Soliparty: mit Brezel G\u00f6ring & Psychoanalyse Supamolly Jessnerstr. 41 10247 BerlinGermany", link: "https://mobilize.berlin/events/0f563ab1-ecce-43e3-9e6f-b74ef9451ba8", source: "mobilize" },
+  { date: "2026-10-30", time: "20:00", title: "Szymon Mika Quartet", venue: "Little Stage", category: "Music", description: "Peppi Guggenheim Exil Musikprogramm @ Little Stage Bar Neuk\u00f6lln Szymon Mika - guitar Thiago Duarte - bass Peter Somos - drums + Speical Guest Szymon Mika (pronounced Shi-mon) is one of Poland\u2019s mos...", link: "https://mobilize.berlin/events/27390f55-376e-426b-9ca4-58d985377bb5", source: "mobilize" },
+  { date: "2026-10-30", time: "21:30", title: "Konzert", venue: "Supamolly", category: "Music", description: "Katheym (alternative occidental music with Arabic influences in order to include gender and cultural diversity in the underground and metal scene. Based in Brussels & Lille) Supamolly Jessnerstr. 4...", link: "https://mobilize.berlin/events/aa2b7713-f317-4478-88a2-435a91774429", source: "mobilize" },
+  { date: "2026-10-31", time: "20:00", title: "Prince Gabriel Presents: Drag and Music", venue: "Little Stage", category: "Music", description: "Peppi Guggenheim Exil Musikprogramm @ Little Stage Club Neuk\u00f6lln Prince Gabriel Presents: Drag and Music/A Halloween Special Performances: Toilette Paypr Prince Gabriel Music: Carolin Pook - Violin...", link: "https://mobilize.berlin/events/7b776f57-8633-4e08-a3c0-61048ff1b214", source: "mobilize" },
+  { date: "2026-10-31", time: "21:30", title: "Konzert", venue: "Supamolly", category: "Music", description: "Circus Rhapsody (Cotton Candy Punk) Supamolly Jessnerstr. 41 10247 BerlinGermany", link: "https://mobilize.berlin/events/6b31bce0-f054-4789-a8e7-661b65fa9d5a", source: "mobilize" },
+  { date: "2026-11-07", time: "21:00", title: "KONZERT", venue: "Mehringhof", category: "Music", description: "POPPERKLOPPER (New Album Release Show) Popperklopper (Punk, Koblenz) Hausvabot (Punk, Berlin) Ad Nauseam (Punk, Bremen) + Aftershow Mehringhof Gneisenaustr. 2a 10961 BerlinGermany", link: "https://mobilize.berlin/events/2c4eca7d-4b95-48f0-ab78-f81bd9ccb28c", source: "mobilize" },
+  { date: "2026-11-28", time: "21:00", title: "KONZERT", venue: "Mehringhof", category: "Music", description: "Gers, Olli & Stefan Birthday Bash mit The Zips (Punk Rock, Glasgow) The Melmacs (Power Pop Punk, Dresden) Erotic Devices (Punk Rock, Berlin) Aftershow mit DJs Mykill & Cooolboys Soundsystem Mehring...", link: "https://mobilize.berlin/events/9f748660-d440-43b7-b835-6efaff0ec776", source: "mobilize" },
+  { date: "2026-11-28", time: "21:00", title: "Konzert im K (A)", venue: "K (A)", category: "Music", description: "'Malefixio' (Death Rock Post Punk, Barcelona) - 'El \u00c1ngel Exterminador' (Post Dark Punk Wave, Berlin) K K\u00f6penicker Stra\u00dfe BerlinGermany", link: "https://mobilize.berlin/events/7eedcf53-adf0-49dd-9915-fea5cfea1ef2", source: "mobilize" },
+  { date: "2026-12-04", time: "21:00", title: "Konzert im K (A)", venue: "K (A)", category: "Music", description: "'Special Forces' (US Hardcore Punk, California) - 'Party Force' (US Hardcore Punk, California) - 'Scheisse Minelli' (Punk Hardcore, Frankfurt/Main) K K\u00f6penicker Stra\u00dfe BerlinGermany", link: "https://mobilize.berlin/events/a2c3d15c-f2fb-4b0d-808c-1dde4cb7dcd9", source: "mobilize" },
   { date: "2027-01-22", title: "CTM 2027 - https://www.ctm-festival.de/", venue: "Several Locations", link: "https://mytrueintent.blogspot.com", source: "mytrueintent" },
 
   // \u2500\u2500 Web picks \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
@@ -2643,7 +2675,7 @@ const CAT_COLORS = {
   Festival: ["#155e75", "#22d3ee"],
 };
 const catColor = (cat) => (cat && CAT_COLORS[cat] ? (document.body.classList.contains("dark") ? CAT_COLORS[cat][1] : CAT_COLORS[cat][0]) : "");
-const SRC_LABELS = { cryptpad: "\ud83d\udcf1 Gigs", mytrueintent: "\ud83c\udfb8 MTI", web: "\ud83c\udf10 Web" };
+const SRC_LABELS = { cryptpad: "\ud83d\udcf1 Gigs", mytrueintent: "\ud83c\udfb8 MTI", mobilize: "\ud83c\udfaa Mob", web: "\ud83c\udf10 Web" };
 const GENRE_MACROS = ["All", "Rock & Indie", "Punk & Hardcore", "Metal & Doom", "Electronic & Experimental", "Jazz & Improvised", "Folk & Country", "Pop", "World & Other"];
 const CATEGORIES = ["All", "Music", "Theatre", "Art", "Cinema", "Market", "Food", "Festival"];
 
@@ -2651,7 +2683,7 @@ const CATEGORIES = ["All", "Music", "Theatre", "Art", "Cinema", "Market", "Food"
 const S = {
   theme: "light", view: "upcoming", category: "All", genre: "All",
   query: "", freeOnly: false, dayFilter: "", showFilters: false,
-  priceMin: "", priceMax: "", sources: ["cryptpad", "mytrueintent", "web"],
+  priceMin: "", priceMax: "", sources: ["cryptpad", "mytrueintent", "mobilize", "web"],
 };
 const today = new Date().toISOString().slice(0, 10);
 const $ = (id) => document.getElementById(id);
@@ -2779,7 +2811,7 @@ $("pmax").addEventListener("input", (e) => { S.priceMax = e.target.value; render
 $("priceClear").addEventListener("click", () => { S.priceMin = ""; S.priceMax = ""; $("pmin").value = ""; $("pmax").value = ""; renderAll(); });
 $("resetBtn").addEventListener("click", () => {
   S.query = ""; S.category = "All"; S.genre = "All"; S.freeOnly = false; S.dayFilter = "";
-  S.priceMin = ""; S.priceMax = ""; S.sources = ["cryptpad", "mytrueintent", "web"];
+  S.priceMin = ""; S.priceMax = ""; S.sources = ["cryptpad", "mytrueintent", "mobilize", "web"];
   $("q").value = ""; $("day").value = ""; $("free").checked = false; $("pmin").value = ""; $("pmax").value = "";
   renderAll();
 });
