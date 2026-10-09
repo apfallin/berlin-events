@@ -34,7 +34,7 @@
   input:focus { border-color: #a3a3a3; }
   body.dark input { border-color: #262626; background: #171717; color: #f5f5f5; }
   #q { flex: 1; }
-  #day { width: 10.5rem; flex-shrink: 0; }
+  #day { width: 7.5rem; flex-shrink: 0; }
   .chip { border: 1px solid #e5e5e5; background: transparent; color: #a3a3a3; border-radius: 999px;
     padding: .4rem .9rem; font-size: .75rem; font-weight: 500; cursor: pointer; transition: all .15s; }
   .chip:hover { border-color: #a3a3a3; color: #525252; }
@@ -82,7 +82,23 @@
   body.dark footer { border-color: #262626; }
   footer p { margin: .5rem 0; line-height: 1.6; }
   footer .src-title { font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #525252; font-size: .8rem; }
+  #genres { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .gchip { border: 1px solid #e5e5e5; background: transparent; color: #a3a3a3; border-radius: .375rem;
+    padding: .2rem .5rem; font-size: .62rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
+    cursor: pointer; transition: all .15s; }
+  .gchip:hover { border-color: #a3a3a3; color: #525252; }
+  .gchip.on { background: #171717; color: #fff; border-color: #171717; }
+  body.dark .gchip { border-color: #262626; color: #a3a3a3; }
+  body.dark .gchip:hover { border-color: #525252; color: #e5e5e5; }
+  body.dark .gchip.on { background: #fff; color: #171717; border-color: #fff; }
+  #resetBtn { background: #171717; color: #fff; border-color: #171717; font-weight: 600;
+    padding: .4rem 1rem; border: 1px solid #171717; }
+  #resetBtn:hover { color: #fff; transform: scale(1.05); }
+  body.dark #resetBtn { background: #e5e5e5; color: #171717; border-color: #e5e5e5; }
+  body.dark #resetBtn:hover { color: #171717; }
   .updated-badge { display: inline-flex; align-items: center; gap: .4rem; margin-top: .5rem !important;
+    border: 1px solid #e5e5e5; border-radius: .375rem; padding: .25rem .5rem; font-size: .72rem !important;
+    font-weight: 600; color: #171717; opacity: 1 !important; }
     border: 1px solid #e5e5e5; border-radius: .375rem; padding: .25rem .5rem; font-size: .72rem !important;
     font-weight: 600; color: #171717; opacity: 1 !important; }
   body.dark .updated-badge { border-color: #262626; color: #f5f5f5; }
@@ -92,10 +108,10 @@
   body.dark .disclaimer { background: #1c1503; color: #fde68a; }
   footer a { text-decoration: underline; }
   footer a:hover { text-decoration: none; }
-  #topBtn { position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 20; width: 2.5rem; height: 2.5rem;
+  #topBtn { position: fixed; left: 50%; bottom: 2rem; transform: translateX(-50%); z-index: 20; width: 3rem; height: 3rem;
     border-radius: 999px; border: 1px solid #d4d4d4; background: #fff; color: #404040; font-size: .9rem;
-    cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,.15); display: none; transition: transform .15s; }
-  #topBtn:hover { transform: scale(1.08); }
+    cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,.15); display: none; transition: transform .15s; font-size: 1rem; }
+  #topBtn:hover { transform: translateX(-50%) scale(1.1); }
   body.dark #topBtn { background: #171717; border-color: #404040; color: #e5e5e5; }
 </style>
 </head>
@@ -123,7 +139,7 @@
     <div class="row">
       <span id="cats" style="display:contents"></span>
       <button class="chip" id="filterBtn">Filters &#9662;</button>
-      <button class="chip" id="resetBtn" style="display:none" title="Reset all filters" aria-label="Reset all filters">&#8634;</button>
+      <button class="chip" id="resetBtn" title="Reset all filters" aria-label="Reset all filters">&#8634; Reset</button>
       <label class="label"><input type="checkbox" id="free" /> Free / donation only</label>
     </div>
     <div id="panel">
@@ -139,7 +155,7 @@
     </div>
     <div id="genreWrap">
       <p class="mini-label">Genre</p>
-      <div class="row" id="genres"></div>
+      <div id="genres"></div>
     </div>
   </div>
 
@@ -156,9 +172,9 @@
     <p class="src-title">Sources <b style="font-size:.9rem">*</b></p>
     <p><strong>&#128241; Gigs</strong> &#8212; the <em>Berlin-Gigs</em> community pad on Cryptpad, a DIY community list of concerts with time, price, genre, smoke-free and wheelchair info. Covers Sep&#8211;Dec 2026.</p>
     <p><strong>&#127928; MTI</strong> &#8212; <a href="https://mytrueintent.blogspot.com" target="_blank" rel="noreferrer">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog. Imported from its spreadsheet export: ~2,100 shows, Oct 2026 &#8211; May 2027, with notes (sold out, postponed, cancelled &#8212; excluded).</p>
-    <p><strong>&#127760; Web</strong> &#8212; curated picks from official sites: <a href="https://festival-of-lights.de/en/" target="_blank" rel="noreferrer">festival-of-lights.de</a>, <a href="https://www.smb.museum" target="_blank" rel="noreferrer">smb.museum</a>, <a href="https://www.gropiusbau.de" target="_blank" rel="noreferrer">gropiusbau.de</a>, <a href="https://www.berlinerfestspiele.de" target="_blank" rel="noreferrer">berlinerfestspiele.de</a> (Jazzfest, Theatertreffen, Musikfest), <a href="https://www.volksbuehne-berlin.de/en/" target="_blank" rel="noreferrer">volksbuehne-berlin.de</a>, <a href="https://www.deutschestheater.de" target="_blank" rel="noreferrer">deutschestheater.de</a>, <a href="https://www.berliner-ensemble.de" target="_blank" rel="noreferrer">berliner-ensemble.de</a>, <a href="https://www.gorki.de/de/spielplan" target="_blank" rel="noreferrer">gorki.de</a>, <a href="https://www.visitberlin.de" target="_blank" rel="noreferrer">visitberlin.de</a>, <a href="https://markthalleneun.de" target="_blank" rel="noreferrer">markthalleneun.de</a>, <a href="https://mauerpark.de" target="_blank" rel="noreferrer">mauerpark.de</a>, <a href="https://uffberlin.de" target="_blank" rel="noreferrer">uffberlin.de</a>, <a href="https://arsenal-berlin.de" target="_blank" rel="noreferrer">arsenal-berlin.de</a>, <a href="https://www.dhm.de/zeughauskino/en/" target="_blank" rel="noreferrer">dhm.de</a>, <a href="https://eiszeit-kino.de" target="_blank" rel="noreferrer">eiszeit-kino.de</a>, <a href="https://www.interfilm.de/en/" target="_blank" rel="noreferrer">interfilm.de</a>, <a href="https://www.berlinale.de" target="_blank" rel="noreferrer">berlinale.de</a>.</p>
+    <p><strong>&#127760; Web</strong> &#8212; curated picks from official sites and venues; each event links directly to its source page.</p>
     <p>Events appearing in more than one source are automatically deduplicated (same title + date) and marked with all matching source badges.</p>
-    <p class="disclaimer">&#9888;&#65039; <strong>Always double-check dates, times and tickets with the organizers or venues before going.</strong> This site aggregates external sources and assumes no responsibility for errors, changes or cancellations.</p>
+    <p class="disclaimer">&#9888;&#65039; <strong>This is an experimental site, a constant work in progress &#8212; it is by no means exhaustive, just an attempt to aggregate lesser-known events in one place.</strong> Always double-check dates, times and tickets with the organizers or venues before going. This site aggregates external sources and assumes no responsibility for errors, changes or cancellations.</p>
   </footer>
 </div>
 <button id="topBtn" aria-label="Back to top">&#8593;</button>
@@ -2540,18 +2556,72 @@ function genreToMacro(g) {
   return "World & Other";
 }
 
+// Normalize a title for dedup: lowercase, strip promoter prefixes and punctuation
+const normTitle = (t) =>
+  (t || "")
+    .toLowerCase()
+    .replace(/^.*?\b(presents|prsnts|pr\\u00e4sentiert|presentiert)\b\s*:?\s*/, "")
+    .replace(/[^a-z0-9]+/g, "");
+
+// Curated genres for well-known artists/festivals without a genre field
+const ARTIST_GENRES = {
+  "accept": "Heavy Metal", "abba": "Pop, Tribute", "aespa": "K-Pop",
+  "agnes obel": "Indie, Chamber Pop", "against the current": "Pop Punk",
+  "17 hippies": "Folk, World", "acid pauli": "Electronic",
+  "aesthetic perfection": "Industrial", "adam green": "Anti-Folk, Indie",
+  "cat power": "Indie Rock", "turbostaat": "Deutschpunk", "millencolin": "Skate Punk",
+  "death cab": "Indie Rock", "myles smith": "Pop, Singer-Songwriter",
+  "damien rice": "Folk, Singer-Songwriter", "feist": "Indie Pop",
+  "jim jones": "Garage Rock, Punk Blues", "desertfest": "Stoner Rock, Doom",
+  "ctm festival": "Experimental, Electronic", "punkfilmfest": "Punk",
+  "darkside": "Electronic, Psych Rock", "placebo": "Alt Rock",
+  "sum 41": "Pop Punk", "3teeth": "Industrial Metal", "warpaint": "Indie Rock, Dream Pop",
+  "wilco": "Alt Country, Indie Rock", "the national": "Indie Rock",
+  "interpol": "Post-Punk", "modest mouse": "Indie Rock",
+  "sigur ros": "Post-Rock", "mogwai": "Post-Rock",
+};
+
+// Infer a genre from the event title when the genre field is missing
+function inferGenre(title) {
+  const t = (title || "").toLowerCase();
+  if (!t) return "";
+  for (const k in ARTIST_GENRES) if (t.indexOf(k) >= 0) return ARTIST_GENRES[k];
+  if (/hardcore|punk|\bhc\b|d-beat|oi!|deutschpunk/.test(t)) return "Punk";
+  if (/doom|stoner|sludge/.test(t)) return "Doom, Stoner";
+  if (/black metal|death metal|thrash|grindcore|metal/.test(t)) return "Metal";
+  if (/jazz/.test(t)) return "Jazz";
+  if (/folk|singer-?songwriter|songwriter/.test(t)) return "Folk, Singer-Songwriter";
+  if (/techno|house|electro(nic)?|ambient|drone|industrial/.test(t)) return "Electronic";
+  if (/post-?punk|post-?rock|shoegaze|indie/.test(t)) return "Indie, Post-Punk";
+  if (/k-?pop|pop/.test(t)) return "Pop";
+  if (/country|bluegrass|americana/.test(t)) return "Country, Americana";
+  if (/blues/.test(t)) return "Blues";
+  if (/reggae|dancehall|dub\b/.test(t)) return "Reggae, Dub";
+  if (/hip-?hop|rap\b/.test(t)) return "Hip-Hop";
+  return "";
+}
+const genreOf = (e) => e.genre || inferGenre(e.title);
+
 function dedupe(events) {
   const seen = new Map();
   for (const e of events) {
-    const key = `${(e.title || "").toLowerCase().replace(/[^a-z0-9]+/g, "")}|${e.date}`;
-    if (!seen.has(key)) seen.set(key, { ...e });
+    const key = normTitle(e.title) + "|" + e.date;
+    if (!seen.has(key)) seen.set(key, Object.assign({}, e));
     else {
       const ex = seen.get(key);
       ex.alsoIn = ex.alsoIn || [];
-      if (ex.source !== e.source && !ex.alsoIn.includes(e.source)) ex.alsoIn.push(e.source);
+      if (ex.source !== e.source && ex.alsoIn.indexOf(e.source) < 0) ex.alsoIn.push(e.source);
+      if (!ex.link && e.link) ex.link = e.link;
+      if (!ex.description && e.description) ex.description = e.description;
+      if (!ex.price && e.price) ex.price = e.price;
+      if (!ex.genre && e.genre) ex.genre = e.genre;
+      if (!ex.time && e.time) ex.time = e.time;
+      if (!ex.venue && e.venue) ex.venue = e.venue;
+      if (ex.smokeFree === undefined && e.smokeFree !== undefined) ex.smokeFree = e.smokeFree;
+      if (ex.wheelchair === undefined && e.wheelchair !== undefined) ex.wheelchair = e.wheelchair;
     }
   }
-  return [...seen.values()];
+  return Array.from(seen.values());
 }
 
 function parsePrice(p) {
@@ -2606,7 +2676,7 @@ function filtered() {
     const p = parsePrice(e.price);
     const okPrice = !priceActive || (p !== null && (pm === null || p.max >= pm) && (px === null || p.min <= px));
     const okQuery = !q || e.title.toLowerCase().includes(q) || (e.venue || "").toLowerCase().includes(q) ||
-      (e.genre || "").toLowerCase().includes(q) || (e.description || "").toLowerCase().includes(q);
+      (genreOf(e) || "").toLowerCase().includes(q) || (e.description || "").toLowerCase().includes(q);
     return okView && okDay && okCat && okGenre && okFree && okSource && okPrice && okQuery;
   }).sort((a, b) => (a.date + (a.time || "")).localeCompare(b.date + (b.time || "")));
 }
@@ -2637,7 +2707,7 @@ function eventRow(e) {
     <div>
       <div>${title}<span class="badges">${badges(e)}</span></div>
       <p class="meta">${esc(e.venue)}${e.time ? " \u00b7 " + esc(e.time) : ""}${e.price ? " \u00b7 " + esc(e.price) : ""}${flags}</p>
-      ${e.genre ? `<p class="genre">\ud83c\udfb5 ${esc(e.genre)}</p>` : ""}
+      ${genreOf(e) ? `<p class="genre">\ud83c\udfb5 ${esc(genreOf(e))}</p>` : ""}
       ${e.description ? `<p class="desc">${esc(e.description)}</p>` : ""}
       ${e.source === "web" && e.link && domainOf(e.link) ? `<p class="dom">\u21b3 ${esc(domainOf(e.link))}</p>` : ""}
     </div>
@@ -2662,7 +2732,7 @@ function renderChips() {
   if (S.category !== "All") {
     gm.classList.add("open");
     $("genres").innerHTML = availableMacros().map((g) =>
-      `<button class="chip${S.genre === g ? " on" : ""}" data-g="${esc(g)}">${esc(g)}</button>`).join("");
+      `<button class="gchip${S.genre === g ? " on" : ""}" data-g="${esc(g)}">${esc(g)}</button>`).join("");
     $("genres").querySelectorAll("[data-g]").forEach((b) =>
       b.addEventListener("click", () => { S.genre = b.dataset.g; renderAll(); }));
   } else gm.classList.remove("open");
@@ -2680,9 +2750,7 @@ function renderAll() {
   renderChips(); renderList();
   const filtersActive = S.query !== "" || S.category !== "All" || S.genre !== "All" || S.freeOnly ||
     S.dayFilter !== "" || S.priceMin !== "" || S.priceMax !== "" || S.sources.length < 3;
-  $("resetBtn").style.display = filtersActive ? "" : "none";
-  $("panel").classList.toggle("open", S.showFilters);
-  $("filterBtn").textContent = "Filters " + (S.showFilters ? "\u25b4" : "\u25be");
+  $("panel").classList.toggle("open", S.showFilters);  $("filterBtn").textContent = "Filters " + (S.showFilters ? "\u25b4" : "\u25be");
   $("filterBtn").classList.toggle("on", S.showFilters || S.priceMin !== "" || S.priceMax !== "" || S.sources.length < 3);
   $("dayClear").style.display = S.dayFilter ? "" : "none";
   $("priceClear").style.display = (S.priceMin !== "" || S.priceMax !== "") ? "" : "none";
