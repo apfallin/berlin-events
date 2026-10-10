@@ -34,14 +34,20 @@
   input:focus { border-color: #a3a3a3; }
   body.dark input { border-color: #262626; background: #171717; color: #f5f5f5; }
   #q { flex: 1; }
-  #day { width: 7.5rem; flex-shrink: 0; }
+  #dayWrap { position: relative; flex-shrink: 0; }
+  #day { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
+  #dayBtn { width: 2.3rem; padding: .45rem 0; text-align: center; font-size: 1rem; line-height: 1; }
   .chip { border: 1px solid #e5e5e5; background: transparent; color: #a3a3a3; border-radius: 999px;
     padding: .4rem .9rem; font-size: .75rem; font-weight: 500; cursor: pointer; transition: all .15s; }
   .chip:hover { border-color: #a3a3a3; color: #525252; }
   .chip.on { background: #171717; color: #fff; border-color: #171717; }
+  .chip.action { border-radius: .45rem; font-weight: 400; padding: .3rem .7rem; font-size: .7rem; }
+  .chipgroup { display: inline-flex; gap: .5rem; align-items: center; }
+  .chip.action.on { background: #f5f5f5; color: #171717; border-color: #171717; font-weight: 600; }
   body.dark .chip { border-color: #262626; color: #a3a3a3; }
   body.dark .chip:hover { border-color: #525252; color: #e5e5e5; }
   body.dark .chip.on { background: #fff; color: #171717; border-color: #fff; }
+  body.dark .chip.action.on { background: #1f1f1f; color: #fff; border-color: #fff; font-weight: 600; }
   .iconbtn { border: 1px solid #d4d4d4; background: transparent; border-radius: .5rem; padding: .5rem .7rem; font-size: .8rem; color: #a3a3a3; cursor: pointer; }
   body.dark .iconbtn { border-color: #404040; }
   .label { font-size: .75rem; color: #737373; display: inline-flex; align-items: center; gap: .35rem; cursor: pointer; margin-left: auto; }
@@ -107,8 +113,6 @@
   .updated-badge { display: inline-flex; align-items: center; gap: .4rem; margin-top: .5rem !important;
     border: 1px solid #e5e5e5; border-radius: .375rem; padding: .25rem .5rem; font-size: .72rem !important;
     font-weight: 600; color: #171717; opacity: 1 !important; }
-    border: 1px solid #e5e5e5; border-radius: .375rem; padding: .25rem .5rem; font-size: .72rem !important;
-    font-weight: 600; color: #171717; opacity: 1 !important; }
   body.dark .updated-badge { border-color: #262626; color: #f5f5f5; }
   .updated-badge .dot { display: inline-block; width: .5rem; height: .5rem; border-radius: 999px; background: #059669; }
   .disclaimer { border-left: 4px solid #f59e0b; background: #fffbeb; color: #78350f;
@@ -121,6 +125,79 @@
     cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,.15); display: none; transition: transform .15s; font-size: 1rem; }
   #topBtn:hover { transform: translateX(-50%) scale(1.1); }
   body.dark #topBtn { background: #171717; border-color: #404040; color: #e5e5e5; }
+
+  /* ── Favorites, calendar & venue links ── */
+  .star { cursor: pointer; user-select: none; margin-right: .3rem; font-size: 1rem; background: none; border: none; padding: 0; color: inherit; }
+  .star.on { color: #f59e0b; }
+  body.dark .star.on { color: #fbbf24; }
+  .icsbtn { cursor: pointer; background: none; border: none; padding: 0 0 0 .3rem; font-size: .85rem; color: #a3a3a3; }
+  .icsbtn:hover { color: inherit; }
+  .vlink { cursor: pointer; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: .2em; }
+  .vaddr { font-size: .72rem; color: #a3a3a3; text-decoration: none; margin-left: .1rem; }
+  .vaddr:hover { color: inherit; }
+  /* Ghost controls: quiet by default, full contrast on row hover / touch (v2, 10 Oct 2026) */
+  .star, .badges { opacity: .35; transition: opacity .15s; }
+  .star.on { opacity: 1; }
+  #list li:hover .star, #list li:hover .badges { opacity: 1; }
+  @media (hover: none) { .star, .badges { opacity: .55; } .star.on { opacity: 1; } }
+  /* Expandable row details (address, map, calendar) */
+  .morebtn { border: none; background: none; cursor: pointer; color: #a3a3a3; font-size: .75rem;
+    padding: .2rem .3rem; flex-shrink: 0; align-self: center; transition: transform .15s; }
+  .morebtn:hover { color: inherit; }
+  li.open .morebtn { transform: rotate(180deg); }
+  .evdet { display: none; margin-top: .35rem; font-size: .8rem; color: #737373; line-height: 1.6; }
+  li.open .evdet { display: block; }
+  .evdet .evaddr { margin-right: .75rem; }
+  #venueChip { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
+  body.dark #venueChip { background: #372a0e; border-color: #f59e0b; color: #fcd34d; }
+  select.chip { appearance: auto; padding: .25rem .5rem; }
+  #langSel { width: auto; padding: .25rem .4rem; }
+  #weekStrip { margin-top: .4rem; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+    -webkit-overflow-scrolling: touch; margin-right: -1.5rem; padding-right: 1.5rem;
+    display: grid; grid-template-columns: repeat(9, 1fr); gap: .2rem; }
+  #weekStrip::-webkit-scrollbar { display: none; }
+  #weekStrip > * { min-width: 0; }
+  #weekStrip .chip { font-size: .68rem; padding: .3rem 0; width: 100%; justify-content: center; text-align: center; border-radius: .45rem; }
+  #weekStrip .chip.today { border-color: #059669; }
+  #weekStrip .chip span.lbl { display: block; overflow: hidden; text-overflow: ellipsis; }
+  .controls.scrolled #panel, .controls.scrolled #genreWrap, .controls.scrolled #weekStrip { display: none; }
+
+  /* \u2500\u2500 Decluttered, mobile-first controls \u2500\u2500 */
+  .row.scrollrow { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+    -webkit-overflow-scrolling: touch; padding-bottom: .1rem; margin-right: -1.5rem; padding-right: 1.5rem; }
+  .row.scrollrow::-webkit-scrollbar { display: none; }
+  .row.scrollrow > * { flex-shrink: 0; }
+  .chip { min-height: 2.1rem; }
+  .hrow { display: flex; align-items: center; gap: .5rem; }
+  @media (max-width: 640px) {
+    body { -webkit-text-size-adjust: 100%; }
+    .wrap { padding: 0 1rem 5rem; }
+    header { padding-top: 1.75rem; padding-bottom: 1.25rem; gap: .6rem; }
+    h1 { font-size: 1.55rem; }
+    .sub { font-size: .78rem; }
+    .controls { margin: 0 -1rem; padding: .7rem 1rem; }
+    input[type=text], input[type=date], input[type=number] { font-size: 1rem; }
+    #q { min-width: 0; }
+    #day { width: auto; }
+    .chip { min-height: 2.35rem; padding: .35rem .8rem; }
+    .row.scrollrow { margin-right: -1rem; padding-right: 1rem; }
+    #panel, #genreWrap { padding: .8rem; }
+    #genres, #subgenres { gap: .3rem; }
+    #list li { padding: 1rem 0; }
+    .ev { flex-direction: column; align-items: flex-start; gap: .2rem; }
+    .evdate { width: auto; }
+    .catbadge { order: 2; }
+    #topBtn { bottom: 1rem; width: 2.6rem; height: 2.6rem; }
+  }
+
+  @media print {
+    header .seg, .controls, #topBtn, .updated-badge, #genreWrap, #panel, .star, .icsbtn, .badges, .morebtn, #stats { display: none !important; }
+    .evdet { display: block !important; }
+    body { background: #fff; color: #000; }
+    .wrap { max-width: 100%; }
+    .ev { break-inside: avoid; }
+    a { color: #000; text-decoration: none; }
+  }
 </style>
 </head>
 <body>
@@ -128,41 +205,59 @@
   <header>
     <div>
       <h1>What's on in <b>Berlin</b></h1>
-      <p class="sub">A minimal digest of concerts, theatre and city events &#8212; deduplicated across sources.<a href="#sources" style="font-size:.9rem;font-weight:700;vertical-align:super;text-decoration:underline" title="About the sources">*</a>
+      <p class="sub">A minimal digest of concerts, theatre and city events &#8212; deduplicated across sources.<a id="srcLink" style="font-size:.9rem;font-weight:700;vertical-align:super;text-decoration:underline;cursor:pointer" title="About the sources">*</a>
         <small class="updated-badge"><span class="dot"></span>Sources last updated: <span class="lastupdated">8 October 2026</span></small></p>
       <div class="seg">
         <button id="upBtn" class="on">Upcoming</button>
         <button id="arBtn">Archive</button>
       </div>
     </div>
-    <button id="themeBtn" aria-label="Toggle theme">&#9728;&#65039;</button>
+    <div class="hrow">
+      <select id="langSel" class="chip" title="Language" aria-label="Language"><option value="en">EN</option><option value="de">DE</option><option value="it">IT</option></select>
+      <button id="themeBtn" aria-label="Toggle theme">&#9728;&#65039;</button>
+    </div>
   </header>
 
-  <div class="controls">
+  <div class="controls" id="controls">
     <div class="row">
       <input type="text" id="q" placeholder="Search artists, venues, genres&#8230;" />
-      <input type="date" id="day" title="Pick a day" />
+      <span id="dayWrap"><input type="date" id="day" title="Pick a day" /><button class="iconbtn" id="dayBtn" aria-label="Pick a day">&#128197;</button></span>
       <button class="iconbtn" id="dayClear" style="display:none" aria-label="Clear day">&#10005;</button>
     </div>
-    <div class="row">
+    <div class="row scrollrow" style="justify-content:center;justify-content:safe center" role="toolbar" aria-label="Categories and quick views">
       <span id="cats" style="display:contents"></span>
-      <button class="chip" id="filterBtn">Filters &#9662;</button>
-      <button class="chip" id="resetBtn" title="Reset all filters" aria-label="Reset all filters">&#8634; Reset</button>
-      <label class="label"><input type="checkbox" id="free" /> Free / donation only</label>
+    </div>
+    <div class="row scrollrow" style="justify-content:space-between;align-items:center;flex-wrap:nowrap">
+      <span class="chipgroup">
+        <button class="chip action" id="favBtn">&#11088; Favorites</button>
+        <button class="chip action" id="tonightBtn">Today</button>
+      </span>
+      <button class="chip on" id="venueChip" style="display:none;margin:0 auto">&#128205; <span id="venueName"></span> &#10005;</button>
+      <span class="chipgroup">
+        <button class="chip action" id="filterBtn">Filters &#9662;</button>
+        <button class="chip action" id="resetBtn" title="Reset all filters" aria-label="Reset all filters">&#8634; Reset</button>
+      </span>
     </div>
     <div id="panel">
-      <p class="mini-label">Source</p>
+      <p class="mini-label" id="lblSource">Source</p>
       <div class="row" id="srcs"></div>
-      <p class="mini-label" style="margin-top:.8rem">Price range (events with a price only)</p>
+      <p class="mini-label" style="margin-top:.8rem" id="lblDistrict">District</p>
+      <div class="row"><select id="district" class="chip" style="width:auto"></select></div>
+      <p class="mini-label" style="margin-top:.8rem" id="lblPrice">Price range (events with a price only)</p>
       <div class="row">
         <input type="number" id="pmin" min="0" placeholder="&#8364; min" style="width:6rem" />
         <span style="color:#a3a3a3">&#8211;</span>
         <input type="number" id="pmax" min="0" placeholder="&#8364; max" style="width:6rem" />
         <button class="iconbtn" id="priceClear" style="display:none" aria-label="Clear price filter">&#10005;</button>
       </div>
+      <div class="row" style="margin-top:.8rem">
+        <label class="label" style="margin-left:0"><input type="checkbox" id="free" /> <span id="lblFree">Free / donation only</span></label>
+        <label class="label" style="margin-left:0"><input type="checkbox" id="access" /> <span id="lblAccess">&#9855;&#65039;/&#128685; only</span></label>
+      </div>
     </div>
+    <div class="row" id="weekStrip"></div>
     <div id="genreWrap">
-      <p class="mini-label">Genre</p>
+      <p class="mini-label" id="lblGenre">Genre</p>
       <div id="genres"></div>
       <div id="subgenres"></div>
     </div>
@@ -177,13 +272,16 @@
 
   <footer id="sources">
     <p>Berlin Events &#183; Berlin-Gigs (Cryptpad) + mytrueintent.blogspot.com + web picks &#183; <span id="tot"></span> events, deduplicated</p>
+    <p id="stats" class="mini-label" style="margin-bottom:.5rem"></p>
     <p class="updated-badge" style="margin-top:.5rem"><span class="dot"></span>Sources last updated: <span class="lastupdated">8 October 2026</span></p>
     <p class="src-title">Sources <b style="font-size:.9rem">*</b></p>
     <p><strong>&#128241; Gigs</strong> &#8212; the <em>Berlin-Gigs</em> community pad on Cryptpad, a DIY community list of concerts with time, price, genre, smoke-free and wheelchair info. Covers Sep&#8211;Dec 2026.</p>
     <p><strong>&#127928; MTI</strong> &#8212; <a href="https://mytrueintent.blogspot.com" target="_blank" rel="noreferrer">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog. Imported from its spreadsheet export: ~2,100 shows, Oct 2026 &#8211; May 2027, with notes (sold out, postponed, cancelled &#8212; excluded).</p>
     <p><strong>&#127914; Mob</strong> &#8212; <a href="https://mobilize.berlin" target="_blank" rel="noreferrer">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.</p>
-    <p><strong>&#127760; Web</strong> &#8212; curated picks from official sites and venues; each event links directly to its source page.</p>
+    <p><strong>&#127760; Web</strong> &#8212; some events found on the web on official sites and venue pages; each links directly to its source page.</p>
+    <p><strong>&#128205; Venues</strong> &#8212; venue addresses and districts are verified via web search (October 2026) and power the district filter; the &#128205; pin next to a venue opens it in OpenStreetMap. Some venues do not publish a public address.</p>
     <p>Events appearing in more than one source are automatically deduplicated (same title + date) and marked with all matching source badges.</p>
+    <p><strong>&#128591; Thanks</strong> &#8212; to everyone who maintains these sources and shares event data, and above all to the artists who make Berlin worth going out for. This site only exists because of their work.</p>
     <p class="disclaimer">&#9888;&#65039; <strong>This is an experimental site, a constant work in progress &#8212; it is by no means exhaustive, just an attempt to aggregate lesser-known events in one place.</strong> Always double-check dates, times and tickets with the organizers or venues before going. This site aggregates external sources and assumes no responsibility for errors, changes or cancellations.</p>
   </footer>
 </div>
@@ -2544,29 +2642,22 @@ const EVENTS = [
   { date: "2027-01-22", title: "CTM 2027 - https://www.ctm-festival.de/", venue: "Several Locations", link: "https://mytrueintent.blogspot.com", source: "mytrueintent" },
 
   // \u2500\u2500 Web picks \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-  { date: "2026-10-09", time: "19:00", title: "Festival of Lights", venue: "City-wide landmarks", price: "Free", category: "Festival", description: "22nd edition, motto 'Colours of Love': nightly light art, 7\u201311 pm, until 18 Oct.", link: "https://festival-of-lights.de/en/", source: "web" },
+  { date: "2026-10-09", time: "19:00", title: "Festival of Lights", venue: "City-wide landmarks", price: "Free", category: "Art", description: "22nd edition, motto 'Colours of Love': nightly light art, 7\u201311 pm, until 18 Oct.", link: "https://festival-of-lights.de/en/", source: "web" },
   { date: "2026-10-13", time: "20:00", title: "Festival of Lights in Concert", venue: "Berlin Cathedral", price: "Ticketed", genre: "Electronic, Ambient", category: "Music", description: "3D light art and ambient live sets by Alle Farben, Westbam, Anja Schneider, until 17 Oct.", link: "https://festival-of-lights.de/en/", source: "web" },
   { date: "2026-10-09", time: "10:00", title: "'Next Door' \u2014 Tacita Dean, Eliasson & more", venue: "Hamburger Bahnhof", price: "\u20ac14", category: "Art", description: "Group show uniting five artists whose studios once sat next door to the museum.", link: "https://www.smb.museum", source: "web" },
   { date: "2026-10-09", time: "10:00", title: "Christoph Schlingensief Retrospective", venue: "Martin-Gropius-Bau", price: "\u20ac12", category: "Art", description: "Major retrospective of the provocative German artist, until Jan 2027.", link: "https://www.gropiusbau.de", source: "web" },
   { date: "2026-10-25", time: "19:00", title: "Jazzfest Berlin", venue: "Haus der Berliner Festspiele & other venues", price: "\u20ac20\u201340", genre: "Jazz", category: "Music", description: "Runs 25 Oct \u2013 1 Nov: 135+ musicians, Anthony Braxton Septet world premiere, Immanuel Wilkins Quartet.", link: "https://www.berlinerfestspiele.de", source: "web" },
-  { date: "2026-10-16", time: "18:00", title: "Club Culture Week: STAY CORE", venue: "Clubs city-wide", price: "Varies", category: "Festival", description: "Berlin's club culture through raves, concerts, performances, panels and workshops.", link: "https://www.visitberlin.de/en/blog/october-berlin", source: "web" },
+  { date: "2026-10-16", time: "18:00", title: "Club Culture Week: STAY CORE", venue: "Clubs city-wide", price: "Varies", category: "Music", description: "Berlin's club culture through raves, concerts, performances, panels and workshops.", link: "https://www.visitberlin.de/en/blog/october-berlin", source: "web" },
   { date: "2026-10-21", time: "10:00", title: "Genghis Khan \u2014 The World of the Mongols", venue: "James-Simon-Galerie, Museum Island", price: "\u20ac18", category: "Art", description: "Major exhibition on the 'Mongol Century', until April 2027.", link: "https://www.smb.museum", source: "web" },
   { date: "2026-10-16", time: "10:00", title: "'Degenerate Art' \u2014 Neue Nationalgalerie", venue: "Neue Nationalgalerie", price: "\u20ac14", category: "Art", description: "Curated by Maike Steinkamp, a new take on the 1937 theme focused on abstract art \u2014 16 Oct 2026 to 14 Mar 2027.", link: "https://www.visitberlin.de/en/top-exhibitions-berlin", source: "web" },
   { date: "2026-10-09", time: "10:00", title: "Lina Lapelyt\u0117 \u2014 We Make Years Out of Hours", venue: "Hamburger Bahnhof", price: "\u20ac14", category: "Art", description: "New exhibition by the Venice Biennale Silver Lion winner at the Nationalgalerie der Gegenwart.", link: "https://www.smb.museum/en/museums-institutions/hamburger-bahnhof/home/", source: "web" },
   { date: "2026-10-09", time: "10:00", title: "Nationalgalerie: A Collection for the 21st Century + Endless Exhibition", venue: "Hamburger Bahnhof", price: "\u20ac14", category: "Art", description: "The Nationalgalerie's collection rehang, expanded each year by a newly commissioned work.", link: "https://www.berlin.de/en/tickets/exhibitions/the-nationalgalerie-the-collection-for-the-21st-century-91882fc0-dd7d-436b-8da6-d2794912f418/", source: "web" },
-  { date: "2026-10-31", time: "18:30", title: "Halloween Party on the Spree", venue: "Hafen Treptow", price: "from \u20ac52", category: "Festival", description: "Night-time costume party cruise with music and the Berlin skyline.", link: "https://www.visitberlin.de/en/blog/top-11-events-halloween", source: "web" },
-  { date: "2026-10-11", time: "10:00", title: "Flea Market at Mauerpark", venue: "Mauerpark", price: "Free", category: "Market", description: "Vintage vinyl, East German knick-knacks and street food.", link: "https://mauerpark.de", source: "web" },
-  { date: "2026-10-18", time: "11:00", title: "Street Food Market", venue: "Markthalle Neun", price: "Free entry", category: "Food", description: "Regional producers, dumplings and a natural wine corner.", link: "https://markthalleneun.de", source: "web" },
+  { date: "2026-10-31", time: "18:30", title: "Halloween Party on the Spree", venue: "Hafen Treptow", price: "from \u20ac52", category: "Music", description: "Night-time costume party cruise with music and the Berlin skyline.", link: "https://www.visitberlin.de/en/blog/top-11-events-halloween", source: "web" },
 
   // \u2500\u2500 November & winter season highlights \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-  { date: "2026-11-01", time: "10:00", title: "Berlin Science Week", venue: "City-wide (Festival Centre: Haus der Kulturen der Welt)", price: "Free (pass required)", category: "Festival", description: "1\\u201310 Nov: city-wide science festival; Festival Centre at HKW 6\\u20138 Nov with free 3-day pass.", link: "https://berlinscienceweek.com", source: "web" },
-  { date: "2026-10-31", time: "14:00", title: "Lichtenberger Winterzeit", venue: "Landsberger Allee 300, Lichtenberg", price: "Free entry", category: "Market", description: "Winter fair with Ferris wheel, rides and treats \\u2014 31 Oct\\u201326 Dec, Wednesday is Family Day.", link: "https://lichtenberger-winterzeit.de", source: "web" },
-  { date: "2026-11-02", time: "12:00", title: "Winterwelt & Weihnachtsmarkt Potsdamer Platz", venue: "Potsdamer Platz", price: "Free entry", category: "Market", description: "Europe's largest mobile toboggan run, alpine huts and mulled wine \\u2014 usually opens early Nov, runs to 31 Dec (exact dates tba).", link: "https://www.potsdamerplatz.de/en/events/winter-world/", source: "web" },
-  { date: "2026-11-04", time: "11:00", title: "Bazaar Berlin", venue: "Messe Berlin", price: "\\u20ac11", category: "Market", description: "Sales fair for products from all over the world, 4\\u20138 Nov; 2-day ticket \\u20ac15.", link: "https://www.bazaar-berlin.de", source: "web" },
-  { date: "2026-11-06", time: "16:00", title: "Gl\\u00fchwald at Uber Platz", venue: "Uber Platz, Friedrichshain", price: "Free entry", category: "Market", description: "Pine grove with covered mulled-wine huts and fire pits opposite the East Side Gallery, 6 Nov\\u20133 Jan.", link: "https://www.berlin.de/weihnachtsmarkt/7839542-3496862-gluehwald-am-uber-platz.html", source: "web" },
+  { date: "2026-11-01", time: "10:00", title: "Berlin Science Week", venue: "City-wide (Festival Centre: Haus der Kulturen der Welt)", price: "Free (pass required)", category: "Art", description: "1\\u201310 Nov: city-wide science festival; Festival Centre at HKW 6\\u20138 Nov with free 3-day pass.", link: "https://berlinscienceweek.com", source: "web" },
   { date: "2026-11-07", time: "19:00", title: "Barocktage 2026", venue: "Staatsoper Unter den Linden", price: "from \\u20ac9", genre: "Baroque, Classical", category: "Music", description: "Staatsoper's Baroque Days, 7\\u201327 Nov: from the first decades of opera to contemporary works.", link: "https://www.staatsoper-berlin.de/de/spielplan/barocktage-2026/", source: "web" },
-  { date: "2026-11-12", time: "15:00", title: "Historischer Weihnachtsmarkt on the RAW grounds", venue: "RAW-Gel\\u00e4nde, Revaler Stra\\u00dfe", price: "Free entry", category: "Market", description: "Medieval-inspired Christmas market with fire shows and light installations, 12 Nov\\u201322 Dec.", link: "https://www.carnica-spectaculi.de/veranstaltung/4-historische-weihnacht/", source: "web" },
-  { date: "2026-11-18", time: "17:00", title: "Christmas Garden Berlin", venue: "Botanischer Garten", price: "from \\u20ac16.90", category: "Festival", description: "Light-art trail through the Botanical Garden, 18 Nov\\u201310 Jan; closed 23, 24 and 30 Nov.", link: "https://www.christmas-garden.de/en/berlin/", source: "web" },
+  { date: "2026-11-18", time: "17:00", title: "Christmas Garden Berlin", venue: "Botanischer Garten", price: "from \\u20ac16.90", category: "Art", description: "Light-art trail through the Botanical Garden, 18 Nov\\u201310 Jan; closed 23, 24 and 30 Nov.", link: "https://www.christmas-garden.de/en/berlin/", source: "web" },
 
   // \u2500\u2500 Cinema: indie & special film events \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
   { date: "2026-10-14", time: "18:00", title: "Ukrainian Film Festival Berlin \u2014 7th edition", venue: "Various cinemas", price: "from \u20ac8", category: "Cinema", description: "Latest contemporary films from Ukraine, theme 'Emergency Spaces', until 18 Oct.", link: "https://uffberlin.de", source: "web" },
@@ -2588,7 +2679,7 @@ const EVENTS = [
 
 // \u2500\u2500 Helpers (same logic as the React version) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 const esc = (s) => String(s === null || s === undefined ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-const fmtDate = (iso) => new Date(iso + "T12:00:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
+const fmtDate = (iso) => new Date(iso + "T12:00:00").toLocaleDateString(S.lang === "it" ? "it-IT" : S.lang === "de" ? "de-DE" : "en-GB", { weekday: "short", day: "numeric", month: "short" });
 const splitGenres = (g) => (g || "").split(/,|\//).map((x) => x.trim()).filter(Boolean);
 
 function genreToMacro(g) {
@@ -3610,9 +3701,6 @@ const CAT_COLORS = {
   Theatre: ["#b45309", "#fbbf24"],
   Art: ["#5b21b6", "#a78bfa"],
   Cinema: ["#0f766e", "#2dd4bf"],
-  Market: ["#065f46", "#34d399"],
-  Food: ["#9a3412", "#fb923c"],
-  Festival: ["#155e75", "#22d3ee"],
 };
 const catColor = (cat) => (cat && CAT_COLORS[cat] ? (document.body.classList.contains("dark") ? CAT_COLORS[cat][1] : CAT_COLORS[cat][0]) : "");
 const SRC_LABELS = { cryptpad: "\ud83d\udcf1 Gigs", mytrueintent: "\ud83c\udfb8 MTI", mobilize: "\ud83c\udfaa Mob", web: "\ud83c\udf10 Web" };
@@ -3666,19 +3754,20 @@ const SUBGENRES = [
 ];
 var SUB_RE = {};
 SUBGENRES.forEach(function (s) { SUB_RE[s.label] = s.re; });
-const CATEGORIES = ["All", "Music", "Theatre", "Art", "Cinema", "Market", "Food", "Festival"];
+const CATEGORIES = ["All", "Music", "Theatre", "Art", "Cinema"];
 
 // \u2500\u2500 State \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 const S = {
   theme: "light", view: "upcoming", category: "All", genre: "All", subGenre: "All",
   query: "", freeOnly: false, dayFilter: "", showFilters: false,
   priceMin: "", priceMax: "", sources: ["cryptpad", "mytrueintent", "mobilize", "web"],
+  favOnly: false, accessOnly: false, district: "All", venue: "", lang: "en",
 };
 const today = new Date().toISOString().slice(0, 10);
 const $ = (id) => document.getElementById(id);
 const LAST_UPDATED = "9 October 2026";
 
-// ── Venue links (single source of truth) ──────────────────────────────────
+//  Venue links (single source of truth) 
 // Event-specific links (mobilize/web) take precedence; otherwise the venue's site is used.
 const VENUE_LINKS = {
   "Schokoladen": "https://schokoladen-mitte.de/",
@@ -3863,10 +3952,305 @@ const VENUE_LINKS = {
 };
 const linkOf = (e) => (e && e.link) || VENUE_LINKS[(e && e.venue || "").trim()] || "";
 
+//  UI languages 
+const LANGS = {
+  en: { upcoming: "Upcoming", archive: "Archive", search: "Search artists, venues, genres\u2026", filters: "Filters", reset: "\u21ba Reset",
+    free: "Free / donation only", access: "\ud83d\udead\ud83e\uddb8 Only smoke-free/wheelchair", source: "Source", district: "District",
+    price: "Price range (events with a price only)", genre: "Genre", tonight: "Today", favs: "\u2b50 Favorites", all: "All",
+    count: (v, d) => (d === "archive" ? "Archive" : "Upcoming") + " \u00b7 " + v + " events",
+    empty: "Nothing matches \u2014 try another day, search or filter." },
+  de: { upcoming: "Bevorstehend", archive: "Archiv", search: "K\u00fcnstler, Venues, Genres suchen\u2026", filters: "Filter", reset: "\u21ba Zur\u00fccksetzen",
+    free: "Nur frei / Spende", access: "Nur rauchfrei/rollstuhlg\u00e4ngig", source: "Quelle", district: "Bezirk",
+    price: "Preisspanne (nur Events mit Preis)", genre: "Genre", tonight: "Heute", favs: "\u2b50 Favoriten", all: "Alle",
+    count: (v, d) => (d === "archive" ? "Archiv" : "Bevorstehend") + " \u00b7 " + v + " Veranstaltungen",
+    empty: "Nichts gefunden \u2014 anderen Tag, Suche oder Filter probieren." },
+  it: { upcoming: "In arrivo", archive: "Archivio", search: "Cerca artisti, venue, generi\u2026", filters: "Filtri", reset: "\u21ba Azzera",
+    free: "Solo gratuiti / offerta", access: "Solo senza fumo/accessibile", source: "Fonte", district: "Quartiere",
+    price: "Fascia di prezzo (solo eventi con prezzo)", genre: "Genere", tonight: "Oggi", favs: "\u2b50 Preferiti", all: "Tutti",
+    count: (v, d) => (d === "archive" ? "Archivio" : "In arrivo") + " \u00b7 " + v + " eventi",
+    empty: "Nessun risultato \u2014 prova un altro giorno, ricerca o filtro." },
+};
+const T = () => LANGS[S.lang] || LANGS.en;
+function applyLang() {
+  const t = T();
+  $("upBtn").textContent = t.upcoming;
+  $("arBtn").textContent = t.archive;
+  $("q").placeholder = t.search;
+  $("filterBtn").textContent = t.filters + " " + (S.showFilters ? "\u25b4" : "\u25be");
+  $("resetBtn").textContent = t.reset;
+  $("tonightBtn").textContent = t.tonight;
+  $("favBtn").textContent = t.favs;
+  $("lblFree").textContent = t.free;
+  $("lblAccess").textContent = t.access;
+  $("lblSource").textContent = t.source;
+  $("lblDistrict").textContent = t.district;
+  $("lblPrice").textContent = t.price;
+  $("lblGenre").textContent = t.genre;
+  $("empty").textContent = t.empty;
+  document.documentElement.setAttribute("lang", S.lang);
+}
+
+// ── Venue addresses & districts (verified via web search, October 2026) ──
+// Format: "Canonical name": ["address (empty if none published)", "district"]
+const VENUES = {
+  "8mm Bar": ["Sch\u00f6nhauser Allee 177B, 10119 Berlin", "Prenzlauer Berg"],
+  "90mil": ["Krossener Str. 42, 10245 Berlin", "Friedrichshain"],
+  "ACUD Kunsthaus": ["Veteranenstra\u00dfe 21, 10119 Berlin", "Mitte"],
+  "Admiralspalast": ["Friedrichstra\u00dfe 101, 10117 Berlin", "Mitte"],
+  "Archiv Potsdam": ["Leipziger Stra\u00dfe 60, 14773 Potsdam", "Potsdam"],
+  "Artistania": ["Neckarstra\u00dfe 19, 12053 Berlin", "Neuk\u00f6lln"],
+  "Astra Kulturhaus": ["Revaler Str. 99 (RAW-Gel\u00e4nde), 10245 Berlin", "Friedrichshain"],
+  "ausland": ["Lychener Str. 60, 10437 Berlin", "Prenzlauer Berg"],
+  "B.L.O. Kantine": ["Kaskelstr. 55 (B.L.O.-Ateliers), 10317 Berlin", "Lichtenberg"],
+  "Badehaus": ["Revaler Str. 99, 10245 Berlin", "Friedrichshain"],
+  "Baketown": ["Kolonnenstra\u00dfe 27, 10829 Berlin", "Sch\u00f6neberg"],
+  "Berghain": ["Am Wriezener Bahnhof, 10243 Berlin", "Friedrichshain"],
+  "Berghain Kantine": ["Am Wriezener Bahnhof, 10243 Berlin", "Friedrichshain"],
+  "Bi Nuu": ["Skalitzer Str. 71-72 (im U-Bhf. Schlesisches Tor), 10997 Berlin", "Kreuzberg"],
+  "Bis aufs Messer": ["Boxhagener Str. 19, 10245 Berlin", "Friedrichshain"],
+  "Cassiopeia": ["Revaler Str. 99 (RAW-Gel\u00e4nde), 10245 Berlin", "Friedrichshain"],
+  "Colosseum": ["Gleimstr. 31-33, 10437 Berlin", "Prenzlauer Berg"],
+  "Columbia Theater": ["Columbiadamm 9-11, 10965 Berlin", "Kreuzberg"],
+  "Columbiahalle": ["Columbiadamm 13-21, 10965 Berlin", "Kreuzberg"],
+  "Deutsches Theater Berlin": ["Schumannstra\u00dfe 13a, 10117 Berlin", "Mitte"],
+  "Donau115": ["Donaustra\u00dfe 115, 12057 Berlin", "Neuk\u00f6lln"],
+  "Drugstore im Rockhaus": ["Buchberger Str. 6 (Rockhaus), 10365 Berlin", "Lichtenberg"],
+  "Eiszeit Kino": ["Zeughofstra\u00dfe 20, 10997 Berlin", "Kreuzberg"],
+  "Emmauskirche": ["Lausitzer Platz 8A, 10997 Berlin", "Kreuzberg"],
+  "Exil-Klinke": ["Heidenauer Str. 10, 12627 Berlin", "Marzahn-Hellersdorf"],
+  "Festsaal Kreuzberg": ["Am Flutgraben 2, 12435 Berlin", "Kreuzberg"],
+  "Filmrauschpalast": ["Lehrter Str. 35 (Kulturfabrik Moabit), 10557 Berlin", "Moabit"],
+  "Frannz": ["Sch\u00f6nhauser Allee 36 (Kulturbrauerei), 10435 Berlin", "Prenzlauer Berg"],
+  "Friedenskirche": ["Bismarckstra\u00dfe 40, 10627 Berlin", "Charlottenburg"],
+  "Friedrichstadt-Palast": ["Friedrichstra\u00dfe 107, 10117 Berlin", "Mitte"],
+  "Galil\u00e4akirche": ["Rigaer Str. 9, 10247 Berlin", "Friedrichshain"],
+  "Kaiser-Wilhelm-Ged\u00e4chtniskirche": ["Breitscheidplatz, 10789 Berlin", "Charlottenburg"],
+  "Gretchen": ["Obentrautstra\u00dfe 19-21, 10963 Berlin", "Kreuzberg"],
+  "Hamburger Bahnhof": ["Invalidenstra\u00dfe 50-51, 10557 Berlin", "Mitte"],
+  "Haus der Berliner Festspiele": ["Chausseestra\u00dfe 128, 10115 Berlin", "Mitte"],
+  "Haus der Statistik": ["Otto-Braun-Stra\u00dfe 70-72, 10178 Berlin", "Mitte"],
+  "Heimathafen Neuk\u00f6lln": ["Karl-Marx-Stra\u00dfe 141, 12043 Berlin", "Neuk\u00f6lln"],
+  "Hole44": ["Hermannstra\u00dfe 146D, 12051 Berlin", "Neuk\u00f6lln"],
+  "Huxleys": ["Hasenheide 107, 10967 Berlin", "Neuk\u00f6lln"],
+  "James-Simon-Galerie": ["Bodestra\u00dfe 3, 10178 Berlin", "Mitte"],
+  "Junction Bar": ["Gneisenaustra\u00dfe 18, 10961 Berlin", "Kreuzberg"],
+  "Kammermusiksaal / Philharmonie": ["Herbert-von-Karajan-Stra\u00dfe 1, 10785 Berlin", "Tiergarten"],
+  "Kesselhaus": ["Knaackstr. 97 (Kulturbrauerei), 10435 Berlin", "Prenzlauer Berg"],
+  "Kieztreff Kamine": ["Prinzenallee 58, 13359 Berlin", "Wedding"],
+  "KM28": ["Karl-Marx-Stra\u00dfe 28, 12043 Berlin", "Neuk\u00f6lln"],
+  "Kulturbrauerei": ["Sch\u00f6nhauser Allee 36, 10435 Berlin", "Prenzlauer Berg"],
+  "Kulturhaus Insel": ["Alt-Treptow 6, 12435 Berlin", "Alt-Treptow"],
+  "Lark": ["Holzmarktstra\u00dfe 15-18, 10179 Berlin", "Friedrichshain"],
+  "Lido": ["Cuvrystra\u00dfe 34, 10997 Berlin", "Kreuzberg"],
+  "Lindenpark Potsdam": ["Stahnsdorfer Str. 76, 14482 Potsdam", "Potsdam"],
+  "loge.": ["Kinzigstr. 9, 10247 Berlin", "Friedrichshain"],
+  "Little Stage Club": ["Jonasstr. 1, 12053 Berlin", "Neuk\u00f6lln"],
+  "Maschinenhaus": ["Sch\u00f6nhauser Allee 36 (Kulturbrauerei), 10435 Berlin", "Prenzlauer Berg"],
+  "Max-Schmeling-Halle": ["Am Falkenberg / Falkplatz, 10437 Berlin", "Prenzlauer Berg"],
+  "Maxim Gorki Theater": ["Am Festungsgraben 2, 10117 Berlin", "Mitte"],
+  "Maaya": ["Revaler Str. 99, 10245 Berlin", "Friedrichshain"],
+  "Mehringhof": ["Gneisenaustra\u00dfe 2a, 10961 Berlin", "Kreuzberg"],
+  "Metropol": ["Nollendorfplatz 5, 10777 Berlin", "Sch\u00f6neberg"],
+  "Mikropol": ["Nollendorfplatz 5 (im Metropol), 10777 Berlin", "Sch\u00f6neberg"],
+  "Modus": ["Ritterstra\u00dfe 24-27, 10969 Berlin", "Mitte"],
+  "Monarch": ["Kottbusser Tor, Neues Kreuzberger Zentrum, 10999 Berlin", "Kreuzberg"],
+  "Neue Nationalgalerie": ["Potsdamer Stra\u00dfe 50, 10785 Berlin", "Tiergarten"],
+  "Neue Zukunft": ["Alt-Stralau 68, 10245 Berlin", "Friedrichshain"],
+  "Orwohaus": ["Frank-Zappa-Stra\u00dfe 19, 12681 Berlin", "Marzahn"],
+  "OGH": ["bei S-Bhf. Sonnenallee, Neuk\u00f6lln", "Neuk\u00f6lln"],
+  "Panke": ["Sch\u00f6nhauser Allee 36, 10435 Berlin", "Prenzlauer Berg"],
+  "Peter Edel": ["Berliner Allee 125, 13088 Berlin", "Wei\u00dfensee"],
+  "Pierre Boulez Saal": ["Franz\u00f6sische Stra\u00dfe 33d, 10117 Berlin", "Mitte"],
+  "Prachtwerk": ["Ganghoferstr. 2, 12043 Berlin", "Neuk\u00f6lln"],
+  "Privatclub": ["Skalitzer Str. 85-86, 10999 Berlin", "Kreuzberg"],
+  "Quasimodo": ["Kantstra\u00dfe 12A, 10623 Berlin", "Charlottenburg"],
+  "RBB Gro\u00dfer Sendesaal": ["Masurenallee 8-14, 14057 Berlin", "Westend"],
+  "Richten25": ["Gerichtstr. 25, 13347 Berlin", "Wedding"],
+  "Roadrunner's": ["Saarbr\u00fccker Str. 24, 10405 Berlin", "Prenzlauer Berg"],
+  "Roter Salon": ["Linienstra\u00dfe 227, 10178 Berlin", "Mitte"],
+  "Parkb\u00fchne Wuhlheide": ["An der Wuhlheide 187, 12459 Berlin", "K\u00f6penick"],
+  "Rough Trade Berlin": ["Ganghoferstra\u00dfe 10, 12043 Berlin", "Neuk\u00f6lln"],
+  "Sama32": ["Samariterstra\u00dfe 32, 10247 Berlin", "Friedrichshain"],
+  "Schokoladen": ["Ackerstra\u00dfe 23, 10115 Berlin", "Mitte"],
+  "silent green": ["Gerichtstra\u00dfe 35, 13347 Berlin", "Wedding"],
+  "Slaughterhouse": ["Lehrter Str. 35 (Kulturfabrik Moabit), 10557 Berlin", "Moabit"],
+  "SO36": ["Oranienstra\u00dfe 205, 10999 Berlin", "Kreuzberg"],
+  "Supamolly": ["Jessnerstra\u00dfe 41, 10247 Berlin", "Friedrichshain"],
+  "Passionskirche": ["Marheinekeplatz 1, 10961 Berlin", "Kreuzberg"],
+  "S\u00e4\u00e4lchen": ["Ritterstra\u00dfe 12, 10969 Berlin", "Mitte"],
+  "Taborkirche": ["Taborstra\u00dfe 17, 10997 Berlin", "Kreuzberg"],
+  "Tempodrom": ["M\u00f6ckernstra\u00dfe 10, 10963 Berlin", "Kreuzberg"],
+  "Kleine Arena Tempodrom": ["M\u00f6ckernstra\u00dfe 10, 10963 Berlin", "Kreuzberg"],
+  "Theater des Westens": ["Kantstra\u00dfe 10-12, 10627 Berlin", "Charlottenburg"],
+  "Theater im Delphi": ["Gustav-Adolf-Stra\u00dfe 2, 13086 Berlin", "Wei\u00dfensee"],
+  "Tresor": ["K\u00f6penicker Str. 70, 10179 Berlin", "Mitte"],
+  "Uber Arena": ["M\u00fchlenstra\u00dfe 12-30, 10243 Berlin", "Friedrichshain"],
+  "Uber Eats Music Hall": ["Uber Platz 2, 10243 Berlin", "Friedrichshain"],
+  "ufaFabrik": ["Viktoriastra\u00dfe 10-18, 12105 Berlin", "Tempelhof"],
+  "Urban Spree": ["Revaler Str. 99, 10245 Berlin", "Friedrichshain"],
+  "Velodrom": ["Landsberger Allee 222, 10405 Berlin", "Prenzlauer Berg"],
+  "Villa Kuriosum": ["Scheffelstra\u00dfe 21, 10367 Berlin", "Friedrichshain"],
+  "Wilma Dubiosum": ["Scheffelstra\u00dfe 21, 10367 Berlin", "Friedrichshain"],
+  "Volksb\u00fchne am Rosa-Luxemburg-Platz": ["Rosa-Luxemburg-Platz, 10117 Berlin", "Mitte"],
+  "Waldb\u00fchne": ["Glockenturmstra\u00dfe 1, 14053 Berlin", "Westend"],
+  "Waschhaus Potsdam": ["Schiffbauergasse 6, 14467 Potsdam", "Potsdam"],
+  "West Germany": ["Skalitzer Str. 133, 10999 Berlin", "Kreuzberg"],
+  "Wild at Heart": ["Wiener Str. 15, 10999 Berlin", "Kreuzberg"],
+  "Zenner": ["Alt-Treptow 15-17, 12435 Berlin", "Alt-Treptow"],
+  "Zitadelle Spandau": ["Am Juliasturm 64, 13599 Berlin", "Spandau"],
+  "Anna Spree": ["Franklinstra\u00dfe 10, 10587 Berlin", "Charlottenburg"],
+  "Center Berlin Pankow": ["Blankenburger Str. 81, 13156 Berlin", "Pankow"],
+  "Spirale": ["Westf\u00e4lische Str. 16a, 10711 Berlin", "Wilmersdorf"],
+  "Unter Wasser Potsdam": ["Uhlandstra\u00dfe 24, 14467 Potsdam", "Potsdam"],
+  "Abstand": ["Rigaer Str. 78, 10247 Berlin", "Friedrichshain"],
+  "Cocoon Bar": ["", "Neuk\u00f6lln"],
+  "Genezarethkirche": ["Herrfurthplatz 14, 12049 Berlin", "Neuk\u00f6lln"],
+  "Ernst-Reuter-Saal": ["Eichborndamm 213, 13437 Berlin", "Reinickendorf"],
+  "Hafen Treptow": ["Bulgarische Str. (Treptower Hafen), 12435 Berlin", "Alt-Treptow"],
+  "Hank Chinaski": ["Kolonienstra\u00dfe 32, 13359 Berlin", "Wedding"],
+  "Haus der Vision\u00e4re": ["Lohm\u00fchleninsel, 12435 Berlin", "Alt-Treptow"],
+  "Heiners": ["Weserstra\u00dfe 58, 12047 Berlin", "Neuk\u00f6lln"],
+  "K19": ["Kreutziger Str. 19, 10245 Berlin", "Friedrichshain"],
+  "KAOS Berlin": ["Wilhelminenhofstra\u00dfe 92, 12524 Berlin", "Obersch\u00f6neweide"],
+  "Kapelle99": ["Boxhagener Str. 99, 10245 Berlin", "Friedrichshain"],
+  "Kleinod": ["Niemetzstr. 24, 12055 Berlin", "Neuk\u00f6lln"],
+  "Lombardo Bar": ["Zionskirchstr. 34, 10119 Berlin", "Mitte"],
+  "Posh Teckel": ["Neuk\u00f6lln, 12047 Berlin", "Neuk\u00f6lln"],
+  "RedRum Artbar": ["Grimmstra\u00dfe 24, 10967 Berlin", "Kreuzberg"],
+  "Revolte-Bar": ["B\u00e4nschstr. 51, 10247 Berlin", "Friedrichshain"],
+  "Sonnenraum": ["Eichenstra\u00dfe 4A, 12435 Berlin", "Treptow"],
+  "Trixxter": ["Oberbaumstr. 11, 10997 Berlin", "Kreuzberg"],
+  "ZGK": ["Scharnweberstr. 38, 12043 Berlin", "Neuk\u00f6lln"],
+  "Botanischer Garten": ["K\u00f6nigin-Luise-Str. 6-8, 14195 Berlin", "Steglitz"],
+  "Staatsoper Unter den Linden": ["Unter den Linden 7, 10117 Berlin", "Mitte"],
+};
+// Aliases: variant spellings used by the sources -> canonical name above
+const VENUE_ALIASES = {
+  "ACUD Club": "ACUD Kunsthaus",
+  "Kantine Berghain": "Berghain Kantine",
+  "Kantine am Berghain": "Berghain Kantine",
+  "@ Kantine am Berghain": "Berghain Kantine",
+  "Philharmonie": "Kammermusiksaal / Philharmonie",
+  "Kammermusiksaal Philharmonie": "Kammermusiksaal / Philharmonie",
+  "RBB Sendesaal": "RBB Gro\u00dfer Sendesaal",
+  "Wuhlheide": "Parkb\u00fchne Wuhlheide",
+  "UFO Velodrom": "Velodrom",
+  "UFO im Velodrom": "Velodrom",
+  "Trxxxxr": "Trixxter", "Trxxxer": "Trixxter",
+  "TrxxxTa, U Schles. Tor, X-Berg": "Trixxter",
+  "Panorama Bar / Berghain": "Berghain",
+  "Kino Arsenal, silent green": "silent green",
+  "Killa Dubiosum": "Wilma Dubiosum",
+  "villa kuriosum": "Villa Kuriosum",
+  "Ged\u00e4chtniskirche": "Kaiser-Wilhelm-Ged\u00e4chtniskirche",
+  "Neue Zukunft (Garage)": "Neue Zukunft",
+  "Neue Zukunft Garage": "Neue Zukunft",
+  "Neue Zukunft - Garage": "Neue Zukunft",
+  "Volksb\u00fchne": "Volksb\u00fchne am Rosa-Luxemburg-Platz",
+  "Rough Trade": "Rough Trade Berlin",
+  "Rockhaus Berlin": "Drugstore im Rockhaus",
+  "Haus der Berliner Festspiele & other venues": "Haus der Berliner Festspiele",
+};
+// Normalized lookup + resolver: alias/exact match, stripped suffix, then prefix match
+const normV = (s) => (s || "").toLowerCase()
+  .replace(/\u00e4/g, "a").replace(/\u00f6/g, "o").replace(/\u00fc/g, "u").replace(/\u00df/g, "ss")
+  .replace(/[^a-z0-9]/g, "");
+const VENUE_IDX = {}, VENUE_ALIAS_IDX = {};
+Object.keys(VENUES).forEach((n) => { VENUE_IDX[normV(n)] = n; });
+Object.keys(VENUE_ALIASES).forEach((n) => {
+  const c = VENUE_IDX[normV(VENUE_ALIASES[n])];
+  if (c && !VENUE_IDX[normV(n)]) VENUE_ALIAS_IDX[normV(n)] = c;
+});
+function venueInfo(v) {
+  const raw = (v || "").trim();
+  if (!raw) return null;
+  const keys = [normV(raw), normV(raw.split(/,|:|\(| - |&/)[0])];
+  for (const k of keys) {
+    if (!k) continue;
+    let cn = VENUE_ALIAS_IDX[k] || VENUE_IDX[k];
+    if (!cn) {
+      let bl = 0;
+      for (const key in VENUE_IDX) {
+        if (k.length >= 3 && (key.startsWith(k) || k.startsWith(key)) && key.length > bl) { cn = VENUE_IDX[key]; bl = key.length; }
+      }
+    }
+    if (cn) { const d = VENUES[cn]; return { name: cn, addr: d[0], district: d[1] }; }
+  }
+  return null;
+}
+const districtOf = (e) => { const vi = venueInfo(e.venue); return vi ? vi.district : ""; };
+
+//  Favorites (localStorage) 
+const favKey = (e) => e.date + "|" + e.title;
+const loadFavs = () => { try { return new Set(JSON.parse(localStorage.getItem("be-favs") || "[]")); } catch (err) { return new Set(); } };
+const FAVS = loadFavs();
+const saveFavs = () => { try { localStorage.setItem("be-favs", JSON.stringify(Array.from(FAVS))); } catch (err) {} };
+
+//  Add-to-calendar (.ics, generated client-side) 
+const icsPad = (n) => String(n).padStart(2, "0");
+function icsStamp(dt) { return dt.getFullYear() + icsPad(dt.getMonth() + 1) + icsPad(dt.getDate()) + "T" + icsPad(dt.getHours()) + icsPad(dt.getMinutes()) + "00"; }
+function icsOf(e) {
+  const start = new Date(e.date + "T" + (e.time || "20:00"));
+  const end = new Date(start.getTime() + 3 * 3600 * 1000);
+  const strip = (s) => String(s || "").replace(/[,;]/g, " ").replace(/\s+/g, " ").trim();
+  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//BerlinEvents//EN", "BEGIN:VEVENT",
+    "UID:" + favKey(e) + "@berlin-events", "DTSTART:" + icsStamp(start), "DTEND:" + icsStamp(end),
+    "SUMMARY:" + strip(e.title), "LOCATION:" + strip(e.venue),
+    "END:VEVENT", "END:VCALENDAR"];
+  return "data:text/calendar;charset=utf-8," + encodeURIComponent(lines.join("\r\n"));
+}
+function downloadIcs(e) {
+  const a = document.createElement("a");
+  a.href = icsOf(e);
+  a.download = (e.title || "event").replace(/[^\w.-]+/g, "_").slice(0, 60) + ".ics";
+  document.body.appendChild(a); a.click(); a.remove();
+}
+
+//  Shareable URL hash (#view=...&cat=...) 
+const HASH_FIELDS = ["view", "category", "genre", "subGenre", "dayFilter", "query", "freeOnly", "favOnly", "accessOnly", "district", "venue", "priceMin", "priceMax"];
+const HASH_DEFAULTS = { view: "upcoming", category: "All", genre: "All", subGenre: "All", dayFilter: "", query: "", freeOnly: false, favOnly: false, accessOnly: false, district: "All", venue: "", priceMin: "", priceMax: "" };
+function writeHash() {
+  const parts = [];
+  HASH_FIELDS.forEach((k) => { const v = S[k]; if (String(v) !== String(HASH_DEFAULTS[k])) parts.push(k + "=" + encodeURIComponent(v)); });
+  if (S.sources.length < 4) parts.push("sources=" + S.sources.join(","));
+  const h = parts.join("&");
+  history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
+}
+let hashRestoring = false;
+function readHash() {
+  const p = new URLSearchParams(location.hash.slice(1));
+  hashRestoring = true;
+  p.forEach((v, k) => {
+    if (k === "sources") { S.sources = v.split(",").filter((s) => SRC_LABELS[s]); return; }
+    if (k in S) S[k] = (typeof S[k] === "boolean") ? v === "true" || v === "1" : v;
+  });
+  $("q").value = S.query; $("day").value = S.dayFilter;
+  $("free").checked = !!S.freeOnly; $("access").checked = !!S.accessOnly;
+  $("pmin").value = S.priceMin; $("pmax").value = S.priceMax;
+  hashRestoring = false;
+}
+
 // \u2500\u2500 Derived data \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 const DEDUP = dedupe(EVENTS);
 $("tot").textContent = DEDUP.length;
 document.querySelectorAll(".lastupdated").forEach(function (el) { el.textContent = LAST_UPDATED; });
+
+//  Footer stats 
+(function buildStats() {
+  const catCounts = new Map();
+  const vc = new Map();
+  let topVenue = "", topN = 0;
+  DEDUP.forEach((e) => {
+    const c = e.category || "Music";
+    catCounts.set(c, (catCounts.get(c) || 0) + 1);
+    const v = (e.venue || "").trim();
+    if (!v || /^(tba|tbA|several locations)$/i.test(v)) return;
+    vc.set(v, (vc.get(v) || 0) + 1);
+    if (vc.get(v) > topN) { topN = vc.get(v); topVenue = v; }
+  });
+  const cats = CATEGORIES.filter((c) => c !== "All" && catCounts.has(c)).map((c) => c + ": " + catCounts.get(c)).join(" \u00b7 ");
+  $("stats").textContent = cats + (topVenue ? " \u00b7 Most active venue: " + topVenue + " (" + topN + ")" : "");
+})();
 
 function filtered() {
   const pm = S.priceMin === "" ? null : Number(S.priceMin);
@@ -3886,7 +4270,12 @@ function filtered() {
     const okPrice = !priceActive || (p !== null && (pm === null || p.max >= pm) && (px === null || p.min <= px));
     const okQuery = !q || e.title.toLowerCase().includes(q) || (e.venue || "").toLowerCase().includes(q) ||
       (genreOf(e) || "").toLowerCase().includes(q) || (e.description || "").toLowerCase().includes(q);
-    return okView && okDay && okCat && okGenre && okSub && okFree && okSource && okPrice && okQuery;
+    const okFav = !S.favOnly || FAVS.has(favKey(e));
+    const okAccess = !S.accessOnly || e.wheelchair || e.smokeFree;
+    const okDistrict = S.district === "All" || districtOf(e) === S.district;
+    const okVenue = !S.venue || (e.venue || "").trim() === S.venue;
+    return okView && okDay && okCat && okGenre && okSub && okFree && okSource && okPrice && okQuery &&
+      okFav && okAccess && okDistrict && okVenue;
   }).sort((a, b) => (a.date + (a.time || "")).localeCompare(b.date + (b.time || "")));
 }
 
@@ -3920,9 +4309,12 @@ function badges(e) {
   return [e.source, ...(e.alsoIn || [])].map((s) => `<span class="badge ${s}">${SRC_LABELS[s]}</span>`).join("");
 }
 
-function eventRow(e) {
+function eventRow(e, i) {
   const col = catColor(e.category) ? ` style="color:${catColor(e.category)}"` : "";
   const lnk = linkOf(e);
+  const faved = FAVS.has(favKey(e));
+  const star = `<button class="star${faved ? " on" : ""}" data-i="${i}" title="Favorite" aria-label="Toggle favorite">${faved ? "\u2b50" : "\u2606"}</button>`;
+  const ics = `<button class="icsbtn" data-i="${i}" title="Add to calendar" aria-label="Add to calendar">\ud83d\udcc5</button>`;
   const title = (!lnk)
     ? `<span class="evtitle"${col}>${esc(e.title)}</span>`
     : `<a class="evtitle" href="${esc(lnk)}" target="_blank" rel="noreferrer"${col}>${esc(e.title)}</a>`;
@@ -3930,16 +4322,26 @@ function eventRow(e) {
     ? `<span class="flags">${e.smokeFree ? "\ud83d\udead " : ""}${e.wheelchair ? "\u267f\ufe0f" : ""}</span>` : "";
   const cat = e.category
     ? `<span class="catbadge" style="color:${catColor(e.category) || "#a3a3a3"};border-color:${catColor(e.category) || "#e5e5e5"}">${esc(e.category)}</span>` : "";
+  const vinfo = e.venue ? venueInfo(e.venue) : null;
+  const vtip = vinfo && vinfo.addr ? `${esc(e.venue)} \u00b7 ${esc(vinfo.addr)}` : "Show only events at this venue";
+  const vname = e.venue
+    ? `<span class="vlink" data-v="${i}" title="${vtip}">${esc(e.venue)}</span>` : esc(e.venue || "");
+  const maplink = vinfo && vinfo.addr
+    ? `<a class="vaddr" href="https://www.openstreetmap.org/search?query=${encodeURIComponent(vinfo.addr)}" target="_blank" rel="noreferrer">map</a>` : "";
+  const det = `<div class="evdet">`
+    + (vinfo && vinfo.addr ? `<span class="evaddr">\ud83d\udccd ${esc(vinfo.addr)} ${maplink}</span>` : "")
+    + `${ics}</div>`;
   return `<li><div class="ev"><div class="evmain">
     <span class="evdate">${fmtDate(e.date)}</span>
     <div>
-      <div>${title}<span class="badges">${badges(e)}</span></div>
-      <p class="meta">${esc(e.venue)}${e.time ? " \u00b7 " + esc(e.time) : ""}${e.price ? " \u00b7 " + esc(e.price) : ""}${flags}</p>
+      <div>${star}${title}<span class="badges">${badges(e)}</span></div>
+      <p class="meta">${vname}${e.time ? " \u00b7 " + esc(e.time) : ""}${e.price ? " \u00b7 " + esc(e.price) : ""}${flags}</p>
       ${genreOf(e) ? `<p class="genre">\ud83c\udfb5 ${esc(genreOf(e))}</p>` : ""}
       ${e.description ? `<p class="desc">${esc(e.description)}</p>` : ""}
       ${e.source === "web" && e.link && domainOf(e.link) ? `<p class="dom">\u21b3 ${esc(domainOf(e.link))}</p>` : ""}
+      ${det}
     </div>
-  </div>${cat}</div></li>`;
+  </div>${cat}<button class="morebtn" aria-label="Details" aria-expanded="false">\u25be</button></div></li>`;
 }
 
 function renderChips() {
@@ -3976,19 +4378,22 @@ function renderChips() {
   } else { gm.classList.remove("open"); sg.style.display = "none"; sg.innerHTML = ""; }
 }
 
+let LAST = [];
 function renderList() {
   const list = filtered();
-  $("count").textContent = `${S.view === "archive" ? "Archive" : "Upcoming"} \u00b7 ${list.length} events` +
+  LAST = list;
+  $("count").textContent = T().count(list.length, S.view) +
     (S.dayFilter ? ` \u00b7 ${new Date(S.dayFilter + "T12:00:00").toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}` : "");
-  $("list").innerHTML = list.map(eventRow).join("");
+  $("list").innerHTML = list.map((e, i) => eventRow(e, i)).join("");
   $("empty").style.display = list.length ? "none" : "block";
 }
 
 function renderAll() {
-  renderChips(); renderList();
+  renderChips(); renderWeek(); renderList();
   const filtersActive = S.query !== "" || S.category !== "All" || S.genre !== "All" || S.freeOnly ||
-    S.dayFilter !== "" || S.priceMin !== "" || S.priceMax !== "" || S.sources.length < 3;
-  $("panel").classList.toggle("open", S.showFilters);  $("filterBtn").textContent = "Filters " + (S.showFilters ? "\u25b4" : "\u25be");
+    S.dayFilter !== "" || S.priceMin !== "" || S.priceMax !== "" || S.sources.length < 3 ||
+    S.favOnly || S.accessOnly || S.district !== "All" || S.venue !== "";
+  $("panel").classList.toggle("open", S.showFilters);  $("filterBtn").textContent = T().filters + " " + (S.showFilters ? "\u25b4" : "\u25be");
   $("filterBtn").classList.toggle("on", S.showFilters || S.priceMin !== "" || S.priceMax !== "" || S.sources.length < 3);
   $("dayClear").style.display = S.dayFilter ? "" : "none";
   $("priceClear").style.display = (S.priceMin !== "" || S.priceMax !== "") ? "" : "none";
@@ -3996,9 +4401,63 @@ function renderAll() {
   $("arBtn").classList.toggle("on", S.view === "archive");
   $("day").min = S.view === "upcoming" ? today : "";
   $("day").max = S.view === "upcoming" ? "" : today;
+  $("favBtn").classList.toggle("on", S.favOnly);
+  $("tonightBtn").classList.toggle("on", S.dayFilter === today && S.view === "upcoming");
+  $("venueChip").style.display = S.venue ? "" : "none";
+  if (S.venue) {
+    $("venueName").textContent = S.venue;
+    const vinfo = venueInfo(S.venue);
+    $("venueChip").title = vinfo && vinfo.addr ? vinfo.addr : "";
+  }
+  writeHash();
 }
 
-// \u2500\u2500 Wire up \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+//  Week strip (lightweight weekly calendar) 
+let weekOff = 0;
+function renderWeek() {
+  const base = new Date(today + "T12:00:00");
+  const dow = (base.getDay() + 6) % 7; // Monday = 0
+  const monday = new Date(base); monday.setDate(base.getDate() - dow + weekOff * 7);
+  const days = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(monday); d.setDate(monday.getDate() + i);
+    days.push(d);
+  }
+  const iso = (d) => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  const inView = DEDUP.filter((e) => (S.view === "archive" ? e.date < today : e.date >= today));
+  const counts = new Map();
+  inView.forEach((e) => counts.set(e.date, (counts.get(e.date) || 0) + 1));
+  $("weekStrip").innerHTML =
+    `<button class="chip" id="wkPrev" aria-label="Previous week">&#8249;</button>` +
+    days.map((d) => {
+      const k = iso(d);
+      const n = counts.get(k) || 0;
+      return `<button class="chip${S.dayFilter === k ? " on" : ""}${k === today ? " today" : ""}" data-day="${k}">` +
+        `<span class="lbl">${d.toLocaleDateString(S.lang === "it" ? "it-IT" : S.lang === "de" ? "de-DE" : "en-GB", { weekday: "short" })} ${d.getDate()}</span>` +
+        `</button>`;
+    }).join("") +
+    `<button class="chip" id="wkNext" aria-label="Next week">&#8250;</button>` +
+    (weekOff !== 0 || S.dayFilter ? `<button class="chip" id="wkClear" aria-label="Clear week">&#10005;</button>` : "");
+  $("wkPrev").addEventListener("click", () => { weekOff--; renderAll(); });
+  $("wkNext").addEventListener("click", () => { weekOff++; renderAll(); });
+  const clear = $("wkClear");
+  if (clear) clear.addEventListener("click", () => { weekOff = 0; S.dayFilter = ""; $("day").value = ""; renderAll(); });
+  $("weekStrip").querySelectorAll("[data-day]").forEach((b) =>
+    b.addEventListener("click", () => { S.view = "upcoming"; S.dayFilter = b.dataset.day; $("day").value = b.dataset.day; renderAll(); }));
+}
+
+//  District select (built once, then kept in sync) 
+function buildDistricts() {
+  const counts = new Map();
+  DEDUP.forEach((e) => { const d = districtOf(e); if (d) counts.set(d, (counts.get(d) || 0) + 1); });
+  const opts = ["All"].concat(Array.from(counts.keys()).sort());
+  $("district").innerHTML = opts.map((d) => {
+    const lbl = d === "All" ? T().all : d;
+    const cnt = d === "All" ? "" : " (" + counts.get(d) + ")";
+    return `<option value="${esc(d)}"${S.district === d ? " selected" : ""}>${esc(lbl)}${cnt}</option>`;
+  }).join("");
+}
+
 $("themeBtn").addEventListener("click", () => {
   S.theme = S.theme === "dark" ? "light" : "dark";
   document.body.classList.toggle("dark", S.theme === "dark");
@@ -4010,6 +4469,8 @@ $("arBtn").addEventListener("click", () => { S.view = "archive"; S.dayFilter = "
 $("q").addEventListener("input", (e) => { S.query = e.target.value; renderAll(); });
 $("day").addEventListener("change", (e) => { S.dayFilter = e.target.value; renderAll(); });
 $("dayClear").addEventListener("click", () => { S.dayFilter = ""; $("day").value = ""; renderAll(); });
+$("dayBtn").addEventListener("click", () => { const d = $("day"); try { d.showPicker(); } catch (err) { d.focus(); } });
+$("srcLink").addEventListener("click", () => { document.getElementById("sources").scrollIntoView({ behavior: "smooth" }); });
 $("free").addEventListener("change", (e) => { S.freeOnly = e.target.checked; renderAll(); });
 $("filterBtn").addEventListener("click", () => { S.showFilters = !S.showFilters; renderAll(); });
 $("pmin").addEventListener("input", (e) => { S.priceMin = e.target.value; renderAll(); });
@@ -4018,12 +4479,52 @@ $("priceClear").addEventListener("click", () => { S.priceMin = ""; S.priceMax = 
 $("resetBtn").addEventListener("click", () => {
   S.query = ""; S.category = "All"; S.genre = "All"; S.subGenre = "All"; S.freeOnly = false; S.dayFilter = "";
   S.priceMin = ""; S.priceMax = ""; S.sources = ["cryptpad", "mytrueintent", "mobilize", "web"];
+  S.favOnly = false; S.accessOnly = false; S.district = "All"; S.venue = "";
   $("q").value = ""; $("day").value = ""; $("free").checked = false; $("pmin").value = ""; $("pmax").value = "";
+  $("access").checked = false; $("district").value = "All";
   renderAll();
 });
+$("tonightBtn").addEventListener("click", () => { S.view = "upcoming"; S.dayFilter = today; $("day").value = today; renderAll(); });
+$("favBtn").addEventListener("click", () => { S.favOnly = !S.favOnly; renderAll(); });
+$("access").addEventListener("change", (e) => { S.accessOnly = e.target.checked; renderAll(); });
+$("district").addEventListener("change", (e) => { S.district = e.target.value; renderAll(); });
+$("venueChip").addEventListener("click", () => { S.venue = ""; renderAll(); });
+$("langSel").addEventListener("change", (e) => { S.lang = e.target.value; applyLang(); buildDistricts(); renderAll(); });
+$("list").addEventListener("click", (ev) => {
+  const more = ev.target.closest(".morebtn");
+  if (more) { const li = more.closest("li"); li.classList.toggle("open"); more.setAttribute("aria-expanded", li.classList.contains("open")); return; }
+  const t = ev.target.closest("[data-i], [data-v]");
+  if (!t) {
+    if (ev.target.closest("a")) return;
+    const li = ev.target.closest("#list li");
+    if (li) { li.classList.toggle("open"); const mb = li.querySelector(".morebtn"); if (mb) mb.setAttribute("aria-expanded", li.classList.contains("open")); }
+    return;
+  }
+  if (t.classList.contains("star")) {
+    const k = favKey(LAST[Number(t.dataset.i)]);
+    if (FAVS.has(k)) FAVS.delete(k); else FAVS.add(k);
+    saveFavs(); renderAll(); return;
+  }
+  if (t.classList.contains("icsbtn")) { downloadIcs(LAST[Number(t.dataset.i)]); return; }
+  if (t.classList.contains("vlink")) { S.venue = LAST[Number(t.dataset.v)].venue.trim(); renderAll(); return; }
+});
+window.addEventListener("hashchange", () => { readHash(); applyLang(); buildDistricts(); $("langSel").value = S.lang; renderAll(); });
 $("topBtn").addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-window.addEventListener("scroll", () => { $("topBtn").style.display = window.scrollY > 400 ? "block" : "none"; }, { passive: true });
+let scrollTicking = false;
+window.addEventListener("scroll", () => {
+  $("topBtn").style.display = window.scrollY > 400 ? "block" : "none";
+  if (scrollTicking) return;
+  scrollTicking = true;
+  requestAnimationFrame(() => {
+    $("controls").classList.toggle("scrolled", window.scrollY > 120);
+    scrollTicking = false;
+  });
+}, { passive: true });
 
+readHash();
+$("langSel").value = S.lang;
+applyLang();
+buildDistricts();
 try {
   renderAll();
 } catch (err) {
