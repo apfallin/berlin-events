@@ -5183,10 +5183,23 @@ function icsOf(e) {
   const start = new Date(e.date + "T" + (e.time || "20:00"));
   const end = new Date(start.getTime() + 3 * 3600 * 1000);
   const strip = (s) => String(s || "").replace(/[,;]/g, " ").replace(/\s+/g, " ").trim();
+  const isMusic = (e.category === "Music" || !e.category);
+  const kind = e.category === "Theatre" ? "Theatre Show" : e.category === "Art" ? "Art Event" : e.category === "Cinema" ? "Cinema Event" : "Concert";
+  const site = "https://apfallin.github.io/berlin-events/";
+  const descParts = [];
+  if (e.description) descParts.push(strip(e.description));
+  if (e.price) descParts.push("Price: " + strip(e.price));
+  const g = genreOf(e);
+  if (isMusic && g) descParts.push("Genre: " + strip(g));
+  if (e.venue) { const vi = venueInfo(e.venue); if (vi && vi.addr) descParts.push("Venue: " + strip(e.venue) + ", " + strip(vi.addr)); }
+  descParts.push("Saved via Berlin Events", site);
+  const desc = descParts.join("\\n");
   const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//BerlinEvents//EN", "BEGIN:VEVENT",
     "UID:" + favKey(e) + "@berlin-events", "DTSTART:" + icsStamp(start), "DTEND:" + icsStamp(end),
-    "SUMMARY:" + strip(e.title), "LOCATION:" + strip(e.venue),
+    "SUMMARY:" + strip(e.title) + " (" + kind + ")", "LOCATION:" + strip(e.venue),
+    "DESCRIPTION:" + desc,
     "END:VEVENT", "END:VCALENDAR"];
+  if (e.link) lines.splice(lines.length - 2, 0, "URL:" + String(e.link));
   return "data:text/calendar;charset=utf-8," + encodeURIComponent(lines.join("\r\n"));
 }
 function downloadIcs(e) {
