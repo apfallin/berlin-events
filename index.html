@@ -5184,15 +5184,18 @@ function icsOf(e) {
   const end = new Date(start.getTime() + 3 * 3600 * 1000);
   const strip = (s) => String(s || "").replace(/[,;]/g, " ").replace(/\s+/g, " ").trim();
   const isMusic = (e.category === "Music" || !e.category);
-  const kind = e.category === "Theatre" ? "Theatre Show" : e.category === "Art" ? "Art Event" : e.category === "Cinema" ? "Cinema Event" : "Concert";
+  const L = S.lang === "it" ? { kindM: "Concerto", kindT: "Spettacolo teatrale", kindA: "Evento d'arte", kindC: "Evento cinema", price: "Prezzo", genre: "Genere", venue: "Locale", saved: "Salvato tramite Berlin Events" }
+        : S.lang === "de" ? { kindM: "Konzert", kindT: "Theaterst\u00fcck", kindA: "Kunst-Veranstaltung", kindC: "Kino-Veranstaltung", price: "Preis", genre: "Genre", venue: "Ort", saved: "Gespeichert \u00fcber Berlin Events" }
+        : { kindM: "Concert", kindT: "Theatre Show", kindA: "Art Event", kindC: "Cinema Event", price: "Price", genre: "Genre", venue: "Venue", saved: "Saved via Berlin Events" };
+  const kind = e.category === "Theatre" ? L.kindT : e.category === "Art" ? L.kindA : e.category === "Cinema" ? L.kindC : L.kindM;
   const site = "https://apfallin.github.io/berlin-events/";
   const descParts = [];
   if (e.description) descParts.push(strip(e.description));
-  if (e.price) descParts.push("Price: " + strip(e.price));
+  if (e.price) descParts.push(L.price + ": " + strip(e.price));
   const g = genreOf(e);
-  if (isMusic && g) descParts.push("Genre: " + strip(g));
-  if (e.venue) { const vi = venueInfo(e.venue); if (vi && vi.addr) descParts.push("Venue: " + strip(e.venue) + ", " + strip(vi.addr)); }
-  descParts.push("Saved via Berlin Events", site);
+  if (isMusic && g) descParts.push(L.genre + ": " + strip(g));
+  if (e.venue) { const vi = venueInfo(e.venue); if (vi && vi.addr) descParts.push(L.venue + ": " + strip(e.venue) + ", " + strip(vi.addr)); }
+  descParts.push(L.saved, site);
   const desc = descParts.join("\\n");
   const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//BerlinEvents//EN", "BEGIN:VEVENT",
     "UID:" + favKey(e) + "@berlin-events", "DTSTART:" + icsStamp(start), "DTEND:" + icsStamp(end),
@@ -5469,6 +5472,7 @@ function buildDistricts() {
 
 $("themeBtn").addEventListener("click", () => {
   S.theme = S.theme === "dark" ? "light" : "dark";
+  try { localStorage.setItem("be-theme", S.theme); } catch (err) {}
   document.body.classList.toggle("dark", S.theme === "dark");
   $("themeBtn").textContent = S.theme === "dark" ? "\u2600\ufe0f" : "\ud83c\udf19";
   renderAll();
@@ -5516,7 +5520,7 @@ $("venueChip").addEventListener("click", () => {
     if (nli) window.scrollTo({ top: window.scrollY + (nli.getBoundingClientRect().top - ofs), behavior: "auto" });
   }
 });
-$("langSel").addEventListener("change", (e) => { S.lang = e.target.value; applyLang(); buildDistricts(); renderAll(); });
+$("langSel").addEventListener("change", (e) => { S.lang = e.target.value; try { localStorage.setItem("be-lang", S.lang); } catch (err) {} applyLang(); buildDistricts(); renderAll(); });
 $("list").addEventListener("click", (ev) => {
   const more = ev.target.closest(".morebtn");
   if (more) { const li = more.closest("li"); li.classList.toggle("open"); more.setAttribute("aria-expanded", li.classList.contains("open")); return; }
@@ -5561,7 +5565,31 @@ window.addEventListener("scroll", () => {
   });
 }, { passive: true });
 
+// \u2500\u2500 Language auto-detection \u2500\u2500
+// First visit: use the browser language (de/it) or fall back to English.
+// A manual selection via the selector is remembered (localStorage) and wins over auto-detection.
+// A #lang=... share link wins over everything.
+const detectLang = () => {
+  let saved = null;
+  try { saved = localStorage.getItem("be-lang"); } catch (err) {}
+  if (saved === "en" || saved === "de" || saved === "it") return saved;
+  const bl = (navigator.language || "en").slice(0, 2).toLowerCase();
+  return (bl === "de" || bl === "it") ? bl : "en";
+};
 readHash();
+if (!new URLSearchParams(location.hash.slice(1)).has("lang")) S.lang = detectLang();
+// \u2500\u2500 Theme detection \u2500\u2500
+// Same rules as language: #theme=... share link wins, then a saved manual choice, then the system preference.
+if (!new URLSearchParams(location.hash.slice(1)).has("theme")) {
+  let savedTheme = null;
+  try { savedTheme = localStorage.getItem("be-theme"); } catch (err) {}
+  if (savedTheme !== "dark" && savedTheme !== "light") {
+    savedTheme = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+  }
+  S.theme = savedTheme;
+}
+document.body.classList.toggle("dark", S.theme === "dark");
+$("themeBtn").textContent = S.theme === "dark" ? "\u2600\ufe0f" : "\ud83c\udf19";
 $("langSel").value = S.lang;
 applyLang();
 buildDistricts();
