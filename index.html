@@ -15,6 +15,7 @@
   h1 { font-size: 2.25rem; font-weight: 300; letter-spacing: -.02em; margin: .75rem 0 0; }
   h1 b { font-weight: 600; }
   .sub { font-size: .85rem; color: #737373; margin: .75rem 0 0; line-height: 1.5; }
+  .subhint { font-size: .68rem; color: #a3a3a3; margin: .3rem 0 0; line-height: 1.4; }
   .sub small { display: block; margin-top: .25rem; font-size: .68rem; opacity: .75; }
   #srcLink { margin-left: .3rem; font-size: .95rem; font-weight: 700; cursor: pointer; display: inline-block;
     transform: translateY(-.45em); text-decoration: underline; text-underline-offset: .15em; transition: color .15s; }
@@ -22,7 +23,7 @@
   body.dark #srcLink:hover { color: #e5e5e5; }
   .nowrap { white-space: nowrap; }
   .seg { display: none; }
-  #themeBtn { margin-left: auto; border: 1px solid #d4d4d4; background: transparent; border-radius: 999px; width: 2rem; height: 2rem; cursor: pointer; font-size: .8rem; flex-shrink: 0; }
+  #themeBtn { margin-left: auto; border: 1px solid #d4d4d4; background: transparent; border-radius: 999px; width: 1.5rem; height: 1.5rem; cursor: pointer; font-size: .65rem; flex-shrink: 0; padding: 0; line-height: 1; display: inline-flex; align-items: center; justify-content: center; }
   body.dark #themeBtn { border-color: #404040; }
   header { display: flex; align-items: flex-start; justify-content: space-between; padding-top: 4rem; padding-bottom: 2.5rem; }
   .controls { position: sticky; top: 0; z-index: 10; background: rgba(255,255,255,.92); backdrop-filter: blur(8px); border-bottom: 1px solid #f0f0f0; margin: 0 -1.5rem; padding: 1rem 1.5rem; }
@@ -45,6 +46,9 @@
   #dayWrap { position: relative; flex-shrink: 0; }
   #day { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
   #dayBtn { width: 2.3rem; padding: .45rem 0; text-align: center; font-size: 1rem; line-height: 1; }
+  #dayWrap #dayClear { width: 1.4rem; padding: .45rem 0; text-align: center; font-size: .7rem; line-height: 1; border-left: none; border-radius: 0 .5rem .5rem 0; color: #525252; }
+  #dayWrap #dayClear:hover { background: #f5f5f5; color: #171717; }
+  body.dark #dayWrap #dayClear:hover { background: #262626; color: #f5f5f5; }
   .chip { border: 1px solid #d4d4d4; background: transparent; color: #525252; border-radius: 999px;
     padding: .4rem .9rem; font-size: .75rem; font-weight: 500; cursor: pointer; transition: all .15s; }
   .chip:hover { border-color: #737373; color: #171717; }
@@ -104,7 +108,9 @@
   .flags { margin-left: .5rem; font-size: .75rem; }
   .genre { font-size: .75rem; font-weight: 500; color: #a3a3a3; margin-top: .25rem; }
   .genre-unknown, .genre-cover { font-weight: 400; opacity: .75; font-style: italic; }
-  .desc { font-size: .85rem; color: #525252; margin-top: .35rem; max-width: 32rem; line-height: 1.5; }
+  .desc { font-size: .85rem; color: #525252; margin-top: .35rem; max-width: 32rem; line-height: 1.5;
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; cursor: pointer; }
+  .desc.open { -webkit-line-clamp: unset; }
   body.dark .desc { color: #d4d4d4; }
   .dom { display: none; }
   #empty { text-align: center; font-size: .85rem; color: #a3a3a3; margin-top: 3rem; display: none; }
@@ -143,6 +149,9 @@
   .disclaimer { border-left: 4px solid #f59e0b; background: #fffbeb; color: #78350f;
     border-radius: .5rem; padding: .6rem .8rem; margin-top: .75rem; font-weight: 500; font-size: .78rem; }
   body.dark .disclaimer { background: #1c1503; color: #fde68a; }
+  .thanks { border-left: 4px solid #059669; background: #f0fdf4; color: #14532d; padding: .6rem .8rem; border-radius: .4rem; font-size: .8rem; line-height: 1.6; margin: .8rem 0 .4rem; }
+  .thanks strong { font-size: .85rem; }
+  body.dark .thanks { background: #0f2417; color: #bbf7d0; }
   footer a { text-decoration: underline; }
   footer a:hover { text-decoration: none; }
   #topBtn { position: fixed; left: 50%; bottom: 2rem; transform: translateX(-50%); z-index: 20; width: 3rem; height: 3rem;
@@ -157,36 +166,45 @@
   .star { cursor: pointer; user-select: none; margin-right: .3rem; font-size: 1rem; background: none; border: none; padding: 0; color: inherit; }
   .star.on { color: #f59e0b; }
   body.dark .star.on { color: #fbbf24; }
-  .icsbtn { cursor: pointer; background: none; border: none; padding: 0 0 0 .3rem; font-size: .85rem; color: #a3a3a3; }
+  .icsbtn { cursor: pointer; background: none; border: none; padding: 0; margin-left: .45rem; font-size: .8rem; color: #a3a3a3; vertical-align: baseline; }
   .icsbtn:hover { color: inherit; }
+  .sharebtn { cursor: pointer; background: none; border: none; padding: 0; margin-left: .45rem; font-size: .8rem; color: #a3a3a3; vertical-align: baseline; }
+  .sharebtn:hover { color: inherit; }
+  @keyframes evflash { 0% { background: #fef3c7; } 100% { background: transparent; } }
+  #list li.flash { animation: evflash 2.2s ease-out 1; }
   .vlink { cursor: pointer; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: .2em; }
-  .vaddr { font-size: .72rem; color: #a3a3a3; text-decoration: none; margin-left: .1rem; }
-  .vaddr:hover { color: inherit; }
   /* Ghost controls: quiet by default, full contrast on row hover / touch (v2, 10 Oct 2026) */
   .star { opacity: .35; transition: opacity .15s; }
   .star.on { opacity: 1; }
   #list li:hover .star { opacity: 1; }
-  @media (hover: none) { .star { opacity: .55; } .star.on { opacity: 1; } }
-  /* Expandable row details (address, map, calendar) */
+  .icsbtn { opacity: .35; transition: opacity .15s; }
+  #list li:hover .icsbtn, #list li:hover .sharebtn { opacity: 1; }
+  .sharebtn { opacity: .35; transition: opacity .15s; }
+  @media (hover: none) { .star, .icsbtn, .sharebtn { opacity: .55; } .star.on { opacity: 1; } }
+  /* Expandable row details (address) */
   .morebtn { border: none; background: none; cursor: pointer; color: #a3a3a3; font-size: .75rem;
     padding: .2rem .3rem; flex-shrink: 0; align-self: center; transition: transform .15s; }
   .morebtn:hover { color: inherit; }
   li.open .morebtn { transform: rotate(180deg); }
   .evdet { display: none; margin-top: .35rem; font-size: .8rem; color: #737373; line-height: 1.6; }
   li.open .evdet { display: block; }
-  .evdet .evaddr { margin-right: .75rem; }
+  .evdet a.evaddr { font-size: .78rem; color: inherit; text-decoration: none; margin-right: .75rem; }
+  .evdet a.evaddr:hover { text-decoration: underline; }
   #venueChip { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
   body.dark #venueChip { background: #372a0e; border-color: #f59e0b; color: #fcd34d; }
   select.chip { appearance: auto; padding: .25rem .5rem; }
-  #langSel { width: auto; padding: .25rem .4rem; }
+  #langSel { width: auto; padding: .1rem .3rem; font-size: .68rem; min-height: 1.5rem; font-weight: 500; }
   #weekStrip { margin-top: .4rem; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
     -webkit-overflow-scrolling: touch; margin-right: -1.5rem; padding-right: 1.5rem;
     display: grid; grid-template-columns: repeat(9, 1fr); gap: .2rem; }
   #weekStrip::-webkit-scrollbar { display: none; }
   #weekStrip > * { min-width: 0; }
-  #weekStrip .chip { font-size: .68rem; padding: .3rem 0; width: 100%; justify-content: center; text-align: center; border-radius: .45rem; }
+  #weekStrip .chip { font-size: .68rem; padding: .25rem 0 .2rem; width: 100%; justify-content: center; text-align: center; border-radius: .45rem; flex-direction: column; line-height: 1.25; }
+  #weekStrip .chip .wkday { display: block; overflow: hidden; text-overflow: ellipsis; font-size: .6rem; font-weight: 400; text-transform: uppercase; letter-spacing: .02em; }
+  #weekStrip .chip .wknum { display: block; font-weight: 600; }
   #weekStrip .chip.today { border-color: #059669; }
-  #weekStrip .chip span.lbl { display: block; overflow: hidden; text-overflow: ellipsis; }
+  #weekStrip .chip.past { opacity: .45; border-style: dashed; }
+  #weekStrip .chip.past:hover, #weekStrip .chip.past.on { opacity: 1; border-style: solid; }
   .controls.scrolled #panel, .controls.scrolled #genreWrap, .controls.scrolled #weekStrip { display: none; }
 
   /* \u2500\u2500 Decluttered, mobile-first controls \u2500\u2500 */
@@ -218,7 +236,7 @@
   }
 
   @media print {
-    .controls, #topBtn, .updated-badge, #genreWrap, #panel, .star, .icsbtn, .morebtn, #stats, #unkBar { display: none !important; }
+    .controls, #topBtn, .updated-badge, #genreWrap, #panel, .star, .icsbtn, .sharebtn, .morebtn, #stats, #unkBar { display: none !important; }
     .evdet { display: block !important; }
     body { background: #fff; color: #000; }
     .wrap { max-width: 100%; }
@@ -232,8 +250,9 @@
   <header>
     <div>
       <h1>What's on in <b>Berlin</b></h1>
-      <p class="sub"><span id="subTitle">A minimal digest of concerts, theatre, art and cinema in Berlin &#8212; gathered from independent sources</span><span class="nowrap">.<a id="srcLink" title="About the sources">*</a></span>
-        <small class="updated-badge"><span class="dot"></span>Sources last updated: <span class="lastupdated">8 October 2026</span></small></p>
+      <p class="sub"><span id="subTitle">A minimal digest of concerts, theatre, art and cinema in Berlin &#8212; gathered from independent sources</span><span class="nowrap">.<a id="srcLink" title="About the sources">*</a></span></p>
+      <p class="subhint" id="calHint">Save any event straight to your calendar</p>
+      <p class="sub"><small class="updated-badge"><span class="dot"></span>Sources last updated: <span class="lastupdated">8 October 2026</span></small></p>
     </div>
     <div class="hrow">
       <select id="langSel" class="chip" title="Language" aria-label="Language"><option value="en">EN</option><option value="de">DE</option><option value="it">IT</option></select>
@@ -244,8 +263,7 @@
   <div class="controls" id="controls">
     <div class="row">
       <span class="qwrap"><input type="text" id="q" placeholder="Search artists, venues, genres&#8230;" /></span>
-      <span id="dayWrap"><input type="date" id="day" title="Pick a day" /><button class="iconbtn" id="dayBtn" aria-label="Pick a day">&#128197;</button></span>
-      <button class="iconbtn" id="dayClear" style="display:none" aria-label="Clear day">&#10005;</button>
+      <span id="dayWrap"><input type="date" id="day" title="Pick a day" /><button class="iconbtn" id="dayBtn" aria-label="Pick a day">&#128197;</button><button class="iconbtn" id="dayClear" style="display:none" aria-label="Clear day filter">&#10005;</button></span>
     </div>
     <div class="row scrollrow" style="justify-content:center;justify-content:safe center" role="toolbar" aria-label="Categories and quick views">
       <span id="cats" style="display:contents"></span>
@@ -297,17 +315,17 @@
     <p>Berlin Events &#183; Berlin-Gigs (Cryptpad) + mytrueintent.blogspot.com + web picks &#183; <span id="tot"></span> events, deduplicated</p>
     <p id="stats" class="mini-label" style="margin-bottom:.5rem"></p>
     <p class="updated-badge" style="margin-top:.5rem"><span class="dot"></span>Sources last updated: <span class="lastupdated">8 October 2026</span></p>
-    <p class="src-title">Sources <b style="font-size:.9rem">*</b></p>
-    <p><strong>&#128241; Gigs</strong> &#8212; the <em>Berlin-Gigs</em> community pad on Cryptpad, a DIY community list of concerts with time, price, genre, smoke-free and wheelchair info. Covers Sep&#8211;Dec 2026.</p>
-    <p><strong>&#127928; MTI</strong> &#8212; <a href="https://mytrueintent.blogspot.com" target="_blank" rel="noreferrer">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog. Imported from its spreadsheet export: ~2,100 shows, Oct 2026 &#8211; May 2027, with notes (sold out, postponed, cancelled &#8212; excluded).</p>
-    <p><strong>&#127914; Mob</strong> &#8212; <a href="https://mobilize.berlin" target="_blank" rel="noreferrer">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.</p>
-    <p><strong>&#127760; Web</strong> &#8212; some events found on the web on official sites and venue pages; each links directly to its source page.</p>
-    <p><strong>&#127917; Stage</strong> &#8212; theatre, dance and performance from the whole Berlin scene, from the big houses to the freie Szene, collected from the theatres&#8217; own calendars and the joint schedule at <a href="https://www.berlin-buehnen.de" target="_blank" rel="noreferrer">berlin-buehnen.de</a>.</p>
-  <p><strong>&#127916; Arthouse</strong> &#8212; special cinema events curated from Berlin&#8217;s independent cinemas (IL Kino, Intimes, Mobile Kino and more) and the <a href="https://www.indiekino.de/kinoprogramm/en/berlin" target="_blank" rel="noreferrer">INDIEKINO</a> aggregator: premieres with guests, festivals and one-off nights &#8212; not regular screenings.</p>
-  <p><strong>&#128205; Venues</strong> &#8212; venue addresses and districts are verified via web search (October 2026) and power the district filter; the &#128205; pin next to a venue opens it in OpenStreetMap. Some venues do not publish a public address.</p>
-    <p>Events appearing in more than one source are automatically deduplicated (same title + date).</p>
-    <p><strong>&#128591; Thanks</strong> &#8212; to everyone who maintains these sources and shares event data, and above all to the artists who make Berlin worth going out for. This site only exists because of their work.</p>
     <p class="disclaimer">&#9888;&#65039; <strong>This is an experimental site, a constant work in progress &#8212; it is by no means exhaustive, just an attempt to aggregate lesser-known events in one place.</strong> Always double-check dates, times and tickets with the organizers or venues before going. This site aggregates external sources and assumes no responsibility for errors, changes or cancellations.</p>
+    <p class="src-title">Sources <b style="font-size:.9rem">*</b></p>
+    <p><strong>&#128241; Gigs</strong> &#8212; the <em>Berlin-Gigs</em> community pad on Cryptpad, a DIY list of concerts with time, price, genre, smoke-free and wheelchair info.</p>
+    <p><strong>&#127928; MTI</strong> &#8212; <a href="https://mytrueintent.blogspot.com" target="_blank" rel="noreferrer">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog, imported from its spreadsheet export.</p>
+    <p><strong>&#127914; Mob</strong> &#8212; <a href="https://mobilize.berlin" target="_blank" rel="noreferrer">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.</p>
+    <p><strong>&#127760; Web</strong> &#8212; events found on the web on official sites and venue pages; each links directly to its source page.</p>
+    <p><strong>&#127917; Stage</strong> &#8212; theatre, dance and performance from the theatres&#8217; own calendars across the whole Berlin scene, from the big houses to the freie Szene.</p>
+    <p><strong>&#127916; Arthouse</strong> &#8212; special cinema events from Berlin&#8217;s independent cinemas and the <a href="https://www.indiekino.de/kinoprogramm/en/berlin" target="_blank" rel="noreferrer">INDIEKINO</a> aggregator: premieres with guests, festivals and one-off nights.</p>
+    <p><strong>&#128205; Venues</strong> &#8212; venue addresses and districts verified via web search; the &#128205; pin next to a venue opens it in OpenStreetMap.</p>
+    <p>Events appearing in more than one source are automatically deduplicated (same title + date).</p>
+    <p class="thanks">&#128591; <strong>Thanks</strong> &#8212; to everyone who maintains these sources and shares event data, and above all to the artists who make Berlin worth going out for. This site only exists because of their work.</p>
   </footer>
 </div>
 <button id="topBtn" aria-label="Back to top">&#8593;</button>
@@ -4869,6 +4887,7 @@ const LANGS = {
     price: "Price range (events with a price only)", genre: "Genre", tonight: "Today", favs: "\u2b50 Favorites", all: "All", unknownGenre: "Genre unknown",
     unkHidden: (n) => n + " music events without a known genre are hidden \u2014 include them?", unkInclude: "Include", unkHide: "Hide them", coverNote: "Cover / tribute band", postponedNote: "Postponed \u2014 new date to be announced",
     subTitle: "A minimal digest of concerts, theatre, art and cinema in Berlin \u2014 gathered from independent sources",
+    calHint: "Save any event straight to your calendar",
     count: (v, d) => (d === "archive" ? "Archive" : "Upcoming") + " \u00b7 " + v + " events",
     empty: "Nothing matches \u2014 try another day, search or filter." },
   de: { upcoming: "Bevorstehend", archive: "Archiv", search: "K\u00fcnstler, Venues, Genres suchen\u2026", filters: "Filter", reset: "\u21ba Zur\u00fccksetzen",
@@ -4876,6 +4895,7 @@ const LANGS = {
     price: "Preisspanne (nur Events mit Preis)", genre: "Genre", tonight: "Heute", favs: "\u2b50 Favoriten", all: "Alle", unknownGenre: "Genre unbekannt",
     unkHidden: (n) => n + " Musik-Events ohne bekanntes Genre sind ausgeblendet \u2014 einblenden?", unkInclude: "Einblenden", unkHide: "Ausblenden", coverNote: "Cover-/Tribute-Band", postponedNote: "Verschoben \u2014 neuer Termin wird bekannt gegeben",
     subTitle: "Ein minimales Digest von Konzerten, Theater, Kunst und Kino in Berlin \u2014 aus unabh\u00e4ngigen Quellen zusammengetragen",
+    calHint: "Speichere jede Veranstaltung direkt in deinem Kalender",
     count: (v, d) => (d === "archive" ? "Archiv" : "Bevorstehend") + " \u00b7 " + v + " Veranstaltungen",
     empty: "Nichts gefunden \u2014 anderen Tag, Suche oder Filter probieren." },
   it: { upcoming: "In arrivo", archive: "Archivio", search: "Cerca artisti, venue, generi\u2026", filters: "Filtri", reset: "\u21ba Azzera",
@@ -4883,6 +4903,7 @@ const LANGS = {
     price: "Fascia di prezzo (solo eventi con prezzo)", genre: "Genere", tonight: "Oggi", favs: "\u2b50 Preferiti", all: "Tutti", unknownGenre: "Genere sconosciuto",
     unkHidden: (n) => n + " eventi musicali senza genere noto sono nascosti \u2014 includerli?", unkInclude: "Includili", unkHide: "Nascondili", coverNote: "Cover / tribute band", postponedNote: "Posticipato \u2014 nuova data da annunciare",
     subTitle: "Un digest essenziale di concerti, teatro, arte e cinema a Berlino \u2014 raccolto da fonti indipendenti",
+    calHint: "Salva ogni evento direttamente nel tuo calendario",
     count: (v, d) => (d === "archive" ? "Archivio" : "In arrivo") + " \u00b7 " + v + " eventi",
     empty: "Nessun risultato \u2014 prova un altro giorno, ricerca o filtro." },
 };
@@ -4890,6 +4911,7 @@ const T = () => LANGS[S.lang] || LANGS.en;
 function applyLang() {
   const t = T();
   $("subTitle").textContent = t.subTitle;
+  $("calHint").textContent = t.calHint;
   $("lblArchive").textContent = t.archive;
   $("q").placeholder = t.search;
   $("filterBtn").textContent = t.filters + " " + (S.showFilters ? "\u25b4" : "\u25be");
@@ -5115,7 +5137,40 @@ const loadFavs = () => { try { return new Set(JSON.parse(localStorage.getItem("b
 const FAVS = loadFavs();
 const saveFavs = () => { try { localStorage.setItem("be-favs", JSON.stringify(Array.from(FAVS))); } catch (err) {} };
 
-//  Add-to-calendar (.ics, generated client-side) 
+//  Shareable event links (#ev=date|title) \u2014 copy + incoming-link handling
+function shareLink(e) {
+  const fk = favKey(e);
+  const url = location.href.split("#")[0] + "#ev=" + encodeURIComponent(fk);
+  const done = () => {
+    const btns = document.querySelectorAll('.sharebtn[data-i="' + LAST.indexOf(e) + '"]');
+    btns.forEach((b) => { b.textContent = "\u2713"; setTimeout(() => { b.textContent = "\ud83d\udd17"; }, 1400); });
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(done).catch(function () { fallbackCopy(url); done(); });
+  } else { fallbackCopy(url); done(); }
+}
+function fallbackCopy(text) {
+  const ta = document.createElement("textarea");
+  ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand("copy"); } catch (err) {}
+  document.body.removeChild(ta);
+}
+function openSharedEvent(fk) {
+  const date = (fk || "").split("|")[0];
+  if (!date) return;
+  if (date < today && S.view !== "archive") { S.view = "archive"; S.autoArch = true; }
+  S.dayFilter = date; $("day").value = date;
+  renderAll();
+  const li = Array.prototype.find.call(document.querySelectorAll("#list li"), function (l) { return l.dataset.fk === fk; });
+  if (li) {
+    li.classList.add("open", "flash");
+    li.scrollIntoView({ behavior: "smooth", block: "center" });
+    const mb = li.querySelector(".morebtn"); if (mb) mb.setAttribute("aria-expanded", "true");
+    setTimeout(() => li.classList.remove("flash"), 2400);
+  }
+}
+//  Add-to-calendar (.ics, generated client-side)
 const icsPad = (n) => String(n).padStart(2, "0");
 function icsStamp(dt) { return dt.getFullYear() + icsPad(dt.getMonth() + 1) + icsPad(dt.getDate()) + "T" + icsPad(dt.getHours()) + icsPad(dt.getMinutes()) + "00"; }
 function icsOf(e) {
@@ -5145,6 +5200,7 @@ function writeHash() {
   history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
 }
 let hashRestoring = false;
+let pendingEv = null;
 function readHash() {
   const p = new URLSearchParams(location.hash.slice(1));
   hashRestoring = true;
@@ -5152,6 +5208,8 @@ function readHash() {
     if (k === "sources") { S.sources = v.split(",").filter((s) => SRC_LABELS[s]); return; }
     if (k in S) S[k] = (typeof S[k] === "boolean") ? v === "true" || v === "1" : v;
   });
+  const pev = p.get("ev");
+  if (pev) { try { pendingEv = decodeURIComponent(pev); } catch (err) { pendingEv = pev; } }
   $("q").value = S.query; $("day").value = S.dayFilter;
   $("free").checked = !!S.freeOnly; $("access").checked = !!S.accessOnly;
   $("archChk").checked = S.view === "archive";
@@ -5240,6 +5298,7 @@ function eventRow(e, i) {
   const faved = FAVS.has(favKey(e));
   const star = `<button class="star${faved ? " on" : ""}" data-i="${i}" title="Favorite" aria-label="Toggle favorite">${faved ? "\u2b50" : "\u2606"}</button>`;
   const ics = `<button class="icsbtn" data-i="${i}" title="Add to calendar" aria-label="Add to calendar">\ud83d\udcc5</button>`;
+  const shr = `<button class="sharebtn" data-i="${i}" title="Copy link to this event" aria-label="Copy link to this event">\ud83d\udd17</button>`;
   const title = (!lnk)
     ? `<span class="evtitle"${col}>${esc(e.title)}</span>`
     : `<a class="evtitle" href="${esc(lnk)}" target="_blank" rel="noreferrer"${col}>${esc(e.title)}</a>`;
@@ -5249,15 +5308,13 @@ function eventRow(e, i) {
   const vtip = vinfo && vinfo.addr ? `${esc(e.venue)} \u00b7 ${esc(vinfo.addr)}` : "Show only events at this venue";
   const vname = e.venue
     ? `<span class="vlink" data-v="${i}" title="${vtip}">${esc(e.venue)}</span>` : esc(e.venue || "");
-  const maplink = vinfo && vinfo.addr
-    ? `<a class="vaddr" href="https://www.openstreetmap.org/search?query=${encodeURIComponent(vinfo.addr)}" target="_blank" rel="noreferrer">map</a>` : "";
   const det = `<div class="evdet">`
-    + (vinfo && vinfo.addr ? `<span class="evaddr">\ud83d\udccd ${esc(vinfo.addr)} ${maplink}</span>` : "")
-    + `${ics}</div>`;
-  return `<li class="${e.postponed ? "postponed" : ""}"><div class="ev"><div class="evmain">
+    + (vinfo && vinfo.addr ? `<a class="evaddr" href="https://www.openstreetmap.org/search?query=${encodeURIComponent(vinfo.addr)}" target="_blank" rel="noreferrer" title="Open in OpenStreetMap">\ud83d\udccd ${esc(vinfo.addr)}</a>` : "")
+    + `</div>`;
+  return `<li class="${e.postponed ? "postponed" : ""}" data-fk="${esc(favKey(e))}"><div class="ev"><div class="evmain">
     <span class="evdate">${fmtDate(e.date)}</span>
     <div>
-      <div>${star}${title}</div>
+      <div>${star}${title}${ics}${shr}</div>
       <p class="meta">${vname}${e.time ? " \u00b7 " + esc(e.time) : ""}${e.price ? " \u00b7 " + esc(e.price) : ""}${flags}</p>
       ${e.postponed ? `<p class="postponed-note">\u23f8 ${esc(T().postponedNote)}</p>` : ""}
       ${(genreOf(e) ? `<p class="genre">\ud83c\udfb5 ${esc(genreOf(e))}</p>` : (isCover(e) ? `<p class="genre genre-cover">\ud83c\udfb5 ${esc(T().coverNote)}</p>` : ((e.category === "Music" || !e.category) ? `<p class="genre genre-unknown">\ud83c\udfb5 ${esc(T().unknownGenre)}</p>` : "")))}
@@ -5323,6 +5380,7 @@ function renderAll() {
   $("filterBtn").insertAdjacentHTML("beforeend", '<span class="hintdot" style="display:' + ((S.showFilters && (S.genre !== "All" || S.subGenre !== "All")) ? "" : "none") + '"></span>');
   $("filterBtn").classList.toggle("on", S.showFilters || S.priceMin !== "" || S.priceMax !== "");
   $("dayClear").style.display = S.dayFilter ? "" : "none";
+  $("dayClear").title = S.lang === "it" ? "Torna alla data odierna" : S.lang === "de" ? "Zur\u00fcck zum heutigen Datum" : "Back to today";
   $("priceClear").style.display = (S.priceMin !== "" || S.priceMax !== "") ? "" : "none";
   $("archChk").checked = S.view === "archive";
   document.body.classList.toggle("archived", S.view === "archive");
@@ -5360,18 +5418,22 @@ function renderWeek() {
     days.map((d) => {
       const k = iso(d);
       const n = counts.get(k) || 0;
-      return `<button class="chip${S.dayFilter === k ? " on" : ""}${k === today ? " today" : ""}" data-day="${k}">` +
-        `<span class="lbl">${d.toLocaleDateString(S.lang === "it" ? "it-IT" : S.lang === "de" ? "de-DE" : "en-GB", { weekday: "short" })} ${d.getDate()}</span>` +
+      return `<button class="chip${S.dayFilter === k ? " on" : ""}${k === today ? " today" : ""}${k < today ? " past" : ""}" data-day="${k}">` +
+        `<span class="lbl wkday">${d.toLocaleDateString(S.lang === "it" ? "it-IT" : S.lang === "de" ? "de-DE" : "en-GB", { weekday: "short" })}</span>` +
+        `<span class="lbl wknum">${d.getDate()}</span>` +
         `</button>`;
     }).join("") +
-    `<button class="chip" id="wkNext" aria-label="Next week">&#8250;</button>` +
-    (weekOff !== 0 || S.dayFilter ? `<button class="chip" id="wkClear" aria-label="Clear week">&#10005;</button>` : "");
+    `<button class="chip" id="wkNext" aria-label="Next week">&#8250;</button>`;
   $("wkPrev").addEventListener("click", () => { weekOff--; renderAll(); });
   $("wkNext").addEventListener("click", () => { weekOff++; renderAll(); });
-  const clear = $("wkClear");
-  if (clear) clear.addEventListener("click", () => { weekOff = 0; S.dayFilter = ""; $("day").value = ""; renderAll(); });
   $("weekStrip").querySelectorAll("[data-day]").forEach((b) =>
-    b.addEventListener("click", () => { S.view = "upcoming"; S.dayFilter = b.dataset.day; $("day").value = b.dataset.day; renderAll(); }));
+    b.addEventListener("click", () => {
+      if (S.dayFilter === b.dataset.day) { S.dayFilter = ""; $("day").value = ""; if (weekOff !== 0) { weekOff = 0; } renderAll(); return; }
+      S.view = "upcoming"; S.dayFilter = b.dataset.day;
+      if (b.dataset.day < today && S.view !== "archive") { S.view = "archive"; S.autoArch = true; }
+      else if (b.dataset.day >= today && S.autoArch) { S.view = "upcoming"; S.autoArch = false; }
+      $("day").value = b.dataset.day; renderAll();
+    }));
 }
 
 //  District select (built once, then kept in sync) 
@@ -5392,10 +5454,15 @@ $("themeBtn").addEventListener("click", () => {
   $("themeBtn").textContent = S.theme === "dark" ? "\u2600\ufe0f" : "\ud83c\udf19";
   renderAll();
 });
-$("archChk").addEventListener("change", (e) => { S.view = e.target.checked ? "archive" : "upcoming"; S.dayFilter = ""; $("day").value = ""; renderAll(); });
+$("archChk").addEventListener("change", (e) => { S.view = e.target.checked ? "archive" : "upcoming"; S.autoArch = false; S.dayFilter = ""; $("day").value = ""; renderAll(); });
 $("q").addEventListener("input", (e) => { S.query = e.target.value; renderAll(); });
-$("day").addEventListener("change", (e) => { S.dayFilter = e.target.value; renderAll(); });
-$("dayClear").addEventListener("click", () => { S.dayFilter = ""; $("day").value = ""; renderAll(); });
+$("day").addEventListener("change", (e) => {
+  S.dayFilter = e.target.value;
+  if (e.target.value && e.target.value < today && S.view !== "archive") { S.view = "archive"; S.autoArch = true; }
+  else if (e.target.value && e.target.value >= today && S.autoArch) { S.view = "upcoming"; S.autoArch = false; }
+  renderAll();
+});
+$("dayClear").addEventListener("click", () => { S.dayFilter = ""; $("day").value = ""; if (S.autoArch) { S.view = "upcoming"; S.autoArch = false; } renderAll(); });
 $("dayBtn").addEventListener("click", () => { const d = $("day"); try { d.showPicker(); } catch (err) { d.focus(); } });
 $("srcLink").addEventListener("click", () => { document.getElementById("sources").scrollIntoView({ behavior: "smooth" }); });
 $("free").addEventListener("change", (e) => { S.freeOnly = e.target.checked; renderAll(); });
@@ -5406,12 +5473,12 @@ $("priceClear").addEventListener("click", () => { S.priceMin = ""; S.priceMax = 
 $("resetBtn").addEventListener("click", () => {
   S.query = ""; S.category = "All"; S.genre = "All"; S.subGenre = "All"; S.freeOnly = false; S.dayFilter = "";
   S.priceMin = ""; S.priceMax = ""; S.sources = ["cryptpad", "mytrueintent", "mobilize", "web"];
-  S.favOnly = false; S.accessOnly = false; S.district = "All"; S.venue = ""; S.view = "upcoming"; S.unkOn = false;
+  S.favOnly = false; S.accessOnly = false; S.district = "All"; S.venue = ""; S.view = "upcoming"; S.unkOn = false; S.autoArch = false; weekOff = 0;
   $("q").value = ""; $("day").value = ""; $("free").checked = false; $("pmin").value = ""; $("pmax").value = "";
   $("access").checked = false; $("district").value = "All"; $("archChk").checked = false;
   renderAll();
 });
-$("tonightBtn").addEventListener("click", () => { S.view = "upcoming"; S.dayFilter = today; $("day").value = today; renderAll(); });
+$("tonightBtn").addEventListener("click", () => { S.view = "upcoming"; S.autoArch = false; weekOff = 0; S.dayFilter = today; $("day").value = today; renderAll(); });
 $("favBtn").addEventListener("click", () => { S.favOnly = !S.favOnly; renderAll(); });
 $("unkBtn").addEventListener("click", () => { S.unkOn = !S.unkOn; renderAll(); });
 $("access").addEventListener("change", (e) => { S.accessOnly = e.target.checked; renderAll(); });
@@ -5424,6 +5491,8 @@ $("list").addEventListener("click", (ev) => {
   const t = ev.target.closest("[data-i], [data-v]");
   if (!t) {
     if (ev.target.closest("a")) return;
+    const desc = ev.target.closest(".desc");
+    if (desc) { desc.classList.toggle("open"); return; }
     const li = ev.target.closest("#list li");
     if (li) { li.classList.toggle("open"); const mb = li.querySelector(".morebtn"); if (mb) mb.setAttribute("aria-expanded", li.classList.contains("open")); }
     return;
@@ -5434,6 +5503,7 @@ $("list").addEventListener("click", (ev) => {
     saveFavs(); renderAll(); return;
   }
   if (t.classList.contains("icsbtn")) { downloadIcs(LAST[Number(t.dataset.i)]); return; }
+  if (t.classList.contains("sharebtn")) { shareLink(LAST[Number(t.dataset.i)]); return; }
   if (t.classList.contains("vlink")) { S.venue = LAST[Number(t.dataset.v)].venue.trim(); renderAll(); return; }
 });
 window.addEventListener("hashchange", () => { readHash(); applyLang(); buildDistricts(); $("langSel").value = S.lang; renderAll(); });
@@ -5459,6 +5529,7 @@ try {
   var el = document.getElementById("count");
   if (el) el.innerHTML = "&#9888;&#65039; Something went wrong loading the events in this browser: " + String(err && err.message ? err.message : err);
 }
+if (pendingEv) { const fk = pendingEv; pendingEv = null; try { openSharedEvent(fk); } catch (err) {} }
 </script>
 </body>
 </html>
