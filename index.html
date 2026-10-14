@@ -7,6 +7,7 @@
 <style>
   :root { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
   * { box-sizing: border-box; }
+  html { overflow-anchor: none; } /* disable native scroll anchoring: it fights the manual venue-filter anchoring */
   body { margin: 0; background: #fff; color: #171717; transition: background .25s, color .25s; }
   body.dark { background: #0a0a0a; color: #f5f5f5; }
   .wrap { max-width: 42rem; margin: 0 auto; padding: 0 1.5rem 6rem; }
@@ -90,7 +91,7 @@
   body.dark #list li.postponed { border-left-color: #fbbf24; }
   body.dark .postponed-note { color: #fcd34d; }
   #list { list-style: none; margin: 0; padding: 0; }
-  #list li { padding: 1.4rem 0; border-bottom: 1px solid #f0f0f0; transition: background .15s; }
+  #list li { padding: 1.4rem 0; border-bottom: 1px solid #f0f0f0; transition: background .15s; overflow-anchor: none; }
   body.dark #list li { border-color: #1a1a1a; }
   #list li:hover { background: #fafafa; }
   body.dark #list li:hover { background: #101010; }
@@ -101,8 +102,13 @@
   body.dark #count.archived { color: #fcd34d; }
   .ev { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
   .evmain { display: flex; align-items: baseline; gap: 1rem; }
-  .evdate { width: 5rem; flex-shrink: 0; font-size: .85rem; font-weight: 500; }
+  .evdatecol { width: 5rem; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-start; gap: .2rem; }
+  .evdatecol .star { margin: .45rem auto 0 auto; }
+  .evdate { font-size: .85rem; font-weight: 500; }
   .evtitle { font-size: 1rem; font-weight: 500; }
+  .evhead { display: flex; align-items: flex-start; gap: .3rem; }
+  .evhead .evtitle { flex: 1 1 auto; min-width: 0; }
+  .evacts { flex: 0 0 auto; margin-left: auto; display: flex; align-items: center; gap: .45rem; padding-top: .1rem; }
   .evtitle:hover { text-decoration: underline; }
   .meta { font-size: .85rem; color: #737373; margin-top: .15rem; }
   .flags { margin-left: .5rem; font-size: .75rem; }
@@ -163,12 +169,12 @@
   body.dark #topBtn { background: #fff; border-color: #fff; color: #171717; box-shadow: 0 6px 20px rgba(0,0,0,.6); }
 
   /*  Favorites, calendar & venue links  */
-  .star { cursor: pointer; user-select: none; margin-right: .3rem; font-size: 1rem; background: none; border: none; padding: 0; color: inherit; }
+  .star { cursor: pointer; user-select: none; font-size: 1rem; background: none; border: none; padding: 0; color: inherit; }
   .star.on { color: #f59e0b; }
   body.dark .star.on { color: #fbbf24; }
-  .icsbtn { cursor: pointer; background: none; border: none; padding: 0; margin-left: .45rem; font-size: .8rem; color: #a3a3a3; vertical-align: baseline; }
+  .icsbtn { cursor: pointer; background: none; border: none; padding: 0; font-size: .8rem; color: #a3a3a3; vertical-align: baseline; }
   .icsbtn:hover { color: inherit; }
-  .sharebtn { cursor: pointer; background: none; border: none; padding: 0; margin-left: .45rem; font-size: .8rem; color: #a3a3a3; vertical-align: baseline; }
+  .sharebtn { cursor: pointer; background: none; border: none; padding: 0; font-size: .8rem; color: #a3a3a3; vertical-align: baseline; }
   .sharebtn:hover { color: inherit; }
   @keyframes evflash { 0% { background: #fef3c7; } 100% { background: transparent; } }
   #list li.flash { animation: evflash 2.2s ease-out 1; }
@@ -5312,9 +5318,9 @@ function eventRow(e, i) {
     + (vinfo && vinfo.addr ? `<a class="evaddr" href="https://www.openstreetmap.org/search?query=${encodeURIComponent(vinfo.addr)}" target="_blank" rel="noreferrer" title="Open in OpenStreetMap">\ud83d\udccd ${esc(vinfo.addr)}</a>` : "")
     + `</div>`;
   return `<li class="${e.postponed ? "postponed" : ""}" data-fk="${esc(favKey(e))}"><div class="ev"><div class="evmain">
-    <span class="evdate">${fmtDate(e.date)}</span>
+    <div class="evdatecol"><span class="evdate">${fmtDate(e.date)}</span>${star}</div>
     <div>
-      <div>${star}${title}${ics}${shr}</div>
+      <div class="evhead">${title}<span class="evacts">${ics}${shr}</span></div>
       <p class="meta">${vname}${e.time ? " \u00b7 " + esc(e.time) : ""}${e.price ? " \u00b7 " + esc(e.price) : ""}${flags}</p>
       ${e.postponed ? `<p class="postponed-note">\u23f8 ${esc(T().postponedNote)}</p>` : ""}
       ${(genreOf(e) ? `<p class="genre">\ud83c\udfb5 ${esc(genreOf(e))}</p>` : (isCover(e) ? `<p class="genre genre-cover">\ud83c\udfb5 ${esc(T().coverNote)}</p>` : ((e.category === "Music" || !e.category) ? `<p class="genre genre-unknown">\ud83c\udfb5 ${esc(T().unknownGenre)}</p>` : "")))}
@@ -5483,7 +5489,20 @@ $("favBtn").addEventListener("click", () => { S.favOnly = !S.favOnly; renderAll(
 $("unkBtn").addEventListener("click", () => { S.unkOn = !S.unkOn; renderAll(); });
 $("access").addEventListener("change", (e) => { S.accessOnly = e.target.checked; renderAll(); });
 $("district").addEventListener("change", (e) => { S.district = e.target.value; renderAll(); });
-$("venueChip").addEventListener("click", () => { S.venue = ""; renderAll(); });
+$("venueChip").addEventListener("click", () => {
+  let fk = "", ofs = null;
+  const lis = document.querySelectorAll("#list li");
+  // Anchor ONLY if the user is scrolled INSIDE the list (first li partially above the viewport).
+  // At the top of the page we do nothing: the page stays put and the full list starts at the top.
+  if (lis.length && lis[0].getBoundingClientRect().top < 0) {
+    for (let j = 0; j < lis.length; j++) { const r = lis[j].getBoundingClientRect(); if (r.bottom > 0) { fk = lis[j].dataset.fk; ofs = r.top; break; } }
+  }
+  S.venue = ""; renderAll();
+  if (fk && ofs !== null) {
+    const nli = Array.prototype.find.call(document.querySelectorAll("#list li"), function (l) { return l.dataset.fk === fk; });
+    if (nli) window.scrollTo({ top: window.scrollY + (nli.getBoundingClientRect().top - ofs), behavior: "auto" });
+  }
+});
 $("langSel").addEventListener("change", (e) => { S.lang = e.target.value; applyLang(); buildDistricts(); renderAll(); });
 $("list").addEventListener("click", (ev) => {
   const more = ev.target.closest(".morebtn");
@@ -5504,7 +5523,17 @@ $("list").addEventListener("click", (ev) => {
   }
   if (t.classList.contains("icsbtn")) { downloadIcs(LAST[Number(t.dataset.i)]); return; }
   if (t.classList.contains("sharebtn")) { shareLink(LAST[Number(t.dataset.i)]); return; }
-  if (t.classList.contains("vlink")) { S.venue = LAST[Number(t.dataset.v)].venue.trim(); renderAll(); return; }
+  if (t.classList.contains("vlink")) {
+    const li = t.closest("li");
+    const fk = li ? li.dataset.fk : "";
+    const ofs = li ? li.getBoundingClientRect().top : null;
+    S.venue = LAST[Number(t.dataset.v)].venue.trim(); renderAll();
+    if (fk && ofs !== null) {
+      const nli = Array.prototype.find.call(document.querySelectorAll("#list li"), function (l) { return l.dataset.fk === fk; });
+      if (nli) window.scrollBy({ top: nli.getBoundingClientRect().top - ofs, behavior: "auto" });
+    }
+    return;
+  }
 });
 window.addEventListener("hashchange", () => { readHash(); applyLang(); buildDistricts(); $("langSel").value = S.lang; renderAll(); });
 $("topBtn").addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
