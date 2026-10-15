@@ -41,6 +41,11 @@
   .qwrap { position: relative; flex: 1; display: flex; }
   .qwrap::before { content: "\1f50d"; position: absolute; left: .8rem; top: 50%;
     transform: translateY(-50%); font-size: .85rem; opacity: .55; pointer-events: none; }
+  .qwrap #q { padding-right: 2rem; }
+  #qClear { position: absolute; right: .45rem; top: 50%; transform: translateY(-50%);
+    border: none; background: transparent; color: #a3a3a3; font-size: .75rem; padding: .2rem .3rem; line-height: 1; z-index: 1; }
+  #qClear:hover { color: #525252; }
+  body.dark #qClear:hover { color: #e5e5e5; }
   #q:focus { border-color: #a3a3a3; background: #fff; }
   body.dark #q { background: #171717; border-color: transparent; }
   body.dark #q:focus { border-color: #525252; background: #0a0a0a; }
@@ -168,6 +173,16 @@
   #topBtn:hover { transform: translateX(-50%) scale(1.1); box-shadow: 0 8px 24px rgba(0,0,0,.4); opacity: 1; }
   body.dark #topBtn { background: #fff; border-color: #fff; color: #171717; box-shadow: 0 6px 20px rgba(0,0,0,.6); }
 
+  /* Linkless event titles + transient toast notice (positioned near the click via JS) */
+  .evtitle.nolink { text-decoration: underline dotted; text-underline-offset: .18em; cursor: pointer; }
+  #toast { position: fixed; left: 0; top: 0; z-index: 30;
+    font-size: .76rem; font-weight: 500; color: #525252; background: #fffbeb; border: 1px solid #fcd34d; border-radius: .5rem;
+    padding: .42rem .8rem; box-shadow: 0 3px 12px rgba(0,0,0,.12); opacity: 0; pointer-events: none;
+    transform: translate(-50%, -6px) scale(.96); transform-origin: center bottom;
+    transition: opacity .18s ease, transform .18s ease; max-width: min(20rem, 90vw); text-align: center; }
+  #toast.show { opacity: 1; transform: translate(-50%, -12px) scale(1); }
+  body.dark #toast { color: #e5e5e5; background: #2a2208; border-color: #a16207; box-shadow: 0 3px 12px rgba(0,0,0,.5); }
+
   /*  Favorites, calendar & venue links  */
   .star { cursor: pointer; user-select: none; font-size: 1rem; background: none; border: none; padding: 0; color: inherit; }
   .star.on { color: #f59e0b; }
@@ -242,7 +257,7 @@
   }
 
   @media print {
-    .controls, #topBtn, .updated-badge, #genreWrap, #panel, .star, .icsbtn, .sharebtn, .morebtn, #stats, #unkBar { display: none !important; }
+    .controls, #topBtn, .updated-badge, #genreWrap, #panel, .star, .icsbtn, .sharebtn, .morebtn, #stats, #unkBar, #toast { display: none !important; }
     .evdet { display: block !important; }
     body { background: #fff; color: #000; }
     .wrap { max-width: 100%; }
@@ -268,7 +283,7 @@
 
   <div class="controls" id="controls">
     <div class="row">
-      <span class="qwrap"><input type="text" id="q" placeholder="Search artists, venues, genres&#8230;" /></span>
+      <span class="qwrap"><input type="text" id="q" placeholder="Search artists, venues, genres&#8230;" /><button id="qClear" style="display:none" aria-label="Clear search">&#10005;</button></span>
       <span id="dayWrap"><input type="date" id="day" title="Pick a day" /><button class="iconbtn" id="dayBtn" aria-label="Pick a day">&#128197;</button><button class="iconbtn" id="dayClear" style="display:none" aria-label="Clear day filter">&#10005;</button></span>
     </div>
     <div class="row scrollrow" style="justify-content:center;justify-content:safe center" role="toolbar" aria-label="Categories and quick views">
@@ -335,6 +350,7 @@
   </footer>
 </div>
 <button id="topBtn" aria-label="Back to top">&#8593;</button>
+<div id="toast" role="status" aria-live="polite"></div>
 <script>
 const EVENTS = [
   { date: "2026-09-30", time: "20:30", title: "Drunk at Your Wedding + Bleu Reine", venue: "Donau115", price: "Entry: donation", genre: "Electric Folk, Dream Rock", smokeFree: true, wheelchair: true, source: "cryptpad" },
@@ -418,25 +434,30 @@ const EVENTS = [
   { date: "2026-10-18", time: "15:00", title: "silent green presents: Kantine Musik", venue: "silent green", price: "10\u20ac at the door", genre: "", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-19", time: "19:00", title: "lose temper prsnt: Barrens + D'CO", venue: "Schokoladen", price: "15 \u20ac", genre: "Ambient, Postrock, Crust, Emo", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-19", time: "20:00", title: "Doc Flippers + Retail Simps", venue: "OGH, Neuk\u00f6lln", price: "", genre: "Total Punk, Punk, Garage Punk", smokeFree: false, wheelchair: false, source: "cryptpad" },
-  { date: "2026-10-19", time: "20:00", title: "silent green presents: Psychic Liberation Night: Andrea Pensado + HMOT + bela", venue: "silent green", price: "19,20\u20ac", genre: "Experimental, Electronic", smokeFree: true, wheelchair: true, source: "cryptpad" },
-  { date: "2026-10-19", time: "19:00", title: "Crunch Tapes presents: Maquina (PT)", venue: "Urban Spree", price: "\u20ac18.99", genre: "krautrock, noise, industrial electronics", smokeFree: false, wheelchair: false, source: "cryptpad" },
-  { date: "2026-10-19", time: "19:00", title: "brighter agency presents: Lener", venue: "Kulturhaus Insel", price: "13-23\u20ac", genre: "indie pop, dream pop", smokeFree: true, wheelchair: true, source: "cryptpad" },
+  { date: "2026-10-20", time: "20:00", title: "silent green presents: Psychic Liberation Night: Andrea Pensado + HMOT + bela", venue: "silent green", price: "19,20\u20ac", genre: "Experimental, Electronic", smokeFree: true, wheelchair: true, source: "cryptpad" },
+  { date: "2026-10-20", time: "19:00", title: "Positive Transmitter & Crunch Tapes present: Maquina + Errorr", venue: "Urban Spree", price: "\u20ac19.99", genre: "krautrock, noise, industrial electronics", smokeFree: false, wheelchair: false, source: "cryptpad" },
+  { date: "2026-10-20", time: "19:00", title: "brighter agency presents: Lener", venue: "Kulturhaus Insel", price: "13-23\u20ac", genre: "indie pop, dream pop", smokeFree: true, wheelchair: true, source: "cryptpad" },
+  { date: "2026-10-20", time: "20:00", title: "Kashual Plastik presents: C. Lavender + Joke Lanz, Exhibition: Klaus Kamptner", venue: "West Germany, Kreuzberg", price: "Tickets: 13,50 - 15 \u20ac", genre: "experimental, electronics, noise, improv", smokeFree: false, wheelchair: false, source: "cryptpad" },
+  { date: "2026-10-20", time: "19:00", title: "thirsty & miserable + Crunch Tapes presents: Thank + Lvft", venue: "Schokoladen", price: "10 - 16\u20ac", genre: "Noise-Rock, Post-Punk", smokeFree: false, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-21", time: "19:00", title: "brighter agency & little league shows present: Mleko & Whisker", venue: "Schokoladen", price: "\u20ac11-15,60", genre: "post-rock, exp-folk, art-rock", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-21", time: "19:00", title: "Powerline Agency present: Nina Winder-Lind", venue: "Neue Zukunft (Garage)", price: "19,80\u20ac", genre: "Folk, Garage Rock, Art Rock", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-21", time: "19:30", title: "Music for Cinemas presents: Nadja Live Score", venue: "Filmrauschpalast Moabit", price: "16 \u20ac", genre: "audiovisual, experimental, electronic \ud83d\udead", smokeFree: true, wheelchair: false, source: "cryptpad" },
-  { date: "2026-10-22", time: "19:00", title: "Puschen presents: Roomer", venue: "Neue Zukunft", price: "19,80 \u20ac", genre: "guitar-driven folk, shoegaze density, indie", smokeFree: true, wheelchair: true, source: "cryptpad" },
+  { date: "2026-10-21", time: "19:00", title: "Plattenbau Deathcult", venue: "Wild At Heart, Kreuzberg", price: "", genre: "Metal, Hardcore", smokeFree: false, wheelchair: false, source: "cryptpad" },
+  { date: "2026-10-22", time: "19:00", title: "Puschen presents: Roomer + Jules Reidy", venue: "Neue Zukunft", price: "19,80 \u20ac", genre: "guitar-driven folk, shoegaze density, indie", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-22", time: "19:00", title: "Modern Age presents: StrawberryJam + Personality + Klang", venue: "Gibney's Berlin", price: "15 \u20ac", genre: "Indie, Post-punk, Alternative", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-22", time: "19:00", title: "bricks agency & little league shows prsnt: Versacer + Apollo Online", venue: "Schokoladen", price: "\u20ac12,50-16,70", genre: "Indie, Indie-Pop", smokeFree: true, wheelchair: true, source: "cryptpad" },
+  { date: "2026-10-22", time: "19:00", title: "Korni, El Es Dias & Geigerz\u00e4hler", venue: "Zaubergarten", price: "", genre: "folk, noise, punk", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-23", time: "19:00", title: "Loge. Kneipenkollekitv presents: Margot Erkner + Kpt. Plasto", venue: "Loge.", price: "10-15\u20ac", genre: "Alternative, Garage, Punk", smokeFree: true, wheelchair: false, source: "cryptpad" },
-  { date: "2026-10-23", time: "19:00", title: "Puschen presents: Fiona Fiasco", venue: "Neue Zukunft (Garage)", price: "16,50 \u20ac", genre: "cinematic nature-filled indie-folk", smokeFree: true, wheelchair: true, source: "cryptpad" },
+  { date: "2026-10-23", time: "19:00", title: "thirsty & miserable presents: Fluten + tba", venue: "Schokoladen", price: "10 - 16\u20ac", genre: "Indie-Punk, Post-HC", smokeFree: false, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-23", time: "20:00", title: "silent green presents: Acephalic Headspace pres. ladr ache + L\u00e9sions Graves Sextet plays Julius Eastman", venue: "silent green", price: "19,20\u20ac", genre: "Experimental, Minimal", smokeFree: true, wheelchair: true, source: "cryptpad" },
-  { date: "2026-10-23", time: "", title: "Crunch Tapes and Positive Transmitter present: lovetempo (US) + Moriah Plaza", venue: "TBA", price: "", genre: "", smokeFree: false, wheelchair: false, source: "cryptpad" },
-  { date: "2026-10-23", time: "20:00", title: "HOSE presents: Ken Chic, Lonalih, Stiftung", venue: "West Germany, Kreuzberg", price: "", genre: "Life Music, LoFi, Ambiente", smokeFree: false, wheelchair: false, source: "cryptpad" },
+  { date: "2026-10-23", time: "20:00", title: "Hose presents: Ken Chic + Lonalih + Stiftung", venue: "West Germany, Kreuzberg", price: "", genre: "Life Music, LoFi, Ambiente", smokeFree: false, wheelchair: false, source: "cryptpad" },
+  { date: "2026-10-23", time: "19:00", title: "Big & Ugly Sound System & Anagram present: Wassermann + Cyrino + Re\u017en\u00fd x Tavil (LP Release)", venue: "Anagram Space", price: "Donation", genre: "Experimental, Free Improvisation, Noise", smokeFree: false, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-23", time: "19:00", title: "bsy agency presents: Cactus For Breakfast + wearemarvin", venue: "Monarch Bar", price: "11.33\u20ac - 20 \u20ac", genre: "surf-rock, indie-rock, psych-rock", smokeFree: false, wheelchair: true, source: "cryptpad" },
-  { date: "2026-10-24", time: "", title: "Crunch Tapes presents: The Black Cat's Eye + Highest Primzahl On Mars", venue: "Loge", price: "", genre: "\ud83d\udead", smokeFree: true, wheelchair: false, source: "cryptpad" },
+  { date: "2026-10-24", time: "19:00", title: "Crunch Tapes presents: The Black Cat's Eye + Highest Primzahl On Mars", venue: "Loge", price: "13.89 \u20ac", genre: "psychedelic, prog rock, space rock", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-24", time: "19:00", title: "brighter agency presents: Tracey Nelson", venue: "8mm Bar", price: "10,50-21,50\u20ac", genre: "country, indie rock", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-24", time: "19:00", title: "Atomic Fruit + Planet Opal (IT)", venue: "Baketown Berlin", price: "17 - 22 \u20ac", genre: "psychedelic, alternative, disco-punk", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-24", time: "19:00", title: "Little Tiger Booking presents: Laras\u00fc\u00df + Tim Strauch B2B MomiK", venue: "Revolte-Bar", price: "Free Entry", genre: "New Wave, Post-Punk, Ambient Dub", smokeFree: false, wheelchair: false, source: "cryptpad" },
+  { date: "2026-10-24", time: "19:00", title: "Disaster By Design and East Side Delta present: Bank Myna + Deule + Sarram", venue: "Across From Willy Brandt Haus", price: "", genre: "Post-Metal, Post-Doom, Drone", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-25", time: "", title: "Crunch Tapes presents: Lagrimas (US) + ONLY + Greetings From", venue: "Neue Zukunft (Garage)", price: "", genre: "", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-25", time: "18:00", title: "Organ Sequences Presents: The international nothing + Jessie Marino + Werner Durand + Werner Dafeldecker + R\u00e9gis Lemberthe + Sophie Renger + Romain C. Bertheau", venue: "Taborkirche", price: "\u20ac15", genre: "", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-25", time: "19:00", title: "brighter agency and BIS! presents: Massimo Silverio + Tara Nome Doyle", venue: "Kantine am Berghain", price: "16 - 21 - 26\u20ac", genre: "post-rock, folk", smokeFree: false, wheelchair: false, source: "cryptpad" },
@@ -444,13 +465,16 @@ const EVENTS = [
   { date: "2026-10-26", time: "19:00", title: "brighter agency presents: Jeffrey Lewis + Mumbles", venue: "Neue Zukunft", price: "17-27\u20ac", genre: "anti folk, punk folk", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-27", time: "20:00", title: "amSTARt presents: g.rag / zelig implosion deluxxe", venue: "Dave Lombardo Bar", price: "0 \u20ac", genre: "No Wave", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-27", time: "20:00", title: "silent green presents: Superfan + Coals", venue: "silent green", price: "18,06\u20ac", genre: "Indie, Alternative-Rock", smokeFree: true, wheelchair: true, source: "cryptpad" },
+  { date: "2026-10-27", time: "19:00", title: "CBK presents: Emma Elisabeth & Reema", venue: "Gibney's/The Other Room", price: "Donations (10\u20ac+)", genre: "Indie, Pop, Singer/Songwriter", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-28", time: "19:00", title: "n.e.s.t.a. & little league shows prsnt: Plaka & Saturno 4000", venue: "Schokoladen", price: "\u20ac11-15,70", genre: "Garage-Funk, Psych-Grooves", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-28", time: "19:00", title: "Fantasticore presents: Deafkids (brz), Kombi (brz)", venue: "neue zukunft", price: "\u20ac17", genre: "experimental, noise, punk", smokeFree: true, wheelchair: true, source: "cryptpad" },
+  { date: "2026-10-28", time: "19:00", title: "FCKSCHNTZL", venue: "Wild at Heart", price: "0 \u20ac", genre: "Punk rock", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-29", time: "20:00", title: "silent green presents: Temple of Faitiche pres. U.e. (Ulla) + Martin Brandlmayr", venue: "silent green", price: "19,20\u20ac", genre: "Experimental, Electronic", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-30", time: "19:00", title: "BeyondBooking presents: HOUSEMEISTER LP FUNDRAISER - vold [stonerdoom/Berlin] x zeug [dronepunk/Berlin]", venue: "Kantine am Berghain", price: "18,10\u20ac", genre: "", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-30", time: "19:00", title: "amSTARt presents: Aniqo + Jonny + Love Supreme", venue: "Galil\u00e4a-Kirche", price: "17,00 \u20ac/19,99 \u20ac", genre: "cinematic Art-Pop, Folk, Indietronic", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-30", time: "", title: "Crunch Tapes and Positive Transmitter present: Crocodiles (US)", venue: "Neue Zukunft", price: "", genre: "indie rock, garage, psych-pop", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-30", time: "19:30", title: "Schwarz Metall f\u00fcr schw\u00e4rzeste W\u00e4lder presents: Grabunhold + Thronecult + Garota", venue: "Exil-Klinke", price: "AK: 15 \u20ac", genre: "Black Metal", smokeFree: true, wheelchair: true, source: "cryptpad" },
+  { date: "2026-10-31", time: "18:00", title: "Ghoul Fest Vol. 3: Fan Club (Lysol) / Industry / Oust / Wet Dream War Machine / Dream Council / Spixe / Matriark", venue: "Neue Zukunft", price: "17,00\u20ac", genre: "Punkrock, Doom, Darkwave", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-31", time: "20:00", title: "131.2 Punkrock Crew Berlin presents Schwindelbude + Schlagsaite + Mike & the Assfuckers", venue: "Sama32", price: "Donation", genre: "Punkrock", smokeFree: false, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-31", time: "19:00", title: "amSTARt presents: Sinem + Naari", venue: "Urban Spree", price: "16,98 \u20ac/19,99 \u20ac", genre: "Anadolu-Rock, Post Punk", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-31", time: "19:00", title: "my people booking & little league shows prsnt: Nothing Works & Guests", venue: "Schokoladen", price: "\u20ac11-15,70", genre: "Post-Hardcore, HC-Punk, Indie-Rock", smokeFree: true, wheelchair: true, source: "cryptpad" },
@@ -465,11 +489,14 @@ const EVENTS = [
   { date: "2026-11-06", time: "19:00", title: "Loge. Kneipenkollekitv presents: Silk + Support", venue: "Loge.", price: "10-15\u20ac", genre: "Alternative, Garage, Punk", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-06", time: "19:00", title: "brighter agency presents: Eilis Frawley", venue: "Rough Trade", price: "", genre: "spoken word/kraut/pop", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-06", time: "19:00", title: "trusty chords, mangel & little league shows prsnt: Fervents & Ulla Suspekt", venue: "Schokoladen", price: "\u20ac11-15,70", genre: "Punk-Rock, Post-Punk, Indie", smokeFree: true, wheelchair: true, source: "cryptpad" },
-  { date: "2026-11-06", time: "19:00", title: "Loge. Kneipenkollekitv presents: Monad + Sweetspot", venue: "Loge.", price: "10-15\u20ac", genre: "Alternative, Dreampop", smokeFree: true, wheelchair: false, source: "cryptpad" },
-  { date: "2026-11-06", time: "19:00", title: "amSTARt presents: Mittekill & Die Hochzeitsband + Cora Peter Frost + DJ Florian Illing", venue: "B.L.O. Kantine", price: "18,35 \u20ac", genre: "Techno-Blues, Punk-House, Piano-Chansons", smokeFree: true, wheelchair: true, source: "cryptpad" },
-  { date: "2026-11-06", time: "20:00", title: "Frictive Frequencies presents: Matthias Koole + Lorena Izquierdo + Mizuki Ishikawa", venue: "ausland. Lychener Str. 60", price: "10,- \u20ac", genre: "experimental, improvisation \ud83d\udead contact us for accessibility needs.", smokeFree: true, wheelchair: false, source: "cryptpad" },
+  { date: "2026-11-07", time: "19:00", title: "Loge. Kneipenkollekitv presents: Monad + Sweetspot", venue: "Loge.", price: "10-15\u20ac", genre: "Alternative, Dreampop", smokeFree: true, wheelchair: false, source: "cryptpad" },
+  { date: "2026-11-07", time: "19:00", title: "amSTARt presents: Mittekill & Die Hochzeitsband + Cora Peter Frost + DJ Florian Illing", venue: "B.L.O. Kantine", price: "18,35 \u20ac", genre: "Techno-Blues, Punk-House, Piano-Chansons", smokeFree: true, wheelchair: true, source: "cryptpad" },
+  { date: "2026-11-07", time: "20:00", title: "Frictive Frequencies presents: Matthias Koole + Lorena Izquierdo + Mizuki Ishikawa", venue: "ausland. Lychener Str. 60", price: "10,- \u20ac", genre: "experimental, improvisation \ud83d\udead contact us for accessibility needs.", smokeFree: true, wheelchair: false, source: "cryptpad" },
+  { date: "2026-11-07", time: "20:30", title: "The Tulips & Hatless Cat", venue: "Trxxxter", price: "", genre: "Garage, Rock'n'Roll, Ska", smokeFree: false, wheelchair: false, source: "cryptpad" },
+  { date: "2026-11-07", time: "19:00", title: "The David Watts Foundation presents: fluppe + Support: Sid Vision", venue: "8mm Bar", price: "14,45\u20ac", genre: "Alternative, Dreampop, Postpunk", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-08", time: "19:00", title: "East Side Delta, Lockkunst e.V. and YaYaYeah present: T\u00d5 Y\u00d5 + Daisy Confused + Sector 7G", venue: "B.L.O. Kantine", price: "13,70\u20ac", genre: "psychedelic rock, krautrock, visual live performance", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-11-09", time: "19:00", title: "crunch tapes, punkfilmfest & little league prsnt: Shaki Tavi (us)", venue: "Schokoladen", price: "\u20ac11,50-16,20", genre: "Noise-Rock, Shoegaze, Alternative", smokeFree: true, wheelchair: true, source: "cryptpad" },
+  { date: "2026-11-09", time: "19:00", title: "See You Soon Shows presents: IDEM + Deshielo + Saltfalls", venue: "Rxxxxhaus (Kreuzberg)", price: "donation", genre: "emo punk, screamo, shoegaze", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-10", time: "19:00", title: "Crunch Tapes and Positive Transmitter present: Godzilla In The Kitchen + Mudfinger", venue: "Neue Zukunft", price: "\u20ac13.89", genre: "heavy psych, alt-metal, stoner", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-10", time: "19:00", title: "annibale, beav boloney & little league shows prsnt: Edging & Jazz", venue: "Schokoladen", price: "\u20ac11-15,70", genre: "Post-Punk, Punk", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-11-11", time: "19:00", title: "Crunch Tapes and Positive Transmitter present: Midwife (US) + Devin Shaffer (US)", venue: "Genezarethkirche", price: "19,99 \u20ac", genre: "slowcore, ambient, dream pop", smokeFree: false, wheelchair: false, source: "cryptpad" },
@@ -480,12 +507,13 @@ const EVENTS = [
   { date: "2026-11-13", time: "21:00", title: "Sheev + Caosonora + Ghostones", venue: "Slaughterhouse", price: "16,50 \u20ac", genre: "Stoner Rock, Progressive Rock, Metal", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-11-14", time: "19:00", title: "Loge. Kneipenkollekitv presents: Pamphlets + Support", venue: "Loge.", price: "10-15\u20ac", genre: "Postpunk", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-14", time: "20:00", title: "131.2 Punkrock Crew Berlin presents: Kaputte Intelligenz + Cock-Ups + OMD", venue: "Abstand", price: "Donation", genre: "Punkrock", smokeFree: false, wheelchair: true, source: "cryptpad" },
-  { date: "2026-11-14", time: "20:00", title: "Sunday 15 November |  | BeyondBooking presents: Aantz [experimental techno/ambient/Berlin] x UnoX [experimental dub/Berlin]", venue: "Panke Culture", price: "18,10\u20ac", genre: "", smokeFree: false, wheelchair: false, source: "cryptpad" },
-  { date: "2026-11-16", time: "19:00", title: "Powerline Agency present: Guy Offenbach & Original Karaoke Band + No Waves", venue: "Neue Zukunft Garage", price: "16,50\u20ac", genre: "Abstract Surf Rock, 1950s Pop", smokeFree: false, wheelchair: false, source: "cryptpad" },
+  { date: "2026-11-14", time: "20:00", title: "BeyondBooking presents: Aantz [experimental techno/ambient/Berlin] x UnoX [experimental dub/Berlin]", venue: "Panke Culture", price: "18,10\u20ac", genre: "", smokeFree: false, wheelchair: false, source: "cryptpad" },
+  { date: "2026-11-16", time: "19:00", title: "Powerline Agency presents: Nowaves + Guy Offenbach & Original Karaoke Band", venue: "Neue Zukunft Garage", price: "16,50\u20ac", genre: "Abstract Surf Rock, 1950s Pop", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-16", time: "19:00", title: "little league shows prsnts: ILA & I Love You Honey Bunny", venue: "Schokoladen", price: "\u20ac11-15,70", genre: "Indie-Rock, Indie-Pop, Alternative", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-11-18", time: "", title: "Crunch Tapes and Positive Transmitter present: \u00c5rabrot (NO/SE) + Intercourse (US)", venue: "Neue Zukunft", price: "", genre: "noise rock, art rock, mathcore", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-19", time: "19:00", title: "Modern Age presents: Sable Season + Blind Arrowhead + How to Make Friends", venue: "Gibney's Berlin", price: "10-15 \u20ac", genre: "Indie, Folk, Alternative", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-11-20", time: "19:00", title: "Loge. Kneipenkollekitv presents: Gnoomes + Support", venue: "Loge.", price: "10-15\u20ac", genre: "Postpunk", smokeFree: true, wheelchair: false, source: "cryptpad" },
+  { date: "2026-11-20", time: "20:00", title: "Aufnahme + Wiedergabe, X3 Podcast, Underground Institute & amSTARt pr\u00e4sentieren: Jemek Jemowit + Nainn + DJ Mary Ocher + DJ Philipp Strobel", venue: "WestGermany", price: "14,68 \u2013 19,80 \u20ac", genre: "", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-21", time: "19:00", title: "Crunch Tapes and Positive Transmitter present: 60 juno (US)", venue: "Kantine am Berghain", price: "\u20ac19.99", genre: "post-punk, indie", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-23", time: "19:00", title: "brighter agency presents:", venue: "@ Kantine am Berghain", price: "18-23\u20ac", genre: "Hyper Folk", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-24", time: "20:00", title: "silent green presents: Angela Bat Dawid", venue: "silent green", price: "19,20\u20ac", genre: "", smokeFree: true, wheelchair: true, source: "cryptpad" },
@@ -511,9 +539,9 @@ const EVENTS = [
   { date: "2026-12-19", time: "20:00", title: "131.2 Punkrock Crew Berlin presents: Verschleisz + Gnatz + Pornscars", venue: "Sama32", price: "Donation", genre: "Punkrock", smokeFree: false, wheelchair: true, source: "cryptpad" },
   { date: "2026-12-19", time: "19:00", title: "Greyzone Concerts pr\u00e4sentiert: D*B*S*", venue: "Neue Zukunft", price: "\u20ac 19,90", genre: "Punk + Stoner Rock", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-12-22", time: "19:00", title: "Crunch Tapes presents: Poledance", venue: "Schokoladen", price: "\u20ac14.97", genre: "alt-pop-rock, emo, pop-punk", smokeFree: false, wheelchair: false, source: "cryptpad" },
-  { date: "2026-12-22", time: "", title: "Euroteuro album release show", venue: "Schokoladen", price: "16 \u20ac", genre: "postpunk, new wave, indie", smokeFree: false, wheelchair: false, source: "cryptpad" },
-  { date: "2026-12-22", time: "19:00", title: "brighter agency presents: Will Samson", venue: "UFA Fabrik", price: "", genre: "folk, electronic, ambient", smokeFree: false, wheelchair: false, source: "cryptpad" },
-  { date: "2026-12-22", time: "19:00", title: "dynamite konzerte & little league shows prsnts: Honig & Meursault", venue: "Schokoladen", price: "\u20ac15,40", genre: "Folk, Indie, Pop", smokeFree: false, wheelchair: false, source: "cryptpad" },
+  { date: "2027-01-27", time: "", title: "Euroteuro album release show", venue: "Schokoladen", price: "16 \u20ac", genre: "postpunk, new wave, indie", smokeFree: false, wheelchair: false, source: "cryptpad" },
+  { date: "2027-02-07", time: "19:00", title: "brighter agency presents: Will Samson", venue: "UFA Fabrik", price: "", genre: "folk, electronic, ambient", smokeFree: false, wheelchair: false, source: "cryptpad" },
+  { date: "2027-02-22", time: "19:00", title: "dynamite konzerte & little league shows prsnts: Honig & Meursault", venue: "Schokoladen", price: "\u20ac15,40", genre: "Folk, Indie, Pop", smokeFree: false, wheelchair: false, source: "cryptpad" },
 
   // \u2500\u2500 mytrueintent.blogspot.com (CSV export: Gigs Berlin.xlsx, Oct 2026 \u2013 May 2027) \u2500\u2500
   { date: "2026-10-08", title: "Myles Smith", venue: "Columbiahalle", source: "mytrueintent" },
@@ -763,15 +791,12 @@ const EVENTS = [
   { date: "2026-10-20", title: "C\u00e9cile McLorin Salvant / Oh Snap", venue: "Kammermusiksaal Philharmonie", source: "mytrueintent" },
   { date: "2026-10-20", title: "AB Syndrom", venue: "Kantine Berghain", source: "mytrueintent" },
   { date: "2026-10-20", title: "R\u00e9plicas II Emilio Gordoa (vibraphone) & Lucy Railton (cello) // Leslie Garc\u00eda (electronics) & Daniela Huerta (electronics)", venue: "KM28", source: "mytrueintent" },
-  { date: "2026-10-20", title: "Lener", venue: "Kulturhaus Insel", source: "mytrueintent" },
   { date: "2026-10-20", title: "Ronnie Romero & Gus G", venue: "Lido", source: "mytrueintent" },
   { date: "2026-10-20", title: "Max Fry", venue: "Mikropol", source: "mytrueintent" },
   { date: "2026-10-20", title: "Skraeckoedlan / Echoes Like Dust", venue: "Neue Zukunft", source: "mytrueintent" },
   { date: "2026-10-20", title: "Sparta", venue: "Neue Zukunft", source: "mytrueintent" },
   { date: "2026-10-20", title: "Bojan", venue: "Privatclub", source: "mytrueintent" },
   { date: "2026-10-20", title: "Sony Shats", venue: "Privatclub", source: "mytrueintent" },
-  { date: "2026-10-20", title: "Thank /LVFT", venue: "Schokoladen", source: "mytrueintent" },
-  { date: "2026-10-20", title: "Psychic Liberation Night: Andrea Pensado + HMOT + bela", venue: "Silent Green", source: "mytrueintent" },
   { date: "2026-10-20", title: "TABBER", venue: "SO36", source: "mytrueintent" },
   { date: "2026-10-21", title: "FKJ", venue: "Astra", source: "mytrueintent" },
   { date: "2026-10-21", title: "Alqemiste", venue: "Badehaus", source: "mytrueintent" },
@@ -788,7 +813,6 @@ const EVENTS = [
   { date: "2026-10-21", title: "Robine", venue: "Privatclub", source: "mytrueintent" },
   { date: "2026-10-21", title: "The Brooks", venue: "Quasimodo", source: "mytrueintent" },
   { date: "2026-10-21", title: "Sintonia 2026 Attunement I: Concepci\u00f3n Huerta + hexorcismos", venue: "Silent Green", source: "mytrueintent" },
-  { date: "2026-10-21", title: "Plattenbau Deathcult - Wild Wednesday Eintritt frei!", venue: "Wild At Heart", source: "mytrueintent" },
   { date: "2026-10-22", title: "Marina Sena", venue: "Astra", source: "mytrueintent" },
   { date: "2026-10-22", title: "Naked Cameo", venue: "Bi Nuu", source: "mytrueintent" },
   { date: "2026-10-22", title: "Trendz", venue: "Columbia Theater", source: "mytrueintent" },
@@ -833,7 +857,6 @@ const EVENTS = [
   { date: "2026-10-23", title: "Narkose / Schimmel \u00dcber Berlin / Sexverbot / Carlo Karacho", venue: "Neue Zukunft", source: "mytrueintent" },
   { date: "2026-10-23", title: "Tay Oskee / The New Light", venue: "Privatclub", source: "mytrueintent" },
   { date: "2026-10-23", title: "EB Davis & The Superband", venue: "Quasimodo", source: "mytrueintent" },
-  { date: "2026-10-23", title: "Fluten", venue: "Schokoladen", source: "mytrueintent" },
   { date: "2026-10-23", title: "Abul Mogard & Marja De Sanctis - A/V Premiere Rafael Anton Irisarri / Concepc\u00edon Huerta", venue: "Silent Green", source: "mytrueintent" },
   { date: "2026-10-23", title: "Female Fronted Is Not A Genre - Hardcore / Punk Festival - Day 2", venue: "SO36", source: "mytrueintent" },
   { date: "2026-10-23", title: "Nights on Broadway - A Tribute to the Bee Gees performed by Night Fever", venue: "Tempodrom", source: "mytrueintent" },
@@ -923,7 +946,6 @@ const EVENTS = [
   { date: "2026-10-28", title: "Codefendants", venue: "SO36", source: "mytrueintent" },
   { date: "2026-10-28", title: "The Fray", venue: "Tempodrom", source: "mytrueintent" },
   { date: "2026-10-28", title: "Lip Critic", venue: "Urban Spree", source: "mytrueintent" },
-  { date: "2026-10-28", title: "FCKSCHNTZL - Wild Wednesday Eintritt frei", venue: "Wild At Heart", source: "mytrueintent" },
   { date: "2026-10-29", title: "D\u00e4mmerland", venue: "Admiralspalast", source: "mytrueintent" },
   { date: "2026-10-29", title: "Dendemann", venue: "Astra", source: "mytrueintent" },
   { date: "2026-10-29", title: "David Mayonga aka Roger Rekless", venue: "Bi Nuu", source: "mytrueintent" },
@@ -972,7 +994,6 @@ const EVENTS = [
   { date: "2026-10-31", title: "Brosie", venue: "Kulturhaus Insel", source: "mytrueintent" },
   { date: "2026-10-31", title: "Mgna Crrrta - Live at Bleach Berlin", venue: "Lark", source: "mytrueintent" },
   { date: "2026-10-31", title: "De Staat", venue: "Lido", source: "mytrueintent" },
-  { date: "2026-10-31", title: "Ghoul Fest - Fan club, Pust, Psykostat, Wet Dream Machine, Spixe, Industry, Deram Council", venue: "Neue Zukunft", source: "mytrueintent" },
   { date: "2026-10-31", title: "Psyche / Sea Of Sin", venue: "Privatclub", source: "mytrueintent" },
   { date: "2026-10-31", title: "The Cloverhearts / Stinky - Celtic Halloween Night", venue: "Roadrunners", source: "mytrueintent" },
   { date: "2026-10-31", title: "Seein Red / M\u00f6rser / Rytes", venue: "Tommy-Weisbecker-Haus", source: "mytrueintent" },
@@ -1090,7 +1111,6 @@ const EVENTS = [
   { date: "2026-11-06", title: "Mehnersmoos", venue: "Uber Eats Music Hall", source: "mytrueintent" },
   { date: "2026-11-06", title: "Tigercub", venue: "Urban Spree", source: "mytrueintent" },
   { date: "2026-11-06", title: "Grumpynators / Kollision", venue: "Wild At Heart", source: "mytrueintent" },
-  { date: "2026-11-07", title: "Mittekill & Hochzeitsband - 'Jungejungejunge' Releaseshow", venue: "B.L.O. Kantine", source: "mytrueintent" },
   { date: "2026-11-07", title: "David Eugene Edwards", venue: "Bi Nuu", source: "mytrueintent" },
   { date: "2026-11-07", title: "Heaven 17", venue: "Columbia Theater", source: "mytrueintent" },
   { date: "2026-11-07", title: "Enter Shikari / Holding Absence / The Callous Daoboys", venue: "Columbiahalle", source: "mytrueintent" },
@@ -1361,7 +1381,6 @@ const EVENTS = [
   { date: "2026-11-20", title: "ParkPunk / FCKSCHTZL", venue: "Schokoladen", source: "mytrueintent" },
   { date: "2026-11-20", title: "Milano", venue: "Tempodrom", source: "mytrueintent" },
   { date: "2026-11-20", title: "Sebastian Neuweger", venue: "Uber Eats Music Hall", source: "mytrueintent" },
-  { date: "2026-11-20", title: "Jemek Jemowit / Nainn", venue: "West Germany", source: "mytrueintent" },
   { date: "2026-11-20", title: "Clive (Splitting Image) and friends &/ Smelly Family", venue: "Wild At Heart", source: "mytrueintent" },
   { date: "2026-11-21", title: "Rosa Beton - Album Session", venue: "Abstand", source: "mytrueintent" },
   { date: "2026-11-21", title: "MC Bomber", venue: "Astra", source: "mytrueintent" },
@@ -1927,7 +1946,6 @@ const EVENTS = [
   { date: "2027-01-27", title: "Levin Liam", venue: "Huxleys", source: "mytrueintent" },
   { date: "2027-01-27", title: "Wirsing", venue: "Monarch", source: "mytrueintent" },
   { date: "2027-01-27", title: "Bakr Khleifi & Derya T\u00fcrkan", venue: "Pierre Boulez Saal", source: "mytrueintent" },
-  { date: "2027-01-27", title: "Euroteuro", venue: "Schokoladen", source: "mytrueintent" },
   { date: "2027-01-27", title: "Andr\u00e9 Rieu", venue: "Uber Arena", source: "mytrueintent" },
   { date: "2027-01-28", title: "Touring", venue: "Gretchen", source: "mytrueintent" },
   { date: "2027-01-28", title: "Isaiah Rashad", venue: "Huxleys", source: "mytrueintent" },
@@ -2092,7 +2110,6 @@ const EVENTS = [
   { date: "2027-02-22", title: "Melrose Avenue", venue: "Columbia Theater", source: "mytrueintent" },
   { date: "2027-02-22", title: "Julia Jacklin", venue: "Festsaal Kreuzberg", source: "mytrueintent" },
   { date: "2027-02-22", title: "Adam Green / Turner Cody & The Soldiers Of Love", venue: "Heimathafen Neuk\u00f6lln", source: "mytrueintent" },
-  { date: "2027-02-22", title: "Honig & Meursault", venue: "Schokoladen", source: "mytrueintent" },
   { date: "2027-02-22", title: "MC Windhund", venue: "SO36", source: "mytrueintent" },
   { date: "2027-02-23", title: "Sleeping With Sirens / Arm's Length / Like Roses", venue: "Astra", source: "mytrueintent" },
   { date: "2027-02-23", title: "Joel Sarakula", venue: "Badehaus", source: "mytrueintent" },
@@ -4684,7 +4701,7 @@ const S = {
 };
 const today = new Date().toISOString().slice(0, 10);
 const $ = (id) => document.getElementById(id);
-const LAST_UPDATED = "11 October 2026";
+const LAST_UPDATED = "15 October 2026";
 
 //  Venue links (single source of truth) 
 // Event-specific links (mobilize/web) take precedence; otherwise the venue's site is used.
@@ -4731,6 +4748,7 @@ const VENUE_LINKS = {
   "West Germany": "https://westgermany.eu/",
   "West Germany, Kreuzberg": "https://westgermany.eu/",
   "UFA Fabrik": "https://ufafabrik.de/en",
+  "Anagram Space": "https://anagramspace.com/berlin-store/",
   "Trxxxxr": "https://ra.co/clubs/46764",
   "Trxxxer": "https://ra.co/clubs/46764",
   "TrxxxTa, U Schles. Tor, X-Berg": "https://ra.co/clubs/46764",
@@ -4891,7 +4909,7 @@ const LANGS = {
   en: { upcoming: "Upcoming", archive: "Archive", search: "Search artists, venues, genres\u2026", filters: "Filters", reset: "\u21ba Reset",
     free: "Free / donation only", access: "Accessible or smoke-free only", source: "Source", district: "District",
     price: "Price range (events with a price only)", genre: "Genre", tonight: "Today", favs: "\u2b50 Favorites", all: "All", unknownGenre: "Genre unknown",
-    unkHidden: (n) => n + " music events without a known genre are hidden \u2014 include them?", unkInclude: "Include", unkHide: "Hide them", coverNote: "Cover / tribute band", postponedNote: "Postponed \u2014 new date to be announced",
+    unkHidden: (n) => n + " music events without a known genre are hidden \u2014 include them?", unkInclude: "Include", unkHide: "Hide them", coverNote: "Cover / tribute band", postponedNote: "Postponed \u2014 new date to be announced", noLink: "No link available for this event \u2014 sorry",
     subTitle: "A minimal digest of concerts, theatre, art and cinema in Berlin \u2014 gathered from independent sources",
     calHint: "Save any event straight to your calendar",
     count: (v, d) => (d === "archive" ? "Archive" : "Upcoming") + " \u00b7 " + v + " events",
@@ -4899,7 +4917,7 @@ const LANGS = {
   de: { upcoming: "Bevorstehend", archive: "Archiv", search: "K\u00fcnstler, Venues, Genres suchen\u2026", filters: "Filter", reset: "\u21ba Zur\u00fccksetzen",
     free: "Nur frei / Spende", access: "Nur barrierefrei oder rauchfrei", source: "Quelle", district: "Bezirk",
     price: "Preisspanne (nur Events mit Preis)", genre: "Genre", tonight: "Heute", favs: "\u2b50 Favoriten", all: "Alle", unknownGenre: "Genre unbekannt",
-    unkHidden: (n) => n + " Musik-Events ohne bekanntes Genre sind ausgeblendet \u2014 einblenden?", unkInclude: "Einblenden", unkHide: "Ausblenden", coverNote: "Cover-/Tribute-Band", postponedNote: "Verschoben \u2014 neuer Termin wird bekannt gegeben",
+    unkHidden: (n) => n + " Musik-Events ohne bekanntes Genre sind ausgeblendet \u2014 einblenden?", unkInclude: "Einblenden", unkHide: "Ausblenden", coverNote: "Cover-/Tribute-Band", postponedNote: "Verschoben \u2014 neuer Termin wird bekannt gegeben", noLink: "Kein Link f\u00fcr diese Veranstaltung verf\u00fcgbar \u2014 Entschuldigung",
     subTitle: "Ein minimales Digest von Konzerten, Theater, Kunst und Kino in Berlin \u2014 aus unabh\u00e4ngigen Quellen zusammengetragen",
     calHint: "Speichere jede Veranstaltung direkt in deinem Kalender",
     count: (v, d) => (d === "archive" ? "Archiv" : "Bevorstehend") + " \u00b7 " + v + " Veranstaltungen",
@@ -4907,7 +4925,7 @@ const LANGS = {
   it: { upcoming: "In arrivo", archive: "Archivio", search: "Cerca artisti, venue, generi\u2026", filters: "Filtri", reset: "\u21ba Azzera",
     free: "Solo gratuiti / offerta", access: "Solo accessibili o senza fumo", source: "Fonte", district: "Quartiere",
     price: "Fascia di prezzo (solo eventi con prezzo)", genre: "Genere", tonight: "Oggi", favs: "\u2b50 Preferiti", all: "Tutti", unknownGenre: "Genere sconosciuto",
-    unkHidden: (n) => n + " eventi musicali senza genere noto sono nascosti \u2014 includerli?", unkInclude: "Includili", unkHide: "Nascondili", coverNote: "Cover / tribute band", postponedNote: "Posticipato \u2014 nuova data da annunciare",
+    unkHidden: (n) => n + " eventi musicali senza genere noto sono nascosti \u2014 includerli?", unkInclude: "Includili", unkHide: "Nascondili", coverNote: "Cover / tribute band", postponedNote: "Posticipato \u2014 nuova data da annunciare", noLink: "Nessun link disponibile per questo evento \u2014 scusa",
     subTitle: "Un digest essenziale di concerti, teatro, arte e cinema a Berlino \u2014 raccolto da fonti indipendenti",
     calHint: "Salva ogni evento direttamente nel tuo calendario",
     count: (v, d) => (d === "archive" ? "Archivio" : "In arrivo") + " \u00b7 " + v + " eventi",
@@ -5014,6 +5032,7 @@ const VENUES = {
   "RBB Gro\u00dfer Sendesaal": ["Masurenallee 8-14, 14057 Berlin", "Westend"],
   "Richten25": ["Gerichtstr. 25, 13347 Berlin", "Wedding"],
   "Roadrunner's": ["Saarbr\u00fccker Str. 24, 10405 Berlin", "Prenzlauer Berg"],
+  "Rxxxxhaus (Kreuzberg)": ["", "Kreuzberg"],
   "Roter Salon": ["Linienstra\u00dfe 227, 10178 Berlin", "Mitte"],
   "Parkb\u00fchne Wuhlheide": ["An der Wuhlheide 187, 12459 Berlin", "K\u00f6penick"],
   "Rough Trade Berlin": ["Ganghoferstra\u00dfe 10, 12043 Berlin", "Neuk\u00f6lln"],
@@ -5035,6 +5054,10 @@ const VENUES = {
   "Uber Eats Music Hall": ["Uber Platz 2, 10243 Berlin", "Friedrichshain"],
   "ufaFabrik": ["Viktoriastra\u00dfe 10-18, 12105 Berlin", "Tempelhof"],
   "Urban Spree": ["Revaler Str. 99, 10245 Berlin", "Friedrichshain"],
+  "UFA Fabrik": ["Viktoriastr. 10-18, 12105 Berlin", "Tempelhof"],
+  "Anagram Space": ["Erlanger Str. 8 (Hinterhof), 12053 Berlin", "Neuk\u00f6lln"],
+  "Zaubergarten": ["", ""],
+  "Across From Willy Brandt Haus": ["", "Kreuzberg"],
   "Velodrom": ["Landsberger Allee 222, 10405 Berlin", "Prenzlauer Berg"],
   "Villa Kuriosum": ["Scheffelstra\u00dfe 21, 10367 Berlin", "Friedrichshain"],
   "Wilma Dubiosum": ["Scheffelstra\u00dfe 21, 10367 Berlin", "Friedrichshain"],
@@ -5092,8 +5115,9 @@ const VENUE_ALIASES = {
   "Wuhlheide": "Parkb\u00fchne Wuhlheide",
   "UFO Velodrom": "Velodrom",
   "UFO im Velodrom": "Velodrom",
-  "Trxxxxr": "Trixxter", "Trxxxer": "Trixxter",
+  "Trxxxxr": "Trixxter", "Trxxxer": "Trixxter", "Trxxxtr": "Trixxter",
   "TrxxxTa, U Schles. Tor, X-Berg": "Trixxter",
+  "Gibney's/The Other Room": "Gibney's Berlin",
   "Panorama Bar / Berghain": "Berghain",
   "Kino Arsenal, silent green": "silent green",
   "Killa Dubiosum": "Wilma Dubiosum",
@@ -5161,6 +5185,26 @@ function fallbackCopy(text) {
   document.body.appendChild(ta); ta.select();
   try { document.execCommand("copy"); } catch (err) {}
   document.body.removeChild(ta);
+}
+// Small transient notice (used for linkless event titles)
+let toastTimer = null;
+function showToast(msg, x, y) {
+  const el = $("toast");
+  if (!el) return;
+  el.textContent = msg;
+  if (typeof x === "number" && typeof y === "number") {
+    const w = el.offsetWidth || 200, h = el.offsetHeight || 36;
+    const left = Math.max(w / 2 + 8, Math.min(window.innerWidth - w / 2 - 8, x));
+    const top = Math.max(8, y - h - 14);
+    el.style.left = left + "px";
+    el.style.top = top + "px";
+  } else {
+    el.style.left = (window.innerWidth / 2) + "px";
+    el.style.top = "50%";
+  }
+  el.classList.add("show");
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.classList.remove("show"); }, 2000);
 }
 function openSharedEvent(fk) {
   const date = (fk || "").split("|")[0];
@@ -5232,7 +5276,7 @@ function readHash() {
   });
   const pev = p.get("ev");
   if (pev) { try { pendingEv = decodeURIComponent(pev); } catch (err) { pendingEv = pev; } }
-  $("q").value = S.query; $("day").value = S.dayFilter;
+  $("q").value = S.query; $("qClear").style.display = S.query ? "block" : "none"; $("day").value = S.dayFilter;
   $("free").checked = !!S.freeOnly; $("access").checked = !!S.accessOnly;
   $("archChk").checked = S.view === "archive";
   $("pmin").value = S.priceMin; $("pmax").value = S.priceMax;
@@ -5322,7 +5366,7 @@ function eventRow(e, i) {
   const ics = `<button class="icsbtn" data-i="${i}" title="Add to calendar" aria-label="Add to calendar">\ud83d\udcc5</button>`;
   const shr = `<button class="sharebtn" data-i="${i}" title="Copy link to this event" aria-label="Copy link to this event">\ud83d\udd17</button>`;
   const title = (!lnk)
-    ? `<span class="evtitle"${col}>${esc(e.title)}</span>`
+    ? `<span class="evtitle nolink"${col} title="${esc(T().noLink)}">${esc(e.title)}</span>`
     : `<a class="evtitle" href="${esc(lnk)}" target="_blank" rel="noreferrer"${col}>${esc(e.title)}</a>`;
   const flags = (e.smokeFree || e.wheelchair)
     ? `<span class="flags">${e.smokeFree ? "\ud83d\udead " : ""}${e.wheelchair ? "\u267f\ufe0f" : ""}</span>` : "";
@@ -5478,7 +5522,8 @@ $("themeBtn").addEventListener("click", () => {
   renderAll();
 });
 $("archChk").addEventListener("change", (e) => { S.view = e.target.checked ? "archive" : "upcoming"; S.autoArch = false; S.dayFilter = ""; $("day").value = ""; renderAll(); });
-$("q").addEventListener("input", (e) => { S.query = e.target.value; renderAll(); });
+$("q").addEventListener("input", (e) => { S.query = e.target.value; $("qClear").style.display = e.target.value ? "block" : "none"; renderAll(); });
+$("qClear").addEventListener("click", () => { S.query = ""; $("q").value = ""; $("qClear").style.display = "none"; renderAll(); $("q").focus(); });
 $("day").addEventListener("change", (e) => {
   S.dayFilter = e.target.value;
   if (e.target.value && e.target.value < today && S.view !== "archive") { S.view = "archive"; S.autoArch = true; }
@@ -5497,7 +5542,7 @@ $("resetBtn").addEventListener("click", () => {
   S.query = ""; S.category = "All"; S.genre = "All"; S.subGenre = "All"; S.freeOnly = false; S.dayFilter = "";
   S.priceMin = ""; S.priceMax = ""; S.sources = ["cryptpad", "mytrueintent", "mobilize", "web"];
   S.favOnly = false; S.accessOnly = false; S.district = "All"; S.venue = ""; S.view = "upcoming"; S.unkOn = false; S.autoArch = false; weekOff = 0;
-  $("q").value = ""; $("day").value = ""; $("free").checked = false; $("pmin").value = ""; $("pmax").value = "";
+  $("q").value = ""; $("qClear").style.display = "none"; $("day").value = ""; $("free").checked = false; $("pmin").value = ""; $("pmax").value = "";
   $("access").checked = false; $("district").value = "All"; $("archChk").checked = false;
   renderAll();
 });
@@ -5522,6 +5567,8 @@ $("venueChip").addEventListener("click", () => {
 });
 $("langSel").addEventListener("change", (e) => { S.lang = e.target.value; try { localStorage.setItem("be-lang", S.lang); } catch (err) {} applyLang(); buildDistricts(); renderAll(); });
 $("list").addEventListener("click", (ev) => {
+  const nolink = ev.target.closest(".nolink");
+  if (nolink) { showToast(T().noLink, ev.clientX, ev.clientY); return; }
   const more = ev.target.closest(".morebtn");
   if (more) { const li = more.closest("li"); li.classList.toggle("open"); more.setAttribute("aria-expanded", li.classList.contains("open")); return; }
   const t = ev.target.closest("[data-i], [data-v]");
