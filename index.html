@@ -112,7 +112,7 @@
   .evtitle:hover { text-decoration: underline; }
   .meta { font-size: .85rem; color: #737373; margin-top: .15rem; }
   .flags { margin-left: .5rem; font-size: .75rem; }
-  .genre { font-size: .75rem; font-weight: 500; color: #a3a3a3; margin-top: .25rem; }
+  .genre { font-size: .75rem; font-weight: 500; color: #a3a3a3; margin-top: .25rem; text-transform: lowercase; }
   .genre-unknown, .genre-cover { font-weight: 400; opacity: .75; font-style: italic; }
   .desc { font-size: .85rem; color: #525252; margin-top: .35rem; max-width: 32rem; line-height: 1.5;
     display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; cursor: pointer; }
@@ -5339,7 +5339,7 @@ function eventRow(e, i) {
       <div class="evhead">${title}<span class="evacts">${ics}${shr}</span></div>
       <p class="meta">${vname}${e.time ? " \u00b7 " + esc(e.time) : ""}${e.price ? " \u00b7 " + esc(e.price) : ""}${flags}</p>
       ${e.postponed ? `<p class="postponed-note">\u23f8 ${esc(T().postponedNote)}</p>` : ""}
-      ${(genreOf(e) ? `<p class="genre">\ud83c\udfb5 ${esc(genreOf(e))}</p>` : (isCover(e) ? `<p class="genre genre-cover">\ud83c\udfb5 ${esc(T().coverNote)}</p>` : ((e.category === "Music" || !e.category) ? `<p class="genre genre-unknown">\ud83c\udfb5 ${esc(T().unknownGenre)}</p>` : "")))}
+      ${(genreOf(e) ? `<p class="genre">${esc(genreOf(e))}</p>` : (isCover(e) ? `<p class="genre genre-cover">${esc(T().coverNote)}</p>` : ((e.category === "Music" || !e.category) ? `<p class="genre genre-unknown">${esc(T().unknownGenre)}</p>` : "")))}
       ${e.description ? `<p class="desc">${esc(e.description)}</p>` : ""}
       ${det}
     </div>
