@@ -117,6 +117,7 @@
   .evhead .evtitle { flex: 1 1 auto; min-width: 0; }
   .evacts { flex: 0 0 auto; margin-left: auto; display: flex; align-items: center; gap: .45rem; padding-top: .1rem; }
   .evtitle:hover { text-decoration: underline; }
+  .evartists { display: block; margin-top: .15rem; }
   .meta { font-size: .85rem; color: #737373; margin-top: .15rem; }
   .flags { margin-left: .5rem; font-size: .75rem; }
   .genre { font-size: .75rem; font-weight: 500; color: #a3a3a3; margin-top: .25rem; text-transform: lowercase; }
@@ -927,7 +928,7 @@ const EVENTS = [
   { date: "2026-10-25", title: "The Tarts / Dane Joe", venue: "8MM Bar", source: "mytrueintent" },
   { date: "2026-10-26", title: "Olli Schulz", venue: "Admiralspalast", source: "mytrueintent",  price: "Sold out" },
   { date: "2026-10-26", title: "Fabian Kuhn", venue: "Badehaus", source: "mytrueintent" },
-  { date: "2026-10-26", title: "Berwyn", venue: "Gretchen", source: "mytrueintent" },
+  // Berwyn @Gretchen 26 Oct REMOVED 17 Oct 2026: venue's own page marks the show cancelled ("Die Show wurde abgesagt"); re-add if a new date is announced
   { date: "2026-10-26", title: "Kitty, Daisy + Lewis", venue: "Huxleys", source: "mytrueintent" },
   { date: "2026-10-26", title: "Lots Of Hands", venue: "Kantine Berghain", source: "mytrueintent" },
   { date: "2026-10-26", title: "Hyd", venue: "Privatclub", source: "mytrueintent" },
@@ -983,7 +984,7 @@ const EVENTS = [
   { date: "2026-10-29", title: "Thu Loukeman", venue: "Lark", source: "mytrueintent" },
   { date: "2026-10-29", title: "Ryan Beatty", venue: "Lido", source: "mytrueintent" },
   { date: "2026-10-29", title: "Kid Francescoli", venue: "Metropol", source: "mytrueintent" },
-  { date: "2026-10-29", title: "Nico McBrain - An Evening With Nicko McBrain - Lesung", venue: "Passionskirche", source: "mytrueintent" },
+  { date: "2026-10-29", title: "Nico McBrain - An Evening With Nicko McBrain - Lesung", venue: "Passionskirche", category: "Theatre", source: "mytrueintent" },
   { date: "2026-10-29", title: "Steaming Satellites", venue: "Privatclub", source: "mytrueintent" },
   { date: "2026-10-29", title: "CF98 / Treibgut", venue: "Schokoladen", source: "mytrueintent" },
   { date: "2026-10-29", title: "Booze & Glory / Doc Rotten", venue: "SO36", source: "mytrueintent" },
@@ -4190,7 +4191,7 @@ var MB_GENRES = {
   "frau lehman": "alternative rock",
   "freddie dickson": "pop",
   "frida gold": "pop",
-  "frittenbude": "alternative rock",
+  "frittenbude": "electropunk, electronic",
   "fuffifufzich": "pop",
   "g-rag": "folk",
   "gauchito club": "latin",
@@ -4820,21 +4821,69 @@ var MB_GENRES = {
   "duesenjaeger": "punk",
   "kontravoid": "electronic",
   "will church": "singer-songwriter",
+  // Web-verified artist genres, 17 Oct 2026 evening (Andrea request: per-artist enrichment from event/venue/organizer pages)
+  "sir andr\u00e1s schiff": "classical", "alina ibragimova": "classical", "c\u00e9dric tiberghien": "classical",
+  "nabil shehata": "classical", "yulianna avdeeva": "classical", "j\u00f6rg widmann": "classical",
+  "boulez ensemble": "classical", "chiaroscuro quartet": "classical", "akademie f\u00fcr alte musik berlin": "classical",
+  "nathalia milstein": "classical", "naseer shamma": "world music, classical",
+  "attack on titan live": "soundtrack", "the world of hans zimmer": "soundtrack",
+  "velvet two stripes": "blues rock, garage rock", "transdecadence": "psychedelic rock, post-punk",
+  "khan": "heavy psych", "skin thief": "post-metal", "xonor": "thrash metal",
+  "katlix": "indie, hip hop", "mork": "black metal", "wolvennest": "black metal, psychedelic rock",
+  "sarkrista": "black metal", "drudensang": "black metal", "gorgoroth": "black metal",
+  "wonderska": "ska", "nainn": "psychedelic rock, grunge, trip hop", "eb davis": "blues, soul",
+  "the international nothing": "experimental", "aoxotoxoa": "psychedelic rock, jam rock",
+  "takuya nakamura": "jazz, electronic",
+  // Venue-first enrichment run 2, 17 Oct 2026 (genres read from venue/organizer pages: Frannz listing, Volksbuehne, KM28, Digital in Berlin, Wikipedia)
+  "reinhard buhr": "ambient, electronic, experimental",
+  "sony shats": "pop, singer-songwriter",
+  "concepci\u00f3n huerta": "electronic", "hexorcismos": "electronic, experimental",
+  "sarah davachi": "classical, electronic", "elsan ghasimi": "world music, classical",
+  "joss turnbull": "world music", "ottolien": "indie pop, singer-songwriter",
+  "satoko fujii": "jazz", "natsuki tamura": "jazz", "angelika niescier": "jazz", "natsat duo": "jazz",
+  "thizzy52": "hip hop", "ricarda hoffmann": "comedy",
+  "tribute to nothing": "alternative rock, post-rock",
+  "tony njoku": "electronic, indie pop", "quiet storm": "electronic, soul",
+  "nardus williams": "classical", "axelle fanyo": "classical",
+  "michael winter": "experimental", "austin larkin": "experimental", "bryan eubanks": "experimental",
+  "alexander markvart": "experimental", "romain c.bertheau": "experimental",
+  "florian paul": "indie pop",
+  // Venue-first enrichment run 4, 17 Oct 2026 night (Privatclub genre tag, Gretchen "Rap, RnB", KM28 jazz series, Bandcamp pages, Wikipedia)
+  "snap kit downes": "jazz", "kit downes": "jazz", "camila nebbia": "jazz", "otis sandsj\u00f6": "jazz",
+  "marta warelis": "jazz", "ketija karahona": "jazz",
+  "bedsore": "metal, psychedelic rock", "wolfennest": "black metal, psychedelic rock",
+  "kjartan sveinsson": "post-rock, classical", "gyda valt\u00fdsd\u00f3ttir": "electronic, experimental",
+  "brezel g\u00f6ring": "chanson, punk", "psychoanalyse": "punk",
+  "marie-elisabeth hecker": "classical", "martin helmchen": "classical",
+  "the tarts": "garage rock, punk",
+  "berwyn": "hip hop, r&b", "baby smith": "indie rock",
+  "philipp poisel": "singer-songwriter, pop", "d\u00e4mmerland": "soundtrack",
+  "thu loukeman": "electronic, singer-songwriter", "loukeman": "electronic, singer-songwriter",
+  "kid francescoli": "electronic, pop",
 };
 
 function inferGenre(title) {
   const t = (title || "").toLowerCase();
   if (!t) return "";
   for (const k in ARTIST_GENRES) if (t.indexOf(k) >= 0) return ARTIST_GENRES[k];
-  var h = t.replace(/^.*?\b(presents|prsnts|pr\u00e4sentiert|presentiert)\b\s*:?\s*/, "").split(/\s*[+\/&,]|\s+w\/|\s+feat\.?\s+|\s+vs\.?\s+/)[0].replace(/\(.*?\)/g, "").trim()
-    .replace(/^elternzeitkonzert:\s*/i, "")
-    .replace(/\s*[-\u2013]\s*(matin\u00e9e|matinee|zusatzshow|unplugged|solo|new date.*|zehn jubil\u00e4umskonzert.*|seamonsters 35th anniversary tour.*|eu album tour.*|tranquilo ii)$/i, "");
-  if (h && MB_GENRES[h]) return MB_GENRES[h];
-  // Tolerant prefix match: artist name at the start of the head, followed by space/dash/paren
-  // (catches qualifiers like "- Matin\u00e9e", "- Zusatzshow", "- ZEHN Jubil\u00e4umskonzert mit Ehreng\u00e4sten")
-  if (!/tribute|cover band/i.test(t))
+  // Multi-artist matching (17 Oct 2026, Andrea request): match EVERY artist segment of the title,
+  // not just the first, and join all found genres - an artist keeps its genre in any combination or solo.
+  var body = t.replace(/^.*?\b(presents|prsnts|pr\u00e4sentiert|presentiert)\b\s*:?\s*/, "");
+  var segs = body.split(/\s*[+\/&,]|\s+w\/|\s+feat\.?\s+|\s+vs\.?\s+/);
+  var found = [];
+  var pushG = (g) => { if (!g) return; String(g).split(/\s*,\s*/).forEach((p) => { p = p.trim().toLowerCase(); if (p && found.indexOf(p) < 0) found.push(p); }); };
+  for (var si = 0; si < segs.length; si++) {
+    var h = segs[si].replace(/\(.*?\)/g, "").trim()
+      .replace(/^elternzeitkonzert:\s*/i, "")
+      .replace(/\s*[-\u2013]\s*(matin\u00e9e|matinee|zusatzshow|unplugged|solo|new date.*|zehn jubil\u00e4umskonzert.*|seamonsters 35th anniversary tour.*|eu album tour.*|tranquilo ii)$/i, "");
+    if (!h) continue;
+    if (MB_GENRES[h]) { pushG(MB_GENRES[h]); continue; }
+    // Tolerant prefix match: artist name at the start of the segment, followed by space/dash/paren
+    if (/tribute|cover band/i.test(t)) continue;
     for (var mk in MB_GENRES)
-      if (h.indexOf(mk) === 0 && (h.length === mk.length || /[\s(\u2013-]/.test(h.charAt(mk.length)))) return MB_GENRES[mk];
+      if (h.indexOf(mk) === 0 && (h.length === mk.length || /[\s(\u2013-]/.test(h.charAt(mk.length)))) { pushG(MB_GENRES[mk]); break; }
+  }
+  if (found.length) return found.join(", ");
   if (/hardcore|punk|\bhc\b|d-beat|oi!|deutschpunk/.test(t)) return "Punk";
   if (/doom|stoner|sludge/.test(t)) return "Doom, Stoner";
   if (/black metal|death metal|thrash|grindcore|metal/.test(t)) return "Metal";
@@ -5639,15 +5688,28 @@ function eventRow(e, i) {
   const star = `<button class="star${faved ? " on" : ""}" data-i="${i}" title="Favorite" aria-label="Toggle favorite">${faved ? "\u2b50" : "\u2606"}</button>`;
   const ics = `<button class="icsbtn" data-i="${i}" title="Add to calendar" aria-label="Add to calendar">\ud83d\udcc5</button>`;
   const shr = `<button class="sharebtn" data-i="${i}" title="Copy link to this event" aria-label="Copy link to this event">\ud83d\udd17</button>`;
+  // Promoter split (17 Oct 2026, Andrea request): "Promoter presents: Artists" renders the artists on a new line under the promoter
+  let tmain = e.title, tsub = "";
+  // Promoter split (17 Oct 2026, Andrea request; extended same night after title scan):
+  // matches presents/prsnts/present/prsnt/pres./pr\u00e4sentiert/presentiert; the (?<!wedding ) guard keeps the
+  // band "The Wedding Present" intact; "presented by" (reversed credit: "Artist - presented by Promoter")
+  // intentionally does NOT match (\bpresent\b fails inside "presented") - those 2 titles stay unsplit.
+  const pm = (e.title || "").match(/^(.*\b(?:prsnts|presents?|prsnt|pres\.|pr\u00e4sentiert|presentiert)\b\s*:?\s*)(.+)$/i);
+  if (pm && pm[1].trim() && pm[2].trim() && !/\bwedding present\b/i.test(pm[1])) { tmain = pm[1].trim(); tsub = pm[2].trim(); }
   const title = (!lnk)
-    ? `<span class="evtitle nolink"${col} title="${esc(T().noLink)}">${esc(e.title)}</span>`
-    : `<a class="evtitle" href="${esc(lnk)}" target="_blank" rel="noreferrer"${col}>${esc(e.title)}</a>`;
+    ? `<span class="evtitle nolink"${col} title="${esc(T().noLink)}">${esc(tmain)}${tsub ? `<span class="evartists">${esc(tsub)}</span>` : ""}</span>`
+    : `<a class="evtitle" href="${esc(lnk)}" target="_blank" rel="noreferrer"${col}>${esc(tmain)}${tsub ? `<span class="evartists">${esc(tsub)}</span>` : ""}</a>`;
   const flags = (e.smokeFree || e.wheelchair)
     ? `<span class="flags">${e.smokeFree ? "\ud83d\udead " : ""}${e.wheelchair ? "\u267f\ufe0f" : ""}</span>` : "";
   const vinfo = e.venue ? venueInfo(e.venue) : null;
   const vtip = vinfo && vinfo.addr ? `${esc(e.venue)} \u00b7 ${esc(vinfo.addr)}` : "Show only events at this venue";
   const vname = e.venue
     ? `<span class="vlink" data-v="${i}" title="${vtip}">${esc(e.venue)}</span>` : esc(e.venue || "");
+  // Non-music desc/venue swap (17 Oct 2026, Andrea request, uniform with the genre-venue swap of music events):
+  // non-music events render the description UNDER the title, BEFORE the .meta venue line, so the venue line
+  // is the last line before the .evdet address panel for ALL events. Music events keep desc after the notes.
+  const isMus = e.category === "Music" || !e.category;
+  const descP = e.description ? `<p class="desc">${esc(e.description)}</p>` : "";
   const det = `<div class="evdet">`
     + (vinfo && vinfo.addr ? `<a class="evaddr" href="https://www.openstreetmap.org/search?query=${encodeURIComponent(vinfo.addr)}" target="_blank" rel="noreferrer" title="Open in OpenStreetMap">\ud83d\udccd ${esc(vinfo.addr)}</a>` : "")
     + `</div>`;
@@ -5656,11 +5718,12 @@ function eventRow(e, i) {
     <div>
       <div class="evhead">${title}<span class="evacts">${ics}${shr}</span></div>
       ${(genreOf(e) ? `<p class="genre">${esc(genreOf(e))}</p>` : (isCover(e) ? `<p class="genre genre-cover">${esc(T().coverNote)}</p>` : ((e.category === "Music" || !e.category) ? `<p class="genre genre-unknown">${esc(T().unknownGenre)}</p>` : "")))}
+      ${!isMus ? descP : ""}
       <p class="meta">${vname}${e.time ? " \u00b7 " + esc(e.time) : ""}${e.price ? " \u00b7 " + esc(e.price) : ""}${flags}</p>
       ${e.prevVenue ? `<p class="change-note">\u26a0 ${esc(T().venueChanged(e.prevVenue))}</p>` : ""}
       ${e.prevDate ? `<p class="change-note">\u26a0 ${esc(T().dateChanged(e.prevDate))}</p>` : ""}
       ${e.postponed ? `<p class="postponed-note">\u23f8 ${esc(T().postponedNote)}</p>` : ""}
-      ${e.description ? `<p class="desc">${esc(e.description)}</p>` : ""}
+      ${isMus ? descP : ""}
       ${det}
     </div>
   </div><button class="morebtn" aria-label="Details" aria-expanded="false">\u25be</button></div></li>`;
