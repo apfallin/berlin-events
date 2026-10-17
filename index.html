@@ -95,6 +95,8 @@
   .postponed-note { font-size: .78rem; font-weight: 600; color: #b45309; margin-top: .3rem; }
   body.dark #list li.postponed { border-left-color: #fbbf24; }
   body.dark .postponed-note { color: #fcd34d; }
+  .change-note { font-size: .78rem; font-weight: 600; color: #1d4ed8; margin-top: .3rem; }
+  body.dark .change-note { color: #60a5fa; }
   #list { list-style: none; margin: 0; padding: 0; }
   #list li { padding: 1.4rem 0; border-bottom: 1px solid #f0f0f0; transition: background .15s; overflow-anchor: none; }
   body.dark #list li { border-color: #1a1a1a; }
@@ -950,7 +952,7 @@ const EVENTS = [
   { date: "2026-10-27", title: "Melanie Baker", venue: "Schokoladen", source: "mytrueintent" },
   { date: "2026-10-27", title: "Tyla", venue: "Uber Eats Music Hall", source: "mytrueintent" },
   { date: "2026-10-28", title: "Vince", venue: "Badehaus", source: "mytrueintent" },
-  { date: "2026-10-28", title: "The Bausa", venue: "Mikropol", source: "mytrueintent" },
+  { date: "2026-10-28", title: "The Bausa", venue: "Mikropol", prevVenue: "Columbia Theater", source: "mytrueintent" },
   { date: "2026-10-28", title: "Ebow", venue: "Columbiahalle", source: "mytrueintent" },
   { date: "2026-10-28", title: "Teenage Fanclub", venue: "Frannz", source: "mytrueintent" },
   { date: "2026-10-28", title: "Mocky & Friends - LA Meets Berlin Jam - 15 years Gretchen", venue: "Gretchen", source: "mytrueintent" },
@@ -1047,7 +1049,7 @@ const EVENTS = [
   { date: "2026-11-02", title: "Joe Jackson + Band", venue: "Admiralspalast", source: "mytrueintent" },
   { date: "2026-11-02", title: "Swapmeet", venue: "Badehaus", source: "mytrueintent" },
   { date: "2026-11-02", title: "Citizen", venue: "Columbia Theater", source: "mytrueintent" },
-  { date: "2026-11-02", title: "Gentleman", venue: "Huxleys", source: "mytrueintent" },
+  { date: "2026-11-02", title: "Gentleman", venue: "Huxleys", prevVenue: "Columbiahalle", source: "mytrueintent" },
   { date: "2026-11-02", title: "Eli Preiss", venue: "Festsaal Kreuzberg", source: "mytrueintent" },
   { date: "2026-11-02", title: "Call Me Karizma", venue: "Frannz", source: "mytrueintent" },
   { date: "2026-11-02", title: "Bel Cobain", venue: "Gretchen", source: "mytrueintent" },
@@ -5165,7 +5167,7 @@ const LANGS = {
   en: { upcoming: "Upcoming", archive: "Archive", search: "Search artists, venues, genres\u2026", filters: "Filters", reset: "\u21ba Reset",
     free: "Free / donation only", access: "Accessible or smoke-free only", source: "Source", district: "District",
     price: "Price range (events with a price only)", genre: "Genre", tonight: "Today", favs: "\u2b50 Favorites", all: "All", unknownGenre: "Genre not yet identified",
-    unkHidden: (n) => n + " music events without a known genre are hidden \u2014 include them?", unkInclude: "Include", unkHide: "Hide them", coverNote: "Cover / tribute band", postponedNote: "Postponed \u2014 new date to be announced", noLink: "No link available for this event \u2014 sorry",
+    unkHidden: (n) => n + " music events without a known genre are hidden \u2014 include them?", unkInclude: "Include", unkHide: "Hide them", coverNote: "Cover / tribute band", postponedNote: "Postponed \u2014 new date to be announced", venueChanged: (v) => "Venue changed \u2014 previously: " + v, dateChanged: (d) => "Date changed \u2014 previously: " + d, noLink: "No link available for this event \u2014 sorry",
     subTitle: "A minimal digest of concerts, theatre, art and cinema in Berlin \u2014 gathered from independent sources",
     calHint: "Save any event straight to your calendar",
     autoNote: "This digest is compiled automatically from the sources listed below; the entries are not individually reviewed by a human. Report any wrong or missing event via the source links.",
@@ -5174,7 +5176,7 @@ const LANGS = {
   de: { upcoming: "Bevorstehend", archive: "Archiv", search: "K\u00fcnstler, Venues, Genres suchen\u2026", filters: "Filter", reset: "\u21ba Zur\u00fccksetzen",
     free: "Nur frei / Spende", access: "Nur barrierefrei oder rauchfrei", source: "Quelle", district: "Bezirk",
     price: "Preisspanne (nur Events mit Preis)", genre: "Genre", tonight: "Heute", favs: "\u2b50 Favoriten", all: "Alle", unknownGenre: "Genre noch nicht identifiziert",
-    unkHidden: (n) => n + " Musik-Events ohne bekanntes Genre sind ausgeblendet \u2014 einblenden?", unkInclude: "Einblenden", unkHide: "Ausblenden", coverNote: "Cover-/Tribute-Band", postponedNote: "Verschoben \u2014 neuer Termin wird bekannt gegeben", noLink: "Kein Link f\u00fcr diese Veranstaltung verf\u00fcgbar \u2014 Entschuldigung",
+    unkHidden: (n) => n + " Musik-Events ohne bekanntes Genre sind ausgeblendet \u2014 einblenden?", unkInclude: "Einblenden", unkHide: "Ausblenden", coverNote: "Cover-/Tribute-Band", postponedNote: "Verschoben \u2014 neuer Termin wird bekannt gegeben", venueChanged: (v) => "Ort ge\u00e4ndert \u2014 vorher: " + v, dateChanged: (d) => "Termin ge\u00e4ndert \u2014 vorher: " + d, noLink: "Kein Link f\u00fcr diese Veranstaltung verf\u00fcgbar \u2014 Entschuldigung",
     subTitle: "Ein minimales Digest von Konzerten, Theater, Kunst und Kino in Berlin \u2014 aus unabh\u00e4ngigen Quellen zusammengetragen",
     calHint: "Speichere jede Veranstaltung direkt in deinem Kalender",
     autoNote: "Dieses Digest wird automatisch aus den unten aufgef\u00fchrten Quellen zusammengestellt; die Eintr\u00e4ge werden nicht einzeln von Hand gepr\u00fcft. Fehlerhafte oder fehlende Veranstaltungen bitte \u00fcber die Quell-Links melden.",
@@ -5183,7 +5185,7 @@ const LANGS = {
   it: { upcoming: "In arrivo", archive: "Archivio", search: "Cerca artisti, venue, generi\u2026", filters: "Filtri", reset: "\u21ba Azzera",
     free: "Solo gratuiti / offerta", access: "Solo accessibili o senza fumo", source: "Fonte", district: "Quartiere",
     price: "Fascia di prezzo (solo eventi con prezzo)", genre: "Genere", tonight: "Oggi", favs: "\u2b50 Preferiti", all: "Tutti", unknownGenre: "Genere non ancora identificato",
-    unkHidden: (n) => n + " eventi musicali senza genere noto sono nascosti \u2014 includerli?", unkInclude: "Includili", unkHide: "Nascondili", coverNote: "Cover / tribute band", postponedNote: "Posticipato \u2014 nuova data da annunciare", noLink: "Nessun link disponibile per questo evento \u2014 scusa",
+    unkHidden: (n) => n + " eventi musicali senza genere noto sono nascosti \u2014 includerli?", unkInclude: "Includili", unkHide: "Nascondili", coverNote: "Cover / tribute band", postponedNote: "Posticipato \u2014 nuova data da annunciare", venueChanged: (v) => "Venue cambiata \u2014 prima: " + v, dateChanged: (d) => "Data cambiata \u2014 prima: " + d, noLink: "Nessun link disponibile per questo evento \u2014 scusa",
     subTitle: "Un digest essenziale di concerti, teatro, arte e cinema a Berlino \u2014 raccolto da fonti indipendenti",
     calHint: "Salva ogni evento direttamente nel tuo calendario",
     autoNote: "Questo digest \u00e8 compilato automaticamente dalle fonti elencate qui sotto; le singole voci non sono controllate una per una a mano. Per eventi errati o mancanti, segnalali tramite i link alle fonti.",
@@ -5655,6 +5657,8 @@ function eventRow(e, i) {
       <div class="evhead">${title}<span class="evacts">${ics}${shr}</span></div>
       ${(genreOf(e) ? `<p class="genre">${esc(genreOf(e))}</p>` : (isCover(e) ? `<p class="genre genre-cover">${esc(T().coverNote)}</p>` : ((e.category === "Music" || !e.category) ? `<p class="genre genre-unknown">${esc(T().unknownGenre)}</p>` : "")))}
       <p class="meta">${vname}${e.time ? " \u00b7 " + esc(e.time) : ""}${e.price ? " \u00b7 " + esc(e.price) : ""}${flags}</p>
+      ${e.prevVenue ? `<p class="change-note">\u26a0 ${esc(T().venueChanged(e.prevVenue))}</p>` : ""}
+      ${e.prevDate ? `<p class="change-note">\u26a0 ${esc(T().dateChanged(e.prevDate))}</p>` : ""}
       ${e.postponed ? `<p class="postponed-note">\u23f8 ${esc(T().postponedNote)}</p>` : ""}
       ${e.description ? `<p class="desc">${esc(e.description)}</p>` : ""}
       ${det}
