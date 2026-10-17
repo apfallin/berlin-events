@@ -216,6 +216,15 @@
   .evdet a.evaddr:hover { text-decoration: underline; }
   #venueChip { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
   body.dark #venueChip { background: #372a0e; border-color: #f59e0b; color: #fcd34d; }
+  #profileBar { display: none; font-size: .78rem; color: #525252; background: #fafaf9; border: 1px solid #e7e5e4; border-radius: .5rem; padding: .55rem .7rem; margin: 0 0 1rem; align-items: center; gap: .5rem; flex-wrap: wrap; }
+  #profileBar .chip { font-size: .72rem; padding: .25rem .6rem; }
+  #profileChip { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
+  body.dark #profileChip { background: #372a0e; border-color: #f59e0b; color: #fcd34d; }
+  #profileX { margin-left: .45rem; cursor: pointer; font-size: .8rem; opacity: .8; }
+  #profileX:hover { opacity: 1; }
+  #profilePanel { background: #fafaf9; border: 1px solid #e7e5e4; border-radius: .6rem; padding: .7rem .8rem .8rem; margin: 0 0 1rem; }
+  #profileCats, #profileGenres { display: flex; flex-wrap: wrap; gap: .4rem; }
+  body.dark #profileBar, body.dark #profilePanel { color: #d4d4d4; background: #171717; border-color: #262626; }
   select.chip { appearance: auto; padding: .25rem .5rem; }
   #langSel { width: auto; padding: .1rem .3rem; font-size: .68rem; min-height: 1.5rem; font-weight: 500; }
   #weekStrip { margin-top: .4rem; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
@@ -260,7 +269,7 @@
   }
 
   @media print {
-    .controls, #topBtn, .updated-badge, #genreWrap, #panel, .star, .icsbtn, .sharebtn, .morebtn, #stats, #unkBar, #toast { display: none !important; }
+    .controls, #topBtn, .updated-badge, #genreWrap, #panel, .star, .icsbtn, .sharebtn, .morebtn, #stats, #unkBar, #toast, #profileBar, #profileChip, #profilePanel { display: none !important; }
     .evdet { display: block !important; }
     body { background: #fff; color: #000; }
     .wrap { max-width: 100%; }
@@ -299,6 +308,7 @@
       </span>
       <button class="chip on" id="venueChip" style="display:none;margin:0 auto">&#128205; <span id="venueName"></span> &#10005;</button>
       <span class="chipgroup">
+        <button class="chip action" id="profileBtn" title="Pick your categories and genres once &#8212; the site will remember them and show only those events">My view</button>
         <button class="chip action" id="filterBtn">Filters &#9662;<span class="hintdot" style="display:none"></span></button>
         <button class="chip action" id="resetBtn" title="Reset all filters" aria-label="Reset all filters">&#8634; Reset</button>
       </span>
@@ -324,6 +334,23 @@
       <p class="mini-label" id="lblGenre">Genre</p>
       <div id="genres"></div>
       <div id="subgenres"></div>
+    </div>
+  </div>
+
+  <p id="profileBar"><span id="profileMsg"></span><button class="chip action" id="profilePersonalize">Personalize</button><button class="chip action" id="profileLater">Show everything</button></p>
+  <button id="profileChip" class="chip on" style="display:none">&#127919; <span id="profileChipTxt"></span><span id="profileX" role="button" aria-label="Remove saved view">&#10005;</span></button>
+  <div id="profilePanel" style="display:none">
+    <p class="subhint" id="profileHint"></p>
+    <p class="mini-label" id="profileLbl"></p>
+    <div class="row" id="profileCats"></div>
+    <div id="profileGenresWrap" style="display:none">
+      <p class="mini-label" style="margin-top:.7rem" id="profileLblGenres">Music genres (optional)</p>
+      <div class="row" id="profileGenres"></div>
+    </div>
+    <div class="row" style="margin-top:.85rem">
+      <button class="chip action" id="profileSave">Save my view</button>
+      <button class="chip action" id="profileCancel">Cancel</button>
+      <button class="chip action" id="profileRemove" style="display:none">Remove saved view</button>
     </div>
   </div>
 
@@ -5060,6 +5087,7 @@ const S = {
   query: "", freeOnly: false, dayFilter: "", showFilters: false,
   priceMin: "", priceMax: "", sources: ["cryptpad", "mytrueintent", "mobilize", "web"],
   favOnly: false, accessOnly: false, district: "All", venue: "", lang: "en", unkOn: false,
+  pCats: [], pGenres: [],
 };
 const today = new Date().toISOString().slice(0, 10);
 const $ = (id) => document.getElementById(id);
@@ -5281,7 +5309,13 @@ const LANGS = {
     calHint: "Save any event straight to your calendar",
     autoNote: "This digest is compiled automatically from the sources listed below; the entries are not individually reviewed by a human. Report any wrong or missing event via the source links.",
     count: (v, d) => (d === "archive" ? "Archive" : "Upcoming") + " \u00b7 " + v + " events",
-    empty: "Nothing matches \u2014 try another day, search or filter." },
+    empty: "Nothing matches \u2014 try another day, search or filter.",
+    profileBtn: "My view", profileBarTxt: "Only interested in part of this? Pick your categories and genres once \u2014 this site will remember your choice.",
+    profilePersonalize: "Personalize", profileLater: "Show everything",
+    profileLbl: "Your view \u2014 pick one or more categories; if you include Music you can also pick music genres",
+    profileLblGenres: "Music genres (optional)", profileSave: "Save my view", profileCancel: "Cancel", profileRemove: "Remove saved view",
+    profileHint: "Choose once what interests you \u2014 this will be remembered on this device and the site will always open showing only these events. You can change or remove it at any time via the amber chip or this button.",
+    profileChip: (c, g) => "Your view: " + c + (g ? " \u00b7 " + g : "") },
   de: { upcoming: "Bevorstehend", archive: "Archiv", search: "K\u00fcnstler, Venues, Genres suchen\u2026", filters: "Filter", reset: "\u21ba Zur\u00fccksetzen",
     free: "Nur frei / Spende", access: "Nur barrierefrei oder rauchfrei", source: "Quelle", district: "Bezirk",
     price: "Preisspanne (nur Events mit Preis)", genre: "Genre", tonight: "Heute", favs: "\u2b50 Favoriten", all: "Alle", unknownGenre: "Genre noch nicht identifiziert",
@@ -5290,7 +5324,13 @@ const LANGS = {
     calHint: "Speichere jede Veranstaltung direkt in deinem Kalender",
     autoNote: "Dieses Digest wird automatisch aus den unten aufgef\u00fchrten Quellen zusammengestellt; die Eintr\u00e4ge werden nicht einzeln von Hand gepr\u00fcft. Fehlerhafte oder fehlende Veranstaltungen bitte \u00fcber die Quell-Links melden.",
     count: (v, d) => (d === "archive" ? "Archiv" : "Bevorstehend") + " \u00b7 " + v + " Veranstaltungen",
-    empty: "Nichts gefunden \u2014 anderen Tag, Suche oder Filter probieren." },
+    empty: "Nichts gefunden \u2014 anderen Tag, Suche oder Filter probieren.",
+    profileBtn: "Meine Ansicht", profileBarTxt: "Nur an einem Teil davon interessiert? W\u00e4hle deine Kategorien und Genres einmal aus \u2014 diese Seite merkt sich deine Auswahl.",
+    profilePersonalize: "Personalisieren", profileLater: "Alles zeigen",
+    profileLbl: "Deine Ansicht \u2014 w\u00e4hle eine oder mehrere Kategorien; mit Musik kannst du auch Musik-Genres w\u00e4hlen",
+    profileLblGenres: "Musik-Genres (optional)", profileSave: "Meine Ansicht speichern", profileCancel: "Abbrechen", profileRemove: "Gespeicherte Ansicht entfernen",
+    profileHint: "W\u00e4hle einmal aus, was dich interessiert \u2014 das wird auf diesem Ger\u00e4t gespeichert und die Seite zeigt k\u00fcnftig nur diese Veranstaltungen. \u00dcber den gelben Chip oder diesen Button kannst du es jederzeit \u00e4ndern oder entfernen.",
+    profileChip: (c, g) => "Deine Ansicht: " + c + (g ? " \u00b7 " + g : "") },
   it: { upcoming: "In arrivo", archive: "Archivio", search: "Cerca artisti, venue, generi\u2026", filters: "Filtri", reset: "\u21ba Azzera",
     free: "Solo gratuiti / offerta", access: "Solo accessibili o senza fumo", source: "Fonte", district: "Quartiere",
     price: "Fascia di prezzo (solo eventi con prezzo)", genre: "Genere", tonight: "Oggi", favs: "\u2b50 Preferiti", all: "Tutti", unknownGenre: "Genere non ancora identificato",
@@ -5299,7 +5339,13 @@ const LANGS = {
     calHint: "Salva ogni evento direttamente nel tuo calendario",
     autoNote: "Questo digest \u00e8 compilato automaticamente dalle fonti elencate qui sotto; le singole voci non sono controllate una per una a mano. Per eventi errati o mancanti, segnalali tramite i link alle fonti.",
     count: (v, d) => (d === "archive" ? "Archivio" : "In arrivo") + " \u00b7 " + v + " eventi",
-    empty: "Nessun risultato \u2014 prova un altro giorno, ricerca o filtro." },
+    empty: "Nessun risultato \u2014 prova un altro giorno, ricerca o filtro.",
+    profileBtn: "La mia vista", profileBarTxt: "Ti interessano solo alcune cose? Scegli una volta le tue categorie e i tuoi generi \u2014 il sito ricorder\u00e0 la tua scelta.",
+    profilePersonalize: "Personalizza", profileLater: "Mostra tutto",
+    profileLbl: "La tua vista \u2014 scegli una o pi\u00f9 categorie; se includi Musica puoi scegliere anche i generi musicali",
+    profileLblGenres: "Generi musicali (opzionale)", profileSave: "Salva la mia vista", profileCancel: "Annulla", profileRemove: "Rimuovi la vista salvata",
+    profileHint: "Scegli una volta cosa ti interessa \u2014 verr\u00e0 ricordato su questo dispositivo e il sito si aprir\u00e0 sempre mostrando solo questi eventi. Puoi cambiarlo o rimuoverlo in qualsiasi momento tramite il chip ambra o questo pulsante.",
+    profileChip: (c, g) => "La tua vista: " + c + (g ? " \u00b7 " + g : "") },
 };
 const T = () => LANGS[S.lang] || LANGS.en;
 function applyLang() {
@@ -5319,6 +5365,18 @@ function applyLang() {
   $("lblPrice").textContent = t.price;
   $("lblGenre").textContent = t.genre;
   $("empty").textContent = t.empty;
+  $("profileBtn").textContent = t.profileBtn;
+  $("profileBtn").title = t.profileBtn + " \u2014 " + t.profileHint;
+  $("profileHint").textContent = t.profileHint;
+  $("profileMsg").textContent = t.profileBarTxt;
+  $("profilePersonalize").textContent = t.profilePersonalize;
+  $("profileLater").textContent = t.profileLater;
+  $("profileLbl").textContent = t.profileLbl;
+  $("profileLblGenres").textContent = t.profileLblGenres;
+  $("profileSave").textContent = t.profileSave;
+  $("profileCancel").textContent = t.profileCancel;
+  $("profileRemove").textContent = t.profileRemove;
+  updateProfileChip();
   document.documentElement.setAttribute("lang", S.lang);
 }
 
@@ -5710,8 +5768,13 @@ function filtered() {
     const okAccess = !S.accessOnly || e.wheelchair || e.smokeFree;
     const okDistrict = S.district === "All" || districtOf(e) === S.district;
     const okVenue = !S.venue || (e.venue || "").trim() === S.venue;
+    // Personal view ("My view"): persistent multi-category + optional music-genre selection (localStorage "be-profile").
+    const okPCat = !S.pCats.length || S.pCats.indexOf(e.category || "Music") !== -1;
+    const pGen = S.pGenres.length > 0 && S.pCats.indexOf("Music") !== -1;
+    const okPGen = !pGen || (e.category && e.category !== "Music") || unknownMusic ||
+      splitGenres(genreOf(e)).some((g) => S.pGenres.indexOf(genreToMacro(g)) !== -1);
     return okView && okDay && okCat && okGenre && okSub && okFree && okPrice && okQuery &&
-      okFav && okAccess && okDistrict && okVenue;
+      okFav && okAccess && okDistrict && okVenue && okPCat && okPGen;
   }).sort((a, b) => (a.date + (a.time || "")).localeCompare(b.date + (b.time || "")));
 }
 
@@ -5818,7 +5881,7 @@ function renderChips() {
 
 let LAST = [];
 function renderList() {
-  const genreActive = S.genre !== "All" || S.subGenre !== "All";
+  const genreActive = S.genre !== "All" || S.subGenre !== "All" || (S.pGenres.length > 0 && S.pCats.indexOf("Music") !== -1);
   let list = filtered();
   const isUnk = (e) => (e.category === "Music" || !e.category) && !genreOf(e) && !isCover(e);
   const unkCount = list.filter(isUnk).length;
@@ -5933,7 +5996,7 @@ $("dayClear").addEventListener("click", () => { S.dayFilter = ""; $("day").value
 $("dayBtn").addEventListener("click", () => { const d = $("day"); try { d.showPicker(); } catch (err) { d.focus(); } });
 $("srcLink").addEventListener("click", () => { document.getElementById("sources").scrollIntoView({ behavior: "smooth" }); });
 $("free").addEventListener("change", (e) => { S.freeOnly = e.target.checked; renderAll(); });
-$("filterBtn").addEventListener("click", () => { S.showFilters = !S.showFilters; renderAll(); });
+$("filterBtn").addEventListener("click", () => { $("profilePanel").style.display = "none"; S.showFilters = !S.showFilters; renderAll(); });
 $("pmin").addEventListener("input", (e) => { S.priceMin = e.target.value; renderAll(); });
 $("pmax").addEventListener("input", (e) => { S.priceMax = e.target.value; renderAll(); });
 $("priceClear").addEventListener("click", () => { S.priceMin = ""; S.priceMax = ""; $("pmin").value = ""; $("pmax").value = ""; renderAll(); });
@@ -6011,6 +6074,67 @@ window.addEventListener("scroll", () => {
   });
 }, { passive: true });
 
+// \u2500\u2500 Personal view ("My view") \u2500\u2500
+// Persistent personal mode: the user picks one or more categories (and, if Music is included,
+// one or more music genres) ONCE; the choice is saved in localStorage key "be-profile" and
+// re-applied on every visit. An amber chip always shows the active view; \u2715 removes it,
+// the "My view" button reopens the picker to change the selection.
+const PROFILE_CATS = ["Music", "Theatre", "Art", "Cinema"];
+let pSel = { cats: [], genres: [] };
+function loadProfile() { try { const p = JSON.parse(localStorage.getItem("be-profile") || "null"); if (p && p.cats && p.cats.length) return p; } catch (err) {} return null; }
+function saveProfile(p) { try { if (p) localStorage.setItem("be-profile", JSON.stringify(p)); else localStorage.removeItem("be-profile"); } catch (err) {} }
+function profileSeen() { try { return localStorage.getItem("be-profile-seen") === "1"; } catch (err) { return true; } }
+function markProfileSeen() { try { localStorage.setItem("be-profile-seen", "1"); } catch (err) {} }
+function applyProfile(p) {
+  S.pCats = (p && p.cats) ? p.cats : [];
+  S.pGenres = (p && p.genres) ? p.genres : [];
+  updateProfileChip();
+}
+function updateProfileChip() {
+  const c = $("profileChip");
+  if (S.pCats.length) {
+    c.style.display = "inline-flex";
+    const gens = (S.pGenres.length && S.pCats.indexOf("Music") !== -1) ? S.pGenres.join(", ") : "";
+    $("profileChipTxt").textContent = T().profileChip(S.pCats.join(", "), gens);
+  } else c.style.display = "none";
+}
+function renderProfilePanel() {
+  $("profileCats").innerHTML = PROFILE_CATS.map((cat) =>
+    `<button class="chip${pSel.cats.indexOf(cat) !== -1 ? " on" : ""}" data-pc="${cat}">${cat}</button>`).join("");
+  $("profileCats").querySelectorAll("[data-pc]").forEach((b) =>
+    b.addEventListener("click", () => { const i = pSel.cats.indexOf(b.dataset.pc); if (i === -1) pSel.cats.push(b.dataset.pc); else pSel.cats.splice(i, 1); renderProfilePanel(); }));
+  $("profileGenresWrap").style.display = pSel.cats.indexOf("Music") !== -1 ? "block" : "none";
+  if (pSel.cats.indexOf("Music") !== -1) {
+    $("profileGenres").innerHTML = GENRE_MACROS.slice(1).map((g) =>
+      `<button class="gchip${pSel.genres.indexOf(g) !== -1 ? " on" : ""}" data-pg="${esc(g)}">${esc(g)}</button>`).join("");
+    $("profileGenres").querySelectorAll("[data-pg]").forEach((b) =>
+      b.addEventListener("click", () => { const i = pSel.genres.indexOf(b.dataset.pg); if (i === -1) pSel.genres.push(b.dataset.pg); else pSel.genres.splice(i, 1); renderProfilePanel(); }));
+  }
+  $("profileRemove").style.display = loadProfile() ? "inline-flex" : "none";
+}
+function openProfilePanel() {
+  pSel = { cats: S.pCats.slice(), genres: S.pGenres.slice() };
+  renderProfilePanel();
+  $("profilePanel").style.display = "block";
+  $("profileBar").style.display = "none";
+}
+$("profileBtn").addEventListener("click", () => { const p = $("profilePanel"); if (p.style.display === "none") openProfilePanel(); else p.style.display = "none"; });
+$("profilePersonalize").addEventListener("click", openProfilePanel);
+$("profileLater").addEventListener("click", () => { markProfileSeen(); $("profileBar").style.display = "none"; });
+$("profileSave").addEventListener("click", () => {
+  if (pSel.cats.length) saveProfile({ cats: pSel.cats, genres: pSel.cats.indexOf("Music") !== -1 ? pSel.genres : [] });
+  markProfileSeen();
+  applyProfile(loadProfile());
+  $("profilePanel").style.display = "none";
+  renderAll();
+});
+$("profileCancel").addEventListener("click", () => { $("profilePanel").style.display = "none"; });
+$("profileRemove").addEventListener("click", () => { saveProfile(null); applyProfile(null); markProfileSeen(); $("profilePanel").style.display = "none"; renderAll(); });
+$("profileChip").addEventListener("click", (ev) => {
+  if (ev.target.id === "profileX") { saveProfile(null); applyProfile(null); renderAll(); }
+  else openProfilePanel();
+});
+
 // \u2500\u2500 Language auto-detection \u2500\u2500
 // First visit: use the browser language (de/it) or fall back to English.
 // A manual selection via the selector is remembered (localStorage) and wins over auto-detection.
@@ -6037,6 +6161,14 @@ if (!new URLSearchParams(location.hash.slice(1)).has("theme")) {
 document.body.classList.toggle("dark", S.theme === "dark");
 $("themeBtn").textContent = S.theme === "dark" ? "\u2600\ufe0f" : "\ud83c\udf19";
 $("langSel").value = S.lang;
+// \u2500\u2500 Personal view detection \u2500\u2500
+// A saved profile wins and is applied BEFORE the first render; first-time visitors (no profile,
+// no dismissal, not arriving via a shared-event link) see the light invitation bar.
+{
+  const savedProfile = loadProfile();
+  if (savedProfile) applyProfile(savedProfile);
+  else if (!profileSeen() && !new URLSearchParams(location.hash.slice(1)).has("ev")) $("profileBar").style.display = "flex";
+}
 applyLang();
 buildDistricts();
 try {
