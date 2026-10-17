@@ -336,6 +336,7 @@
     <p>Berlin Events &#183; Berlin-Gigs (Cryptpad) + mytrueintent.blogspot.com + web picks &#183; <span id="tot"></span> events, deduplicated</p>
     <p id="stats" class="mini-label" style="margin-bottom:.5rem"></p>
     <p class="updated-badge" style="margin-top:.5rem"><span class="dot"></span>Sources last updated: <span class="lastupdated">8 October 2026</span></p>
+    <p id="autoNote" class="mini-label" style="margin:.6rem 0 0 0"></p>
     <p class="disclaimer">&#9888;&#65039; <strong>This is an experimental site, a constant work in progress &#8212; it is by no means exhaustive, just an attempt to aggregate lesser-known events in one place.</strong> Always double-check dates, times and tickets with the organizers or venues before going. This site aggregates external sources and assumes no responsibility for errors, changes or cancellations.</p>
     <p class="src-title">Sources <b style="font-size:.9rem">*</b></p>
     <p><strong>&#128241; Gigs</strong> &#8212; the <em>Berlin-Gigs</em> community pad on Cryptpad, a DIY list of concerts with time, price, genre, smoke-free and wheelchair info.</p>
@@ -347,6 +348,19 @@
     <p><strong>&#128205; Venues</strong> &#8212; venue addresses and districts verified via web search; the &#128205; pin next to a venue opens it in OpenStreetMap.</p>
     <p>Events appearing in more than one source are automatically deduplicated (same title + date).</p>
     <p class="thanks">&#128591; <strong>Thanks</strong> &#8212; to everyone who maintains these sources and shares event data, and above all to the artists who make Berlin worth going out for. This site only exists because of their work.</p>
+    <p style="margin:.9rem 0 0 0"><a href="#" id="legalLink" class="mini-label" style="text-decoration:underline">Impressum &amp; Datenschutz</a></p>
+    <div id="legal" style="display:none">
+      <p class="src-title">Impressum</p>
+      <p><strong>Angaben gem&#228;&#223; &#167; 5 DDG</strong></p>
+      <p id="impName"></p>
+      <p id="impContact"></p>
+      <p>Verantwortlich f&#252;r den Inhalt dieser Website gem&#228;&#223; &#167; 18 Abs. 2 MStV: <span id="impResp"></span>.</p>
+      <p>Diese Website ist ein nicht-kommerzielles privates Projekt. Es werden keine Werbung, Affiliate-Links oder bezahlten Inhalte betrieben, keine Tickets verkauft und keine Abonnements angeboten; Links f&#252;hren zu den offiziellen Seiten der Veranstalter.</p>
+      <p class="src-title" style="margin-top:1rem">Datenschutzerkl&#228;rung</p>
+      <p>Diese Website verarbeitet keine personenbezogenen Daten. Es gibt keine Cookies, kein Tracking, keine Analyse-Tools und keine Server-Logs im eigenen Betrieb. Speicherung im Browser (Browser-Sprache, Theme, Favoriten) erfolgt ausschlie&#223;lich lokal &#252;ber den lokalen Speicher deines Browsers; diese Daten verlassen dein Ger&#228;t nicht und k&#246;nnen &#252;ber die Browser-Einstellungen gel&#246;scht werden.</p>
+      <p>Die Website wird bei GitHub Pages (GitHub, Inc., USA) gehostet. Beim Aufruf der Seite k&#246;nnen technisch notwendige Zugriffsdaten (IP-Adresse, Zeitpunkt) in den Server-Protokollen von GitHub verarbeitet werden. Details: <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noreferrer">GitHub Privacy Statement</a>.</p>
+      <p>Der Hinweis zu Inhalten gem&#228;&#223; &#167; 27 Mediendienste-Staatsvertrag und &#167; 5 DDG lautet: soweit auf dieser Website Inhalte oder Links auf externe Quellen verweisen, wird f&#252;r diese fremden Inhalte keine Verantwortung &#252;bernommen.</p>
+    </div>
   </footer>
 </div>
 <button id="topBtn" aria-label="Back to top">&#8593;</button>
@@ -5150,26 +5164,29 @@ const linkOf = (e) => (e && e.link) || VENUE_LINKS[(e && e.venue || "").trim()] 
 const LANGS = {
   en: { upcoming: "Upcoming", archive: "Archive", search: "Search artists, venues, genres\u2026", filters: "Filters", reset: "\u21ba Reset",
     free: "Free / donation only", access: "Accessible or smoke-free only", source: "Source", district: "District",
-    price: "Price range (events with a price only)", genre: "Genre", tonight: "Today", favs: "\u2b50 Favorites", all: "All", unknownGenre: "Genre unknown",
+    price: "Price range (events with a price only)", genre: "Genre", tonight: "Today", favs: "\u2b50 Favorites", all: "All", unknownGenre: "Genre not yet identified",
     unkHidden: (n) => n + " music events without a known genre are hidden \u2014 include them?", unkInclude: "Include", unkHide: "Hide them", coverNote: "Cover / tribute band", postponedNote: "Postponed \u2014 new date to be announced", noLink: "No link available for this event \u2014 sorry",
     subTitle: "A minimal digest of concerts, theatre, art and cinema in Berlin \u2014 gathered from independent sources",
     calHint: "Save any event straight to your calendar",
+    autoNote: "This digest is compiled automatically from the sources listed below; the entries are not individually reviewed by a human. Report any wrong or missing event via the source links.",
     count: (v, d) => (d === "archive" ? "Archive" : "Upcoming") + " \u00b7 " + v + " events",
     empty: "Nothing matches \u2014 try another day, search or filter." },
   de: { upcoming: "Bevorstehend", archive: "Archiv", search: "K\u00fcnstler, Venues, Genres suchen\u2026", filters: "Filter", reset: "\u21ba Zur\u00fccksetzen",
     free: "Nur frei / Spende", access: "Nur barrierefrei oder rauchfrei", source: "Quelle", district: "Bezirk",
-    price: "Preisspanne (nur Events mit Preis)", genre: "Genre", tonight: "Heute", favs: "\u2b50 Favoriten", all: "Alle", unknownGenre: "Genre unbekannt",
+    price: "Preisspanne (nur Events mit Preis)", genre: "Genre", tonight: "Heute", favs: "\u2b50 Favoriten", all: "Alle", unknownGenre: "Genre noch nicht identifiziert",
     unkHidden: (n) => n + " Musik-Events ohne bekanntes Genre sind ausgeblendet \u2014 einblenden?", unkInclude: "Einblenden", unkHide: "Ausblenden", coverNote: "Cover-/Tribute-Band", postponedNote: "Verschoben \u2014 neuer Termin wird bekannt gegeben", noLink: "Kein Link f\u00fcr diese Veranstaltung verf\u00fcgbar \u2014 Entschuldigung",
     subTitle: "Ein minimales Digest von Konzerten, Theater, Kunst und Kino in Berlin \u2014 aus unabh\u00e4ngigen Quellen zusammengetragen",
     calHint: "Speichere jede Veranstaltung direkt in deinem Kalender",
+    autoNote: "Dieses Digest wird automatisch aus den unten aufgef\u00fchrten Quellen zusammengestellt; die Eintr\u00e4ge werden nicht einzeln von Hand gepr\u00fcft. Fehlerhafte oder fehlende Veranstaltungen bitte \u00fcber die Quell-Links melden.",
     count: (v, d) => (d === "archive" ? "Archiv" : "Bevorstehend") + " \u00b7 " + v + " Veranstaltungen",
     empty: "Nichts gefunden \u2014 anderen Tag, Suche oder Filter probieren." },
   it: { upcoming: "In arrivo", archive: "Archivio", search: "Cerca artisti, venue, generi\u2026", filters: "Filtri", reset: "\u21ba Azzera",
     free: "Solo gratuiti / offerta", access: "Solo accessibili o senza fumo", source: "Fonte", district: "Quartiere",
-    price: "Fascia di prezzo (solo eventi con prezzo)", genre: "Genere", tonight: "Oggi", favs: "\u2b50 Preferiti", all: "Tutti", unknownGenre: "Genere sconosciuto",
+    price: "Fascia di prezzo (solo eventi con prezzo)", genre: "Genere", tonight: "Oggi", favs: "\u2b50 Preferiti", all: "Tutti", unknownGenre: "Genere non ancora identificato",
     unkHidden: (n) => n + " eventi musicali senza genere noto sono nascosti \u2014 includerli?", unkInclude: "Includili", unkHide: "Nascondili", coverNote: "Cover / tribute band", postponedNote: "Posticipato \u2014 nuova data da annunciare", noLink: "Nessun link disponibile per questo evento \u2014 scusa",
     subTitle: "Un digest essenziale di concerti, teatro, arte e cinema a Berlino \u2014 raccolto da fonti indipendenti",
     calHint: "Salva ogni evento direttamente nel tuo calendario",
+    autoNote: "Questo digest \u00e8 compilato automaticamente dalle fonti elencate qui sotto; le singole voci non sono controllate una per una a mano. Per eventi errati o mancanti, segnalali tramite i link alle fonti.",
     count: (v, d) => (d === "archive" ? "Archivio" : "In arrivo") + " \u00b7 " + v + " eventi",
     empty: "Nessun risultato \u2014 prova un altro giorno, ricerca o filtro." },
 };
@@ -5178,6 +5195,7 @@ function applyLang() {
   const t = T();
   $("subTitle").textContent = t.subTitle;
   $("calHint").textContent = t.calHint;
+  $("autoNote").textContent = t.autoNote;
   $("lblArchive").textContent = t.archive;
   $("q").placeholder = t.search;
   $("filterBtn").textContent = t.filters + " " + (S.showFilters ? "\u25b4" : "\u25be");
@@ -5536,6 +5554,11 @@ function readHash() {
 const DEDUP = dedupe(EVENTS);
 $("tot").textContent = DEDUP.length;
 document.querySelectorAll(".lastupdated").forEach(function (el) { el.textContent = LAST_UPDATED; });
+var IMP_NAME = [65,110,100,114,101,97,32,80,105,114,97,115,60,98,114,62,90,119,105,110,103,108,105,115,116,114,97,223,101,32,51,54,60,98,114,62,49,48,53,53,53,32,66,101,114,108,105,110,60,98,114,62,68,101,117,116,115,99,104,108,97,110,100];
+var IMP_CONTACT = [69,45,77,97,105,108,58,32,119,111,105,98,46,97,111,51,100,98,64,112,97,115,115,105,110,98,111,120,46,99,111,109];
+var IMP_RESP = [65,110,100,114,101,97,32,80,105,114,97,115,44,32,65,110,115,99,104,114,105,102,116,32,119,105,101,32,111,98,101,110];
+function impStr(a) { var s = ""; for (var i = 0; i < a.length; i++) s += String.fromCharCode(a[i]); return s; }
+$("legalLink").addEventListener("click", function (ev) { ev.preventDefault(); var d = $("legal"); if (!d.dataset.f) { $("impName").innerHTML = impStr(IMP_NAME); $("impContact").innerHTML = impStr(IMP_CONTACT); $("impResp").innerHTML = impStr(IMP_RESP); d.dataset.f = 1; } var open = d.style.display !== "none"; d.style.display = open ? "none" : "block"; if (!open) d.scrollIntoView({ behavior: "smooth", block: "nearest" }); });
 
 //  Footer stats 
 (function buildStats() {
@@ -5630,9 +5653,9 @@ function eventRow(e, i) {
     <div class="evdatecol"><span class="evdate">${fmtDate(e.date)}</span>${star}</div>
     <div>
       <div class="evhead">${title}<span class="evacts">${ics}${shr}</span></div>
+      ${(genreOf(e) ? `<p class="genre">${esc(genreOf(e))}</p>` : (isCover(e) ? `<p class="genre genre-cover">${esc(T().coverNote)}</p>` : ((e.category === "Music" || !e.category) ? `<p class="genre genre-unknown">${esc(T().unknownGenre)}</p>` : "")))}
       <p class="meta">${vname}${e.time ? " \u00b7 " + esc(e.time) : ""}${e.price ? " \u00b7 " + esc(e.price) : ""}${flags}</p>
       ${e.postponed ? `<p class="postponed-note">\u23f8 ${esc(T().postponedNote)}</p>` : ""}
-      ${(genreOf(e) ? `<p class="genre">${esc(genreOf(e))}</p>` : (isCover(e) ? `<p class="genre genre-cover">${esc(T().coverNote)}</p>` : ((e.category === "Music" || !e.category) ? `<p class="genre genre-unknown">${esc(T().unknownGenre)}</p>` : "")))}
       ${e.description ? `<p class="desc">${esc(e.description)}</p>` : ""}
       ${det}
     </div>
