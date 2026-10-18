@@ -237,6 +237,11 @@
   body.dark #profilePanel { color: #d4d4d4; background: linear-gradient(180deg, #1e1b4b, #171717 3.5rem); border-color: #4f46e5; }
   body.dark #profilePanel .mini-label { color: #a5b4fc; }
   #profileSave { background: #4f46e5; border-color: #4f46e5; color: #fff; font-weight: 600; }
+  #visitWrap { margin: 1rem 0 0 0; display: none; align-items: center; justify-content: flex-end; gap: .55rem; }
+  #visitDigits { display: inline-flex; gap: .14rem; background: #171717; border: 1px solid #525252; border-radius: .3rem; padding: .22rem .38rem; }
+  #visitDigits span { display: inline-block; min-width: .8rem; text-align: center; font-family: "Courier New", ui-monospace, Menlo, monospace;
+    font-size: .82rem; font-weight: 700; color: #16a34a; text-shadow: 0 0 7px rgba(22, 163, 74, .5); }
+  body.dark #visitDigits { background: #0a0a0a; border-color: #404040; }
   #profileSave:hover { background: #4338ca; border-color: #4338ca; color: #fff; }
   #profileCancel { color: #737373; }
   #profileRemove { background: #fef2f2; border-color: #fca5a5; color: #b91c1c; }
@@ -406,6 +411,7 @@
     <p><strong>&#128205; Venues</strong> &#8212; venue addresses and districts verified via web search; the &#128205; pin next to a venue opens it in OpenStreetMap.</p>
     <p>Events appearing in more than one source are automatically deduplicated (same title + date).</p>
     <p class="thanks">&#128591; <strong>Thanks</strong> &#8212; to everyone who maintains these sources and shares event data, and above all to the artists who make Berlin worth going out for. This site only exists because of their work.</p>
+    <p id="visitWrap" style="display:none"><span id="visitDigits" aria-hidden="true"></span> <span class="mini-label" id="visitLbl" style="margin:0"></span></p>
     <p style="margin:.9rem 0 0 0"><a href="#" id="legalLink" class="mini-label" style="text-decoration:underline">Impressum &amp; Datenschutz</a></p>
     <div id="legal" style="display:none">
       <p class="src-title">Impressum</p>
@@ -415,7 +421,7 @@
       <p>Verantwortlich f&#252;r den Inhalt dieser Website gem&#228;&#223; &#167; 18 Abs. 2 MStV: <span id="impResp"></span>.</p>
       <p>Diese Website ist ein nicht-kommerzielles privates Projekt. Es werden keine Werbung, Affiliate-Links oder bezahlten Inhalte betrieben, keine Tickets verkauft und keine Abonnements angeboten; Links f&#252;hren zu den offiziellen Seiten der Veranstalter.</p>
       <p class="src-title" style="margin-top:1rem">Datenschutzerkl&#228;rung</p>
-      <p>Diese Website verarbeitet keine personenbezogenen Daten. Es gibt keine Cookies, kein Tracking, keine Analyse-Tools und keine Server-Logs im eigenen Betrieb. Speicherung im Browser (Browser-Sprache, Theme, Favoriten) erfolgt ausschlie&#223;lich lokal &#252;ber den lokalen Speicher deines Browsers; diese Daten verlassen dein Ger&#228;t nicht und k&#246;nnen &#252;ber die Browser-Einstellungen gel&#246;scht werden.</p>
+      <p>Diese Website verarbeitet keine personenbezogenen Daten. Es gibt keine Cookies, kein Tracking, keine Analyse-Tools und keine Server-Logs im eigenen Betrieb. Speicherung im Browser (Browser-Sprache, Theme, Favoriten, pers&#246;nliche Veranstaltungsansicht) erfolgt ausschlie&#223;lich lokal &#252;ber den lokalen Speicher deines Browsers; diese Daten verlassen dein Ger&#228;t nicht und k&#246;nnen &#252;ber die Browser-Einstellungen gel&#246;scht werden. Ausnahme: ein anonymer Besuchsz&#228;hler (CountAPI, countapi.mileshilliard.com) z&#228;hlt die Besuche dieser Seite als reine Zahl hoch; dabei werden keine Cookies gesetzt und keine personenbezogenen Daten gespeichert, doch wie bei jedem Web-Aufruf wird die Anfrage technisch bedingt &#252;ber deine IP-Adresse an den Server des Anbieters &#252;bermittelt.</p>
       <p>Die Website wird bei GitHub Pages (GitHub, Inc., USA) gehostet. Beim Aufruf der Seite k&#246;nnen technisch notwendige Zugriffsdaten (IP-Adresse, Zeitpunkt) in den Server-Protokollen von GitHub verarbeitet werden. Details: <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noreferrer">GitHub Privacy Statement</a>.</p>
       <p>Der Hinweis zu Inhalten gem&#228;&#223; &#167; 27 Mediendienste-Staatsvertrag und &#167; 5 DDG lautet: soweit auf dieser Website Inhalte oder Links auf externe Quellen verweisen, wird f&#252;r diese fremden Inhalte keine Verantwortung &#252;bernommen.</p>
     </div>
@@ -5343,7 +5349,8 @@ const LANGS = {
     profileLbl: "Your view \u2014 pick one or more categories; if you include Music you can also pick music genres",
     profileLblGenres: "Music genres (optional)", profileSave: "Save my view", profileCancel: "Cancel", profileRemove: "Remove saved view",
     profileHint: "Choose once what interests you \u2014 this will be remembered on this device and the site will always open showing only these events. You can change or remove it at any time via the \"My view\" chip or this button.",
-    profileChip: (c, g) => "Your view: " + c + (g ? " \u00b7 " + g : "") },
+    profileChip: (c, g) => "Your view: " + c + (g ? " \u00b7 " + g : ""),
+    visits: "visits since October 2026" },
   de: { upcoming: "Bevorstehend", archive: "Archiv", search: "K\u00fcnstler, Venues, Genres suchen\u2026", filters: "Filter", reset: "\u21ba Zur\u00fccksetzen",
     free: "Nur frei / Spende", access: "Nur barrierefrei oder rauchfrei", source: "Quelle", district: "Bezirk",
     price: "Preisspanne (nur Events mit Preis)", genre: "Genre", tonight: "Heute", favs: "\u2b50 Favoriten", all: "Alle", unknownGenre: "Genre noch nicht identifiziert",
@@ -5358,7 +5365,8 @@ const LANGS = {
     profileLbl: "Deine Ansicht \u2014 w\u00e4hle eine oder mehrere Kategorien; mit Musik kannst du auch Musik-Genres w\u00e4hlen",
     profileLblGenres: "Musik-Genres (optional)", profileSave: "Meine Ansicht speichern", profileCancel: "Abbrechen", profileRemove: "Gespeicherte Ansicht entfernen",
     profileHint: "W\u00e4hle einmal aus, was dich interessiert \u2014 das wird auf diesem Ger\u00e4t gespeichert und die Seite zeigt k\u00fcnftig nur diese Veranstaltungen. \u00dcber den \"Meine Ansicht\"-Chip oder diesen Button kannst du es jederzeit \u00e4ndern oder entfernen.",
-    profileChip: (c, g) => "Deine Ansicht: " + c + (g ? " \u00b7 " + g : "") },
+    profileChip: (c, g) => "Deine Ansicht: " + c + (g ? " \u00b7 " + g : ""),
+    visits: "Besuche seit Oktober 2026" },
   it: { upcoming: "In arrivo", archive: "Archivio", search: "Cerca artisti, venue, generi\u2026", filters: "Filtri", reset: "\u21ba Azzera",
     free: "Solo gratuiti / offerta", access: "Solo accessibili o senza fumo", source: "Fonte", district: "Quartiere",
     price: "Fascia di prezzo (solo eventi con prezzo)", genre: "Genere", tonight: "Oggi", favs: "\u2b50 Preferiti", all: "Tutti", unknownGenre: "Genere non ancora identificato",
@@ -5373,7 +5381,8 @@ const LANGS = {
     profileLbl: "La tua vista \u2014 scegli una o pi\u00f9 categorie; se includi Musica puoi scegliere anche i generi musicali",
     profileLblGenres: "Generi musicali (opzionale)", profileSave: "Salva la mia vista", profileCancel: "Annulla", profileRemove: "Rimuovi la vista salvata",
     profileHint: "Scegli una volta cosa ti interessa \u2014 verr\u00e0 ricordato su questo dispositivo e il sito si aprir\u00e0 sempre mostrando solo questi eventi. Puoi cambiarlo o rimuoverlo in qualsiasi momento tramite il chip \"La mia vista\" o questo pulsante.",
-    profileChip: (c, g) => "La tua vista: " + c + (g ? " \u00b7 " + g : "") },
+    profileChip: (c, g) => "La tua vista: " + c + (g ? " \u00b7 " + g : ""),
+    visits: "visite da ottobre 2026" },
 };
 const T = () => LANGS[S.lang] || LANGS.en;
 function applyLang() {
@@ -5405,6 +5414,7 @@ function applyLang() {
   $("profileCancel").textContent = t.profileCancel;
   $("profileRemove").textContent = t.profileRemove;
   updateProfileChip();
+  $("visitLbl").textContent = t.visits;
   document.documentElement.setAttribute("lang", S.lang);
 }
 
@@ -6180,6 +6190,26 @@ $("profileFab").addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
   setTimeout(() => { openProfilePanel(); $("profilePanel").scrollIntoView({ behavior: "smooth", block: "nearest" }); }, 350);
 });
+
+// \u2500\u2500 Retro visit counter (badge in the footer) \u2500\u2500
+// Anonymous hit counter via CountAPI (countapi.mileshilliard.com, free, no cookies, no signup).
+// Counted ONCE per browsing session (sessionStorage guard): page reloads do not inflate the number.
+// The badge stays hidden if the API cannot be reached (offline/closed \u2014 the site never looks broken).
+(function () {
+  var counted = false;
+  try { counted = sessionStorage.getItem("be-counted") === "1"; } catch (err) {}
+  fetch("https://countapi.mileshilliard.com/api/v1/" + (counted ? "get" : "hit") + "/berlin-events-apfallin-visits")
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      var n = Number(d.value);
+      if (!isFinite(n) || n < 0) return;
+      $("visitDigits").innerHTML = String(Math.floor(n)).split("").map(function (ch) { return "<span>" + ch + "</span>"; }).join("");
+      $("visitLbl").textContent = T().visits;
+      $("visitWrap").style.display = "flex";
+      try { sessionStorage.setItem("be-counted", "1"); } catch (err) {}
+    })
+    .catch(function () {});
+})();
 
 // \u2500\u2500 Language auto-detection \u2500\u2500
 // First visit: use the browser language (de/it) or fall back to English.
