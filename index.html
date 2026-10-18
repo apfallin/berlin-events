@@ -175,6 +175,11 @@
   #topBtn.show { opacity: 1; }
   #topBtn:hover { transform: translateX(-50%) scale(1.1); box-shadow: 0 8px 24px rgba(0,0,0,.4); opacity: 1; }
   body.dark #topBtn { background: #fff; border-color: #fff; color: #171717; box-shadow: 0 6px 20px rgba(0,0,0,.6); }
+  #profileFab { position: fixed; right: 1rem; bottom: 5.6rem; z-index: 20; display: none; border: 1px solid #4f46e5; background: #4f46e5;
+    color: #fff; border-radius: 999px; padding: .45rem .85rem; font-size: .74rem; font-weight: 600; cursor: pointer;
+    max-width: 70vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; box-shadow: 0 4px 14px rgba(79,70,229,.35); }
+  #profileFab:hover { background: #4338ca; border-color: #4338ca; }
+  body.dark #profileFab { background: #6366f1; border-color: #818cf8; box-shadow: 0 4px 14px rgba(0,0,0,.5); }
 
   /* Linkless event titles + transient toast notice (positioned near the click via JS) */
   .evtitle.nolink { text-decoration: underline dotted; text-underline-offset: .18em; cursor: pointer; }
@@ -216,17 +221,35 @@
   .evdet a.evaddr:hover { text-decoration: underline; }
   #venueChip { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
   body.dark #venueChip { background: #372a0e; border-color: #f59e0b; color: #fcd34d; }
-  #profileBar { display: none; font-size: .78rem; color: #525252; background: #fafaf9; border: 1px solid #e7e5e4; border-radius: .5rem; padding: .55rem .7rem; margin: 0 0 1rem; align-items: center; gap: .5rem; flex-wrap: wrap; }
+  #profileBar { display: none; font-size: .8rem; color: #3730a3; background: linear-gradient(135deg, #eef2ff, #f5f3ff); border: 1px solid #c7d2fe; border-left: 3px solid #6366f1; border-radius: .55rem; padding: .65rem .8rem; margin: 0 0 1rem; align-items: center; gap: .6rem; flex-wrap: wrap; box-shadow: 0 2px 10px rgba(99,102,241,.10); }
   #profileBar .chip { font-size: .72rem; padding: .25rem .6rem; }
-  #profileChip { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
-  body.dark #profileChip { background: #372a0e; border-color: #f59e0b; color: #fcd34d; }
+  #profilePersonalize { background: #4f46e5; border-color: #4f46e5; color: #fff; font-weight: 600; }
+  #profilePersonalize:hover { background: #4338ca; border-color: #4338ca; color: #fff; }
+  #profileChip { background: #eef2ff; border-color: #6366f1; color: #4338ca; }
+  body.dark #profileChip { background: #1e1b4b; border-color: #818cf8; color: #c7d2fe; }
   #profileX { margin-left: .45rem; cursor: pointer; font-size: .8rem; opacity: .8; }
   #profileX:hover { opacity: 1; }
-  #profilePanel { background: #fafaf9; border: 1px solid #e7e5e4; border-radius: .6rem; padding: .7rem .8rem .8rem; margin: 0 0 1rem; }
+  #profilePanel { background: linear-gradient(180deg, #eef2ff, #fafaf9 3.5rem); border: 1px solid #c7d2fe; border-radius: .65rem; padding: .75rem .85rem .85rem; margin: 0 0 1rem; box-shadow: 0 4px 16px rgba(99,102,241,.10); }
+  #profileHint { color: #4f46e5; }
+  body.dark #profileHint { color: #a5b4fc; }
   #profileCats, #profileGenres { display: flex; flex-wrap: wrap; gap: .4rem; }
-  body.dark #profileBar, body.dark #profilePanel { color: #d4d4d4; background: #171717; border-color: #262626; }
+  body.dark #profileBar { color: #c7d2fe; background: linear-gradient(135deg, #1e1b4b, #2e1065); border-color: #4f46e5; border-left-color: #818cf8; }
+  body.dark #profilePanel { color: #d4d4d4; background: linear-gradient(180deg, #1e1b4b, #171717 3.5rem); border-color: #4f46e5; }
+  body.dark #profilePanel .mini-label { color: #a5b4fc; }
+  #profileSave { background: #4f46e5; border-color: #4f46e5; color: #fff; font-weight: 600; }
+  #profileSave:hover { background: #4338ca; border-color: #4338ca; color: #fff; }
+  #profileCancel { color: #737373; }
+  #profileRemove { background: #fef2f2; border-color: #fca5a5; color: #b91c1c; }
+  #profileRemove:hover { background: #fee2e2; border-color: #f87171; color: #991b1b; }
+  body.dark #profileSave { background: #6366f1; border-color: #818cf8; color: #fff; }
+  body.dark #profileCancel { color: #a3a3a3; }
+  body.dark #profileRemove { background: #450a0a; border-color: #b91c1c; color: #fca5a5; }
   select.chip { appearance: auto; padding: .25rem .5rem; }
   #langSel { width: auto; padding: .1rem .3rem; font-size: .68rem; min-height: 1.5rem; font-weight: 500; }
+  #profileBtn { padding: .1rem .5rem; font-size: .68rem; min-height: 1.5rem; flex-shrink: 0; background: #eef2ff; border-color: #6366f1; color: #4338ca; font-weight: 600; }
+  #profileBtn.active { background: #4f46e5; border-color: #4f46e5; color: #fff; }
+  body.dark #profileBtn { background: #1e1b4b; border-color: #818cf8; color: #c7d2fe; }
+  body.dark #profileBtn.active { background: #6366f1; border-color: #818cf8; color: #fff; }
   #weekStrip { margin-top: .4rem; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
     -webkit-overflow-scrolling: touch; margin-right: -1.5rem; padding-right: 1.5rem;
     display: grid; grid-template-columns: repeat(9, 1fr); gap: .2rem; }
@@ -250,7 +273,8 @@
   @media (max-width: 640px) {
     body { -webkit-text-size-adjust: 100%; }
     .wrap { padding: 0 1rem 5rem; }
-    header { padding-top: 1.75rem; padding-bottom: 1.25rem; gap: .6rem; }
+    header { padding-top: 1.75rem; padding-bottom: 1.25rem; gap: .6rem; flex-wrap: wrap; }
+    .hrow { flex-wrap: wrap; justify-content: flex-end; margin-left: auto; }
     h1 { font-size: 1.55rem; }
     .sub { font-size: .78rem; }
     .controls { margin: 0 -1rem; padding: .7rem 1rem; }
@@ -261,15 +285,18 @@
     .chip { min-height: 2.35rem; padding: .35rem .8rem; }
     .row.scrollrow { margin-right: -1rem; padding-right: 1rem; }
     #panel, #genreWrap { padding: .8rem; }
+    .chip.action { min-height: 1.85rem; padding: .22rem .5rem; font-size: .68rem; }
+    #venueChip { font-size: .68rem; padding: .22rem .5rem; }
     #genres, #subgenres { gap: .3rem; }
     #list li { padding: 1rem 0; }
     .ev { flex-direction: column; align-items: flex-start; gap: .2rem; }
     .evdate { width: auto; }
     #topBtn { bottom: 1rem; width: 2.6rem; height: 2.6rem; }
+    #profileFab { bottom: 4.8rem; padding: .38rem .7rem; font-size: .7rem; max-width: 60vw; }
   }
 
   @media print {
-    .controls, #topBtn, .updated-badge, #genreWrap, #panel, .star, .icsbtn, .sharebtn, .morebtn, #stats, #unkBar, #toast, #profileBar, #profileChip, #profilePanel { display: none !important; }
+    .controls, #topBtn, .updated-badge, #genreWrap, #panel, .star, .icsbtn, .sharebtn, .morebtn, #stats, #unkBar, #toast, #profileBar, #profileChip, #profilePanel, #profileFab { display: none !important; }
     .evdet { display: block !important; }
     body { background: #fff; color: #000; }
     .wrap { max-width: 100%; }
@@ -288,6 +315,7 @@
       <p class="sub"><small class="updated-badge"><span class="dot"></span>Sources last updated: <span class="lastupdated">8 October 2026</span></small></p>
     </div>
     <div class="hrow">
+      <button class="chip action" id="profileBtn" title="Pick your categories and genres once &#8212; the site will remember them and show only those events">My view</button>
       <select id="langSel" class="chip" title="Language" aria-label="Language"><option value="en">EN</option><option value="de">DE</option><option value="it">IT</option></select>
       <button id="themeBtn" aria-label="Toggle theme">&#9728;&#65039;</button>
     </div>
@@ -308,7 +336,6 @@
       </span>
       <button class="chip on" id="venueChip" style="display:none;margin:0 auto">&#128205; <span id="venueName"></span> &#10005;</button>
       <span class="chipgroup">
-        <button class="chip action" id="profileBtn" title="Pick your categories and genres once &#8212; the site will remember them and show only those events">My view</button>
         <button class="chip action" id="filterBtn">Filters &#9662;<span class="hintdot" style="display:none"></span></button>
         <button class="chip action" id="resetBtn" title="Reset all filters" aria-label="Reset all filters">&#8634; Reset</button>
       </span>
@@ -338,7 +365,7 @@
   </div>
 
   <p id="profileBar"><span id="profileMsg"></span><button class="chip action" id="profilePersonalize">Personalize</button><button class="chip action" id="profileLater">Show everything</button></p>
-  <button id="profileChip" class="chip on" style="display:none">&#127919; <span id="profileChipTxt"></span><span id="profileX" role="button" aria-label="Remove saved view">&#10005;</span></button>
+  <button id="profileChip" class="chip on" style="display:none"><span id="profileChipTxt"></span><span id="profileX" role="button" aria-label="Remove saved view">&#10005;</span></button>
   <div id="profilePanel" style="display:none">
     <p class="subhint" id="profileHint"></p>
     <p class="mini-label" id="profileLbl"></p>
@@ -348,7 +375,7 @@
       <div class="row" id="profileGenres"></div>
     </div>
     <div class="row" style="margin-top:.85rem">
-      <button class="chip action" id="profileSave">Save my view</button>
+      <button class="chip action" id="profileSave" title="Save your selection \u2014 the site will open like this every time">Save my view</button>
       <button class="chip action" id="profileCancel">Cancel</button>
       <button class="chip action" id="profileRemove" style="display:none">Remove saved view</button>
     </div>
@@ -359,7 +386,8 @@
     <p id="count"></p>
     <p id="unkBar"><span id="unkMsg"></span><button class="iconbtn" id="unkBtn"></button></p>
     <p id="empty">Nothing matches &#8212; try another day, search or filter.</p>
-    <ul id="list"></ul>
+    <button id="profileFab" title=""></button>
+  <ul id="list"></ul>
   </main>
 
   <footer id="sources">
@@ -5314,7 +5342,7 @@ const LANGS = {
     profilePersonalize: "Personalize", profileLater: "Show everything",
     profileLbl: "Your view \u2014 pick one or more categories; if you include Music you can also pick music genres",
     profileLblGenres: "Music genres (optional)", profileSave: "Save my view", profileCancel: "Cancel", profileRemove: "Remove saved view",
-    profileHint: "Choose once what interests you \u2014 this will be remembered on this device and the site will always open showing only these events. You can change or remove it at any time via the amber chip or this button.",
+    profileHint: "Choose once what interests you \u2014 this will be remembered on this device and the site will always open showing only these events. You can change or remove it at any time via the \"My view\" chip or this button.",
     profileChip: (c, g) => "Your view: " + c + (g ? " \u00b7 " + g : "") },
   de: { upcoming: "Bevorstehend", archive: "Archiv", search: "K\u00fcnstler, Venues, Genres suchen\u2026", filters: "Filter", reset: "\u21ba Zur\u00fccksetzen",
     free: "Nur frei / Spende", access: "Nur barrierefrei oder rauchfrei", source: "Quelle", district: "Bezirk",
@@ -5329,7 +5357,7 @@ const LANGS = {
     profilePersonalize: "Personalisieren", profileLater: "Alles zeigen",
     profileLbl: "Deine Ansicht \u2014 w\u00e4hle eine oder mehrere Kategorien; mit Musik kannst du auch Musik-Genres w\u00e4hlen",
     profileLblGenres: "Musik-Genres (optional)", profileSave: "Meine Ansicht speichern", profileCancel: "Abbrechen", profileRemove: "Gespeicherte Ansicht entfernen",
-    profileHint: "W\u00e4hle einmal aus, was dich interessiert \u2014 das wird auf diesem Ger\u00e4t gespeichert und die Seite zeigt k\u00fcnftig nur diese Veranstaltungen. \u00dcber den gelben Chip oder diesen Button kannst du es jederzeit \u00e4ndern oder entfernen.",
+    profileHint: "W\u00e4hle einmal aus, was dich interessiert \u2014 das wird auf diesem Ger\u00e4t gespeichert und die Seite zeigt k\u00fcnftig nur diese Veranstaltungen. \u00dcber den \"Meine Ansicht\"-Chip oder diesen Button kannst du es jederzeit \u00e4ndern oder entfernen.",
     profileChip: (c, g) => "Deine Ansicht: " + c + (g ? " \u00b7 " + g : "") },
   it: { upcoming: "In arrivo", archive: "Archivio", search: "Cerca artisti, venue, generi\u2026", filters: "Filtri", reset: "\u21ba Azzera",
     free: "Solo gratuiti / offerta", access: "Solo accessibili o senza fumo", source: "Fonte", district: "Quartiere",
@@ -5344,7 +5372,7 @@ const LANGS = {
     profilePersonalize: "Personalizza", profileLater: "Mostra tutto",
     profileLbl: "La tua vista \u2014 scegli una o pi\u00f9 categorie; se includi Musica puoi scegliere anche i generi musicali",
     profileLblGenres: "Generi musicali (opzionale)", profileSave: "Salva la mia vista", profileCancel: "Annulla", profileRemove: "Rimuovi la vista salvata",
-    profileHint: "Scegli una volta cosa ti interessa \u2014 verr\u00e0 ricordato su questo dispositivo e il sito si aprir\u00e0 sempre mostrando solo questi eventi. Puoi cambiarlo o rimuoverlo in qualsiasi momento tramite il chip ambra o questo pulsante.",
+    profileHint: "Scegli una volta cosa ti interessa \u2014 verr\u00e0 ricordato su questo dispositivo e il sito si aprir\u00e0 sempre mostrando solo questi eventi. Puoi cambiarlo o rimuoverlo in qualsiasi momento tramite il chip \"La mia vista\" o questo pulsante.",
     profileChip: (c, g) => "La tua vista: " + c + (g ? " \u00b7 " + g : "") },
 };
 const T = () => LANGS[S.lang] || LANGS.en;
@@ -6070,6 +6098,7 @@ window.addEventListener("scroll", () => {
   scrollTicking = true;
   requestAnimationFrame(() => {
     $("controls").classList.toggle("scrolled", window.scrollY > 120);
+    updateProfileFab();
     scrollTicking = false;
   });
 }, { passive: true });
@@ -6093,10 +6122,19 @@ function applyProfile(p) {
 function updateProfileChip() {
   const c = $("profileChip");
   if (S.pCats.length) {
+    $("profileBtn").classList.add("active");
     c.style.display = "inline-flex";
     const gens = (S.pGenres.length && S.pCats.indexOf("Music") !== -1) ? S.pGenres.join(", ") : "";
     $("profileChipTxt").textContent = T().profileChip(S.pCats.join(", "), gens);
-  } else c.style.display = "none";
+    $("profileFab").textContent = T().profileChip(S.pCats.join(", "), gens);
+    $("profileFab").title = T().profileHint;
+  } else { c.style.display = "none"; $("profileBtn").classList.remove("active"); $("profileFab").style.display = "none"; }
+  updateProfileFab();
+}
+// Floating pill (bottom-right): shows that the personal view is active while the controls are
+// scrolled away; opens the picker and returns to the controls when tapped.
+function updateProfileFab() {
+  $("profileFab").style.display = (S.pCats.length && window.scrollY > 120) ? "block" : "none";
 }
 function renderProfilePanel() {
   $("profileCats").innerHTML = PROFILE_CATS.map((cat) =>
@@ -6133,6 +6171,10 @@ $("profileRemove").addEventListener("click", () => { saveProfile(null); applyPro
 $("profileChip").addEventListener("click", (ev) => {
   if (ev.target.id === "profileX") { saveProfile(null); applyProfile(null); renderAll(); }
   else openProfilePanel();
+});
+$("profileFab").addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  setTimeout(() => { openProfilePanel(); $("profilePanel").scrollIntoView({ behavior: "smooth", block: "nearest" }); }, 350);
 });
 
 // \u2500\u2500 Language auto-detection \u2500\u2500
