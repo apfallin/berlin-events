@@ -131,7 +131,7 @@
   /* Artist name + play button stay TOGETHER on one line (20 Oct 2026, Andrea report: the play dropped to
      the next line when the artist name ended at the line edge, e.g. Daniela Huerta / Elektrokohle):
      inline-block + nowrap makes the pair wrap as one unit - if they don't fit, BOTH move to the next line */
-  .evart { display: inline-block; white-space: nowrap; } .evsep { opacity: .75; }
+  .evart { display: inline-block; max-width: 100%; overflow-wrap: break-word; } .evsep { opacity: .75; }
   /* Inline per-artist play button: smaller halo than the old evside one, tuned for text lines */
   .aply { padding: .2rem .28rem; margin: 0; font-size: .85rem; }
   /* Right button cell (20 Oct 2026, Andrea request: play/calendar/link in an autonomous cell on the right,
