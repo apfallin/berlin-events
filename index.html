@@ -60,6 +60,12 @@
   .chip:hover { border-color: #737373; color: #171717; }
   .chip.on { background: #171717; color: #fff; border-color: #171717; }
   .chip.action { border-radius: .45rem; font-weight: 400; padding: .3rem .7rem; font-size: .7rem; position: relative; }
+  /* Personal-view badge in the category row (20 Oct 2026): shows that "All" is actually the saved view */
+  .catview { display: inline-flex; align-items: center; background: #eef2ff; border: 1px solid #c7d2fe; color: #4338ca; border-radius: 999px 0 0 999px; padding: .22rem .5rem; font-size: .65rem; font-weight: 600; cursor: pointer; flex: 0 0 auto; margin-right: -1px; }
+  .catview:hover { background: #e0e7ff; }
+  #cats .catview + .chip { border-top-left-radius: 0; border-bottom-left-radius: 0; margin-left: 0; }
+  body.dark .catview { background: #1e1b4b; border-color: #818cf8; color: #c7d2fe; }
+  body.dark .catview:hover { background: #312e81; }
   .hintdot { display: inline-block; width: .42rem; height: .42rem; border-radius: 999px; background: #f59e0b; margin-left: .4rem; vertical-align: middle; }
   body.dark .hintdot { background: #fbbf24; }
   .chipgroup { display: inline-flex; gap: .5rem; align-items: center; }
@@ -133,6 +139,18 @@
   footer p { margin: .5rem 0; line-height: 1.6; }
   footer .src-title { font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #525252; font-size: .8rem; }
   #genres { display: flex; flex-wrap: wrap; gap: .4rem; }
+  /* Genre chips fade slightly while a personal view is active (20 Oct 2026, Andrea request):
+     they feel less relevant; the accent colors stay (they match the event title colors). */
+  #genreWrap.dimmed .gchip { opacity: .35; border-style: dashed; }
+  #genreWrap.dimmed .gchip.on { opacity: .7; }
+  #genreWrap.dimmed .gchip:hover { opacity: 1; border-style: solid; }
+  /* Same "less relevant" fade for the CATEGORY chips row (All/Music/Art/...) under My view
+     (20 Oct 2026, Andrea: it is the row below the search, not the genre bar). The My-view pill
+     joined to ALL stays at full opacity; category accent colors stay (they match event titles). */
+  #cats.dimmed .chip { opacity: .35; border-style: dashed; }
+  #cats.dimmed .chip.on { opacity: .7; }
+  #cats.dimmed .chip:hover { opacity: 1; border-style: solid; }
+  #cats.dimmed .catview { opacity: 1; border-style: solid; }
   .gchip { border: 1px solid #e5e5e5; background: #fafafa; color: #525252; border-radius: 999px;
     padding: .2rem .6rem .2rem .55rem; font-size: .62rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
     cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; gap: .35rem; }
@@ -318,7 +336,7 @@
       <h1>What's on in <b>Berlin</b></h1>
       <p class="sub"><span id="subTitle">A minimal digest of concerts, theatre, art and cinema in Berlin &#8212; gathered from independent sources</span><span class="nowrap">.<a id="srcLink" title="About the sources">*</a></span></p>
       <p class="subhint" id="calHint">Save any event straight to your calendar</p>
-      <p class="sub"><small class="updated-badge"><span class="dot"></span>Sources last updated: <span class="lastupdated">8 October 2026</span></small></p>
+      <p class="sub"><small class="updated-badge"><span class="dot"></span><span class="updLbl">Sources last updated: </span><span class="lastupdated">8 October 2026</span></small></p>
     </div>
     <div class="hrow">
       <button class="chip action" id="profileBtn" title="Pick your categories and genres once &#8212; the site will remember them and show only those events">My view</button>
@@ -397,21 +415,20 @@
   </main>
 
   <footer id="sources">
-    <p>Berlin Events &#183; Berlin-Gigs (Cryptpad) + mytrueintent.blogspot.com + web picks &#183; <span id="tot"></span> events, deduplicated</p>
+    <p>Berlin Events &#183; Berlin-Gigs (Cryptpad) + mytrueintent.blogspot.com + web picks &#183; <span id="tot"></span><span id="totLbl"> events, deduplicated</span></p>
     <p id="stats" class="mini-label" style="margin-bottom:.5rem"></p>
-    <p class="updated-badge" style="margin-top:.5rem"><span class="dot"></span>Sources last updated: <span class="lastupdated">8 October 2026</span></p>
-    <p id="autoNote" class="mini-label" style="margin:.6rem 0 0 0"></p>
-    <p class="disclaimer">&#9888;&#65039; <strong>This is an experimental site, a constant work in progress &#8212; it is by no means exhaustive, just an attempt to aggregate lesser-known events in one place.</strong> Always double-check dates, times and tickets with the organizers or venues before going. This site aggregates external sources and assumes no responsibility for errors, changes or cancellations.</p>
-    <p class="src-title">Sources <b style="font-size:.9rem">*</b></p>
-    <p><strong>&#128241; Gigs</strong> &#8212; the <em>Berlin-Gigs</em> community pad on Cryptpad, a DIY list of concerts with time, price, genre, smoke-free and wheelchair info.</p>
-    <p><strong>&#127928; MTI</strong> &#8212; <a href="https://mytrueintent.blogspot.com" target="_blank" rel="noreferrer">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog, imported from its spreadsheet export.</p>
-    <p><strong>&#127914; Mob</strong> &#8212; <a href="https://mobilize.berlin" target="_blank" rel="noreferrer">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.</p>
-    <p><strong>&#127760; Web</strong> &#8212; events found on the web on official sites and venue pages; each links directly to its source page.</p>
-    <p><strong>&#127917; Stage</strong> &#8212; theatre, dance and performance from the theatres&#8217; own calendars across the whole Berlin scene, from the big houses to the freie Szene.</p>
-    <p><strong>&#127916; Arthouse</strong> &#8212; special cinema events from Berlin&#8217;s independent cinemas and the <a href="https://www.indiekino.de/kinoprogramm/en/berlin" target="_blank" rel="noreferrer">INDIEKINO</a> aggregator: premieres with guests, festivals and one-off nights.</p>
-    <p><strong>&#128205; Venues</strong> &#8212; venue addresses and districts verified via web search; the &#128205; pin next to a venue opens it in OpenStreetMap.</p>
-    <p>Events appearing in more than one source are automatically deduplicated (same title + date).</p>
-    <p class="thanks">&#128591; <strong>Thanks</strong> &#8212; to everyone who maintains these sources and shares event data, and above all to the artists who make Berlin worth going out for. This site only exists because of their work.</p>
+    <p class="updated-badge" style="margin-top:.5rem"><span class="dot"></span><span class="updLbl">Sources last updated: </span><span class="lastupdated">8 October 2026</span></p>
+    <p class="disclaimer" id="disclaimerP">&#9888;&#65039; <strong>This is an experimental site, a constant work in progress &#8212; it is by no means exhaustive, just an attempt to aggregate lesser-known events in one place.</strong> Always double-check dates, times and tickets with the organizers or venues before going. This site aggregates external sources and assumes no responsibility for errors, changes or cancellations.</p>
+    <p class="src-title"><span id="srcTitle">Sources</span> <b style="font-size:.9rem">*</b></p>
+    <p id="srcGigsP"><strong>&#128241; Gigs</strong> &#8212; the <em>Berlin-Gigs</em> community pad on Cryptpad, a DIY list of concerts with time, price, genre, smoke-free and wheelchair info.</p>
+    <p id="srcMtiP"><strong>&#127928; MTI</strong> &#8212; <a href="https://mytrueintent.blogspot.com" target="_blank" rel="noreferrer">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog, imported from its spreadsheet export.</p>
+    <p id="srcMobP"><strong>&#127914; Mob</strong> &#8212; <a href="https://mobilize.berlin" target="_blank" rel="noreferrer">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.</p>
+    <p id="srcWebP"><strong>&#127760; Web</strong> &#8212; events found on the web on official sites and venue pages; each links directly to its source page.</p>
+    <p id="srcStageP"><strong>&#127917; Stage</strong> &#8212; theatre, dance and performance from the theatres&#8217; own calendars across the whole Berlin scene, from the big houses to the freie Szene.</p>
+    <p id="srcArthouseP"><strong>&#127916; Arthouse</strong> &#8212; special cinema events from Berlin&#8217;s independent cinemas and the <a href="https://www.indiekino.de/kinoprogramm/en/berlin" target="_blank" rel="noreferrer">INDIEKINO</a> aggregator: premieres with guests, festivals and one-off nights.</p>
+    <p id="srcVenuesP"><strong>&#128205; Venues</strong> &#8212; venue addresses and districts verified via web search; the &#128205; pin next to a venue opens it in OpenStreetMap.</p>
+    <p id="dedupP">Events appearing in more than one source are automatically deduplicated (same title + date).</p>
+    <p class="thanks" id="thanksP">&#128591; <strong>Thanks</strong> &#8212; to everyone who maintains these sources and shares event data, and above all to the artists who make Berlin worth going out for. This site only exists because of their work.</p>
     <p id="visitWrap" style="display:none"><span id="visitDigits" aria-hidden="true"></span> <span class="mini-label" id="visitLbl" style="margin:0"></span></p>
     <p style="margin:.9rem 0 0 0"><a href="#" id="legalLink" class="mini-label" style="text-decoration:underline">Impressum &amp; Datenschutz</a></p>
     <div id="legal" style="display:none">
@@ -5115,6 +5132,12 @@ const SUBGENRES = [
 var SUB_RE = {};
 SUBGENRES.forEach(function (s) { SUB_RE[s.label] = s.re; });
 const CATEGORIES = ["All", "Music", "Theatre", "Art", "Cinema"];
+//  Localized category labels (display only; data-cat values stay English - 20 Oct 2026, Andrea request) 
+const CAT_LBL = {
+  de: { "All": "Alle", "Music": "Musik", "Theatre": "Theater", "Art": "Kunst", "Cinema": "Kino" },
+  it: { "All": "Tutti", "Music": "Musica", "Theatre": "Teatro", "Art": "Arte", "Cinema": "Cinema" },
+};
+const catLbl = (c) => (CAT_LBL[S.lang] && CAT_LBL[S.lang][c]) || c;
 
 // \u2500\u2500 State \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 const S = {
@@ -5342,7 +5365,6 @@ const LANGS = {
     unkHidden: (n) => n + " music events without a known genre are hidden \u2014 include them?", unkInclude: "Include", unkHide: "Hide them", coverNote: "Cover / tribute band", postponedNote: "Postponed \u2014 new date to be announced", venueChanged: (v) => "Venue changed \u2014 previously: " + v, dateChanged: (d) => "Date changed \u2014 previously: " + d, noLink: "No link available for this event \u2014 sorry",
     subTitle: "A minimal digest of concerts, theatre, art and cinema in Berlin \u2014 gathered from independent sources",
     calHint: "Save any event straight to your calendar",
-    autoNote: "This digest is compiled automatically from the sources listed below; the entries are not individually reviewed by a human. Report any wrong or missing event via the source links.",
     count: (v, d) => (d === "archive" ? "Archive" : "Upcoming") + " \u00b7 " + v + " events",
     empty: "Nothing matches \u2014 try another day, search or filter.",
     profileBtn: "My view", profileBarTxt: "Only interested in part of this? Pick your categories and genres once \u2014 this site will remember your choice.",
@@ -5351,14 +5373,31 @@ const LANGS = {
     profileLblGenres: "Music genres (optional)", profileSave: "Save my view", profileCancel: "Cancel", profileRemove: "Remove saved view",
     profileHint: "Choose once what interests you \u2014 this will be remembered on this device and the site will always open showing only these events. You can change or remove it at any time via the \"My view\" chip or this button.",
     profileChip: (c, g) => "Your view: " + c + (g ? " \u00b7 " + g : ""),
-    visits: "visits since October 2026" },
+    visits: "visits since October 2026",
+    updLbl: "Sources last updated: ", srcLinkTitle: "About the sources", totLbl: " events, deduplicated",
+    mostVenue: (v, n) => "Most active venue: " + v + " (" + n + ")",
+    disclaimer: "&#9888;&#65039; <strong>Experimental site \u2014 a work in progress, by no means exhaustive \u2014 compiled automatically from the sources below, not individually reviewed by a human.</strong> Always double-check dates, times and tickets with the organizers or venues; report errors or missing events via the source links. No responsibility is assumed for errors, changes or cancellations.",
+    srcTitle: "Sources",
+    srcGigs: "<strong>&#128241; Gigs</strong> \u2014 the <em>Berlin-Gigs</em> community pad on Cryptpad, a DIY list of concerts with time, price, genre, smoke-free and wheelchair info.",
+    srcMti: "<strong>&#127928; MTI</strong> \u2014 <a href=\"https://mytrueintent.blogspot.com\" target=\"_blank\" rel=\"noreferrer\">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog, imported from its spreadsheet export.",
+    srcMob: "<strong>&#127914; Mob</strong> \u2014 <a href=\"https://mobilize.berlin\" target=\"_blank\" rel=\"noreferrer\">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.",
+    srcWeb: "<strong>&#127760; Web</strong> \u2014 events found on the web on official sites and venue pages; each links directly to its source page.",
+    srcStage: "<strong>&#127917; Stage</strong> \u2014 theatre, dance and performance from the theatres\u2019 own calendars across the whole Berlin scene, from the big houses to the freie Szene.",
+    srcArthouse: "<strong>&#127916; Arthouse</strong> \u2014 special cinema events from Berlin\u2019s independent cinemas and the <a href=\"https://www.indiekino.de/kinoprogramm/en/berlin\" target=\"_blank\" rel=\"noreferrer\">INDIEKINO</a> aggregator: premieres with guests, festivals and one-off nights.",
+    srcVenues: "<strong>&#128205; Venues</strong> \u2014 venue addresses and districts verified via web search; the &#128205; pin next to a venue opens it in OpenStreetMap.",
+    dedupNote: "Events appearing in more than one source are automatically deduplicated (same title + date).",
+    thanksNote: "&#128591; <strong>Thanks</strong> \u2014 to everyone who maintains these sources and shares event data, and above all to the artists who make Berlin worth going out for. This site only exists because of their work.",
+    resetTitle: "Reset all filters", langTitle: "Language", themeTitle: "Toggle theme", dayTitle: "Pick a day",
+    clearSearch: "Clear search", clearDay: "Clear day filter", clearPrice: "Clear price filter",
+    backTop: "Back to top", prevWeek: "Previous week", nextWeek: "Next week", removeView: "Remove saved view",
+    favTitle: "Favorite", icsTitle: "Add to calendar", shareTitle: "Copy link to this event", detailsTitle: "Details",
+    osmTitle: "Open in OpenStreetMap", venueOnly: "Show only events at this venue" },
   de: { upcoming: "Bevorstehend", archive: "Archiv", search: "K\u00fcnstler, Venues, Genres suchen\u2026", filters: "Filter", reset: "\u21ba Zur\u00fccksetzen",
     free: "Nur frei / Spende", access: "Nur barrierefrei oder rauchfrei", source: "Quelle", district: "Bezirk",
     price: "Preisspanne (nur Events mit Preis)", genre: "Genre", tonight: "Heute", favs: "\u2b50 Favoriten", all: "Alle", unknownGenre: "Genre noch nicht identifiziert",
     unkHidden: (n) => n + " Musik-Events ohne bekanntes Genre sind ausgeblendet \u2014 einblenden?", unkInclude: "Einblenden", unkHide: "Ausblenden", coverNote: "Cover-/Tribute-Band", postponedNote: "Verschoben \u2014 neuer Termin wird bekannt gegeben", venueChanged: (v) => "Ort ge\u00e4ndert \u2014 vorher: " + v, dateChanged: (d) => "Termin ge\u00e4ndert \u2014 vorher: " + d, noLink: "Kein Link f\u00fcr diese Veranstaltung verf\u00fcgbar \u2014 Entschuldigung",
     subTitle: "Ein minimales Digest von Konzerten, Theater, Kunst und Kino in Berlin \u2014 aus unabh\u00e4ngigen Quellen zusammengetragen",
     calHint: "Speichere jede Veranstaltung direkt in deinem Kalender",
-    autoNote: "Dieses Digest wird automatisch aus den unten aufgef\u00fchrten Quellen zusammengestellt; die Eintr\u00e4ge werden nicht einzeln von Hand gepr\u00fcft. Fehlerhafte oder fehlende Veranstaltungen bitte \u00fcber die Quell-Links melden.",
     count: (v, d) => (d === "archive" ? "Archiv" : "Bevorstehend") + " \u00b7 " + v + " Veranstaltungen",
     empty: "Nichts gefunden \u2014 anderen Tag, Suche oder Filter probieren.",
     profileBtn: "Meine Ansicht", profileBarTxt: "Nur an einem Teil davon interessiert? W\u00e4hle deine Kategorien und Genres einmal aus \u2014 diese Seite merkt sich deine Auswahl.",
@@ -5367,14 +5406,31 @@ const LANGS = {
     profileLblGenres: "Musik-Genres (optional)", profileSave: "Meine Ansicht speichern", profileCancel: "Abbrechen", profileRemove: "Gespeicherte Ansicht entfernen",
     profileHint: "W\u00e4hle einmal aus, was dich interessiert \u2014 das wird auf diesem Ger\u00e4t gespeichert und die Seite zeigt k\u00fcnftig nur diese Veranstaltungen. \u00dcber den \"Meine Ansicht\"-Chip oder diesen Button kannst du es jederzeit \u00e4ndern oder entfernen.",
     profileChip: (c, g) => "Deine Ansicht: " + c + (g ? " \u00b7 " + g : ""),
-    visits: "Besuche seit Oktober 2026" },
+    visits: "Besuche seit Oktober 2026",
+    updLbl: "Quellen zuletzt aktualisiert: ", srcLinkTitle: "\u00dcber die Quellen", totLbl: " Veranstaltungen, dedupliziert",
+    mostVenue: (v, n) => "Aktivste Venue: " + v + " (" + n + ")",
+    disclaimer: "&#9888;&#65039; <strong>Experimentelle Seite \u2014 in Arbeit, keineswegs vollst\u00e4ndig \u2014 automatisch aus den unten genannten Quellen zusammengestellt, nicht einzeln von Hand gepr\u00fcft.</strong> Datum, Uhrzeit und Tickets immer bei den Veranstaltern oder Venues pr\u00fcfen; Fehler bitte \u00fcber die Quell-Links melden. Keine Haftung f\u00fcr Fehler, \u00c4nderungen oder Absagen.",
+    srcTitle: "Quellen",
+    srcGigs: "<strong>&#128241; Gigs</strong> \u2014 das <em>Berlin-Gigs</em> Community-Pad auf Cryptpad, eine DIY-Liste von Konzerten mit Uhrzeit, Preis, Genre, Rauch- und Rollstuhl-Info.",
+    srcMti: "<strong>&#127928; MTI</strong> \u2014 <a href=\"https://mytrueintent.blogspot.com\" target=\"_blank\" rel=\"noreferrer\">mytrueintent.blogspot.com</a>, ein Berliner Indie/Rock-Konzert-Blog, importiert aus seinem Tabellen-Export.",
+    srcMob: "<strong>&#127914; Mob</strong> \u2014 <a href=\"https://mobilize.berlin\" target=\"_blank\" rel=\"noreferrer\">mobilize.berlin</a>, eine Berliner Mobilizon-Instanz: f\u00f6derierte DIY-Plattform f\u00fcr Konzerte, Parties und Community-Events.",
+    srcWeb: "<strong>&#127760; Web</strong> \u2014 im Web gefundene Veranstaltungen von offiziellen Seiten und Venue-Seiten; jeder Eintrag verlinkt direkt auf seine Quell-Seite.",
+    srcStage: "<strong>&#127917; Stage</strong> \u2014 Theater, Tanz und Performance aus den Spielpl\u00e4nen der H\u00e4user der ganzen Berliner Szene, von den gro\u00dfen B\u00fchnen bis zur freien Szene.",
+    srcArthouse: "<strong>&#127916; Arthouse</strong> \u2014 besondere Kino-Events aus Berlins Programmkinos und dem <a href=\"https://www.indiekino.de/kinoprogramm/en/berlin\" target=\"_blank\" rel=\"noreferrer\">INDIEKINO</a>-Aggregator: Premieren mit G\u00e4sten, Festivals und einmalige Abende.",
+    srcVenues: "<strong>&#128205; Venues</strong> \u2014 Venue-Adressen und Bezirke per Websuche verifiziert; der &#128205;-Pin neben einer Venue \u00f6ffnet sie in OpenStreetMap.",
+    dedupNote: "Veranstaltungen, die in mehreren Quellen erscheinen, werden automatisch dedupliziert (gleicher Titel + Datum).",
+    thanksNote: "&#128591; <strong>Danke</strong> \u2014 an alle, die diese Quellen pflegen und Veranstaltungsdaten teilen, und vor allem an die K\u00fcnstler, die Berlin zu einem Ort machen, f\u00fcr den es sich zu ausgehen lohnt. Diese Seite existiert nur dank ihrer Arbeit.",
+    resetTitle: "Alle Filter zur\u00fccksetzen", langTitle: "Sprache", themeTitle: "Design wechseln", dayTitle: "Tag w\u00e4hlen",
+    clearSearch: "Suche l\u00f6schen", clearDay: "Tag-Filter l\u00f6schen", clearPrice: "Preis-Filter l\u00f6schen",
+    backTop: "Zur\u00fcck nach oben", prevWeek: "Vorherige Woche", nextWeek: "N\u00e4chste Woche", removeView: "Gespeicherte Ansicht entfernen",
+    favTitle: "Favorit", icsTitle: "Zum Kalender hinzuf\u00fcgen", shareTitle: "Link zu dieser Veranstaltung kopieren", detailsTitle: "Details",
+    osmTitle: "In OpenStreetMap \u00f6ffnen", venueOnly: "Nur Veranstaltungen in dieser Venue zeigen" },
   it: { upcoming: "In arrivo", archive: "Archivio", search: "Cerca artisti, venue, generi\u2026", filters: "Filtri", reset: "\u21ba Azzera",
     free: "Solo gratuiti / offerta", access: "Solo accessibili o senza fumo", source: "Fonte", district: "Quartiere",
     price: "Fascia di prezzo (solo eventi con prezzo)", genre: "Genere", tonight: "Oggi", favs: "\u2b50 Preferiti", all: "Tutti", unknownGenre: "Genere non ancora identificato",
     unkHidden: (n) => n + " eventi musicali senza genere noto sono nascosti \u2014 includerli?", unkInclude: "Includili", unkHide: "Nascondili", coverNote: "Cover / tribute band", postponedNote: "Posticipato \u2014 nuova data da annunciare", venueChanged: (v) => "Venue cambiata \u2014 prima: " + v, dateChanged: (d) => "Data cambiata \u2014 prima: " + d, noLink: "Nessun link disponibile per questo evento \u2014 scusa",
     subTitle: "Un digest essenziale di concerti, teatro, arte e cinema a Berlino \u2014 raccolto da fonti indipendenti",
     calHint: "Salva ogni evento direttamente nel tuo calendario",
-    autoNote: "Questo digest \u00e8 compilato automaticamente dalle fonti elencate qui sotto; le singole voci non sono controllate una per una a mano. Per eventi errati o mancanti, segnalali tramite i link alle fonti.",
     count: (v, d) => (d === "archive" ? "Archivio" : "In arrivo") + " \u00b7 " + v + " eventi",
     empty: "Nessun risultato \u2014 prova un altro giorno, ricerca o filtro.",
     profileBtn: "La mia vista", profileBarTxt: "Ti interessano solo alcune cose? Scegli una volta le tue categorie e i tuoi generi \u2014 il sito ricorder\u00e0 la tua scelta.",
@@ -5383,14 +5439,31 @@ const LANGS = {
     profileLblGenres: "Generi musicali (opzionale)", profileSave: "Salva la mia vista", profileCancel: "Annulla", profileRemove: "Rimuovi la vista salvata",
     profileHint: "Scegli una volta cosa ti interessa \u2014 verr\u00e0 ricordato su questo dispositivo e il sito si aprir\u00e0 sempre mostrando solo questi eventi. Puoi cambiarlo o rimuoverlo in qualsiasi momento tramite il chip \"La mia vista\" o questo pulsante.",
     profileChip: (c, g) => "La tua vista: " + c + (g ? " \u00b7 " + g : ""),
-    visits: "visite da ottobre 2026" },
+    visits: "visite da ottobre 2026",
+    updLbl: "Ultimo aggiornamento fonti: ", srcLinkTitle: "Info sulle fonti", totLbl: " eventi, deduplicati",
+    mostVenue: (v, n) => "Venue pi\u00f9 attiva: " + v + " (" + n + ")",
+    disclaimer: "&#9888;&#65039; <strong>Sito sperimentale \u2014 in costruzione, per niente completo \u2014 compilato automaticamente dalle fonti qui sotto, non controllato una a una a mano.</strong> Verifica sempre date, orari e biglietti con gli organizzatori o le venue; segnala errori o mancanze tramite i link alle fonti. Nessuna responsabilit\u00e0 per errori, cambi o annullamenti.",
+    srcTitle: "Fonti",
+    srcGigs: "<strong>&#128241; Gigs</strong> \u2014 il pad comunitario <em>Berlin-Gigs</em> su Cryptpad, una lista DIY di concerti con orario, prezzo, genere e info su fumo e accessibilit\u00e0.",
+    srcMti: "<strong>&#127928; MTI</strong> \u2014 <a href=\"https://mytrueintent.blogspot.com\" target=\"_blank\" rel=\"noreferrer\">mytrueintent.blogspot.com</a>, un blog di concerti indie/rock berlinese, importato dal suo export a foglio di calcolo.",
+    srcMob: "<strong>&#127914; Mob</strong> \u2014 <a href=\"https://mobilize.berlin\" target=\"_blank\" rel=\"noreferrer\">mobilize.berlin</a>, un'istanza Mobilizon di Berlino: piattaforma DIY federata per concerti, feste ed eventi della comunit\u00e0.",
+    srcWeb: "<strong>&#127760; Web</strong> \u2014 eventi trovati sul web su siti ufficiali e pagine delle venue; ognuno linka direttamente alla pagina di origine.",
+    srcStage: "<strong>&#127917; Stage</strong> \u2014 teatro, danza e performance dai calendari dei teatri di tutta la scena berlinese, dalle grandi case alla scena indipendente.",
+    srcArthouse: "<strong>&#127916; Arthouse</strong> \u2014 eventi speciali al cinema dai cinema indipendenti di Berlino e dall'aggregatore <a href=\"https://www.indiekino.de/kinoprogramm/en/berlin\" target=\"_blank\" rel=\"noreferrer\">INDIEKINO</a>: prime con ospiti, festival e serate uniche.",
+    srcVenues: "<strong>&#128205; Venues</strong> \u2014 indirizzi e quartieri delle venue verificati via ricerca web; la &#128205; accanto a una venue la apre in OpenStreetMap.",
+    dedupNote: "Gli eventi presenti in pi\u00f9 fonti vengono deduplicati automaticamente (stesso titolo + data).",
+    thanksNote: "&#128591; <strong>Grazie</strong> \u2014 a chi mantiene queste fonti e condivide dati sugli eventi, e soprattutto agli artisti che rendono Berlino un posto per cui vale la pena uscire di casa. Questo sito esiste solo grazie al loro lavoro.",
+    resetTitle: "Azzera tutti i filtri", langTitle: "Lingua", themeTitle: "Cambia tema", dayTitle: "Scegli un giorno",
+    clearSearch: "Cancella la ricerca", clearDay: "Cancella il filtro giorno", clearPrice: "Cancella il filtro prezzo",
+    backTop: "Torna su", prevWeek: "Settimana precedente", nextWeek: "Settimana successiva", removeView: "Rimuovi la vista salvata",
+    favTitle: "Preferito", icsTitle: "Aggiungi al calendario", shareTitle: "Copia il link a questo evento", detailsTitle: "Dettagli",
+    osmTitle: "Apri in OpenStreetMap", venueOnly: "Mostra solo gli eventi in questa venue" },
 };
 const T = () => LANGS[S.lang] || LANGS.en;
 function applyLang() {
   const t = T();
   $("subTitle").textContent = t.subTitle;
   $("calHint").textContent = t.calHint;
-  $("autoNote").textContent = t.autoNote;
   $("lblArchive").textContent = t.archive;
   $("q").placeholder = t.search;
   $("filterBtn").textContent = t.filters + " " + (S.showFilters ? "\u25b4" : "\u25be");
@@ -5416,6 +5489,32 @@ function applyLang() {
   $("profileRemove").textContent = t.profileRemove;
   updateProfileChip();
   $("visitLbl").textContent = t.visits;
+  // Full-site localization (20 Oct 2026, Andrea request): every static English text follows the language
+  document.querySelectorAll(".updLbl").forEach((el) => { el.textContent = t.updLbl; });
+  $("srcLink").title = t.srcLinkTitle;
+  $("totLbl").textContent = t.totLbl;
+  $("disclaimerP").innerHTML = t.disclaimer;
+  $("srcTitle").textContent = t.srcTitle;
+  $("srcGigsP").innerHTML = t.srcGigs;
+  $("srcMtiP").innerHTML = t.srcMti;
+  $("srcMobP").innerHTML = t.srcMob;
+  $("srcWebP").innerHTML = t.srcWeb;
+  $("srcStageP").innerHTML = t.srcStage;
+  $("srcArthouseP").innerHTML = t.srcArthouse;
+  $("srcVenuesP").innerHTML = t.srcVenues;
+  $("dedupP").textContent = t.dedupNote;
+  $("thanksP").innerHTML = t.thanksNote;
+  $("resetBtn").title = t.resetTitle;
+  $("langSel").title = t.langTitle;
+  $("themeBtn").setAttribute("aria-label", t.themeTitle);
+  $("day").title = t.dayTitle;
+  $("dayBtn").setAttribute("aria-label", t.dayTitle);
+  $("qClear").setAttribute("aria-label", t.clearSearch);
+  $("dayClear").setAttribute("aria-label", t.clearDay);
+  $("priceClear").setAttribute("aria-label", t.clearPrice);
+  $("profileX").setAttribute("aria-label", t.removeView);
+  $("topBtn").setAttribute("aria-label", t.backTop);
+  if (typeof refreshStats === "function") refreshStats();
   document.documentElement.setAttribute("lang", S.lang);
 }
 
@@ -5768,8 +5867,8 @@ var IMP_RESP = [65,110,100,114,101,97,32,80,105,114,97,115,44,32,65,110,115,99,1
 function impStr(a) { var s = ""; for (var i = 0; i < a.length; i++) s += String.fromCharCode(a[i]); return s; }
 $("legalLink").addEventListener("click", function (ev) { ev.preventDefault(); var d = $("legal"); if (!d.dataset.f) { $("impName").innerHTML = impStr(IMP_NAME); $("impContact").innerHTML = impStr(IMP_CONTACT); $("impResp").innerHTML = impStr(IMP_RESP); d.dataset.f = 1; } var open = d.style.display !== "none"; d.style.display = open ? "none" : "block"; if (!open) d.scrollIntoView({ behavior: "smooth", block: "nearest" }); });
 
-//  Footer stats 
-(function buildStats() {
+//  Footer stats (refreshable so it follows the language - 20 Oct 2026) 
+function refreshStats() {
   const catCounts = new Map();
   const vc = new Map();
   let topVenue = "", topN = 0;
@@ -5781,9 +5880,10 @@ $("legalLink").addEventListener("click", function (ev) { ev.preventDefault(); va
     vc.set(v, (vc.get(v) || 0) + 1);
     if (vc.get(v) > topN) { topN = vc.get(v); topVenue = v; }
   });
-  const cats = CATEGORIES.filter((c) => c !== "All" && catCounts.has(c)).map((c) => c + ": " + catCounts.get(c)).join(" \u00b7 ");
-  $("stats").textContent = cats + (topVenue ? " \u00b7 Most active venue: " + topVenue + " (" + topN + ")" : "");
-})();
+  const cats = CATEGORIES.filter((c) => c !== "All" && catCounts.has(c)).map((c) => catLbl(c) + ": " + catCounts.get(c)).join(" \u00b7 ");
+  $("stats").textContent = cats + (topVenue ? " \u00b7 " + T().mostVenue(topVenue, topN) : "");
+}
+refreshStats();
 
 function filtered() {
   const pm = S.priceMin === "" ? null : Number(S.priceMin);
@@ -5847,9 +5947,9 @@ function eventRow(e, i) {
   const col = catColor(e.category) ? ` style="color:${catColor(e.category)}"` : "";
   const lnk = linkOf(e);
   const faved = FAVS.has(favKey(e));
-  const star = `<button class="star${faved ? " on" : ""}" data-i="${i}" title="Favorite" aria-label="Toggle favorite">${faved ? "\u2b50" : "\u2606"}</button>`;
-  const ics = `<button class="icsbtn" data-i="${i}" title="Add to calendar" aria-label="Add to calendar">\ud83d\udcc5</button>`;
-  const shr = `<button class="sharebtn" data-i="${i}" title="Copy link to this event" aria-label="Copy link to this event">\ud83d\udd17</button>`;
+  const star = `<button class="star${faved ? " on" : ""}" data-i="${i}" title="${esc(T().favTitle)}" aria-label="${esc(T().favTitle)}">${faved ? "\u2b50" : "\u2606"}</button>`;
+  const ics = `<button class="icsbtn" data-i="${i}" title="${esc(T().icsTitle)}" aria-label="${esc(T().icsTitle)}">\ud83d\udcc5</button>`;
+  const shr = `<button class="sharebtn" data-i="${i}" title="${esc(T().shareTitle)}" aria-label="${esc(T().shareTitle)}">\ud83d\udd17</button>`;
   // Promoter split (17 Oct 2026, Andrea request): "Promoter presents: Artists" renders the artists on a new line under the promoter
   let tmain = e.title, tsub = "";
   // Promoter split (17 Oct 2026, Andrea request; extended same night after title scan):
@@ -5864,7 +5964,7 @@ function eventRow(e, i) {
   const flags = (e.smokeFree || e.wheelchair)
     ? `<span class="flags">${e.smokeFree ? "\ud83d\udead " : ""}${e.wheelchair ? "\u267f\ufe0f" : ""}</span>` : "";
   const vinfo = e.venue ? venueInfo(e.venue) : null;
-  const vtip = vinfo && vinfo.addr ? `${esc(e.venue)} \u00b7 ${esc(vinfo.addr)}` : "Show only events at this venue";
+  const vtip = vinfo && vinfo.addr ? `${esc(e.venue)} \u00b7 ${esc(vinfo.addr)}` : T().venueOnly;
   const vname = e.venue
     ? `<span class="vlink" data-v="${i}" title="${vtip}">${esc(e.venue)}</span>` : esc(e.venue || "");
   // Non-music desc/venue swap (17 Oct 2026, Andrea request, uniform with the genre-venue swap of music events):
@@ -5873,7 +5973,7 @@ function eventRow(e, i) {
   const isMus = e.category === "Music" || !e.category;
   const descP = e.description ? `<p class="desc">${esc(e.description)}</p>` : "";
   const det = `<div class="evdet">`
-    + (vinfo && vinfo.addr ? `<a class="evaddr" href="https://www.openstreetmap.org/search?query=${encodeURIComponent(vinfo.addr)}" target="_blank" rel="noreferrer" title="Open in OpenStreetMap">\ud83d\udccd ${esc(vinfo.addr)}</a>` : "")
+    + (vinfo && vinfo.addr ? `<a class="evaddr" href="https://www.openstreetmap.org/search?query=${encodeURIComponent(vinfo.addr)}" target="_blank" rel="noreferrer" title="${esc(T().osmTitle)}">\ud83d\udccd ${esc(vinfo.addr)}</a>` : "")
     + `</div>`;
   return `<li class="${e.postponed ? "postponed" : ""}" data-fk="${esc(favKey(e))}"><div class="ev"><div class="evmain">
     <div class="evdatecol"><span class="evdate">${fmtDate(e.date)}</span>${star}</div>
@@ -5888,12 +5988,21 @@ function eventRow(e, i) {
       ${isMus ? descP : ""}
       ${det}
     </div>
-  </div><button class="morebtn" aria-label="Details" aria-expanded="false">\u25be</button></div></li>`;
+  </div><button class="morebtn" aria-label="${esc(T().detailsTitle)}" aria-expanded="false">\u25be</button></div></li>`;
 }
 
 function renderChips() {
+  $("genreWrap").classList.toggle("dimmed", !!S.pCats.length);
+  $("cats").classList.toggle("dimmed", !!S.pCats.length);
   $("cats").innerHTML = CATEGORIES.map((c) =>
-    `<button class="chip${S.category === c ? " on" : ""}" data-cat="${c}">${c}</button>`).join("");
+    `<button class="chip${S.category === c ? " on" : ""}" data-cat="${c}">${esc(catLbl(c))}</button>`).join("");
+  // Personal-view badge (20 Oct 2026, Andrea request): when a saved view filters the list, "All" is not
+  // really all - this small indigo pill JOINED to the LEFT of the All chip reads as a little extension of it.
+  if (S.pCats.length) {
+    $("cats").insertAdjacentHTML("afterbegin",
+      `<button class="catview" id="catViewBadge" title="${esc(T().profileHint)}">${esc(T().profileBtn)}</button>`);
+    $("catViewBadge").addEventListener("click", () => { openProfilePanel(); $("profilePanel").scrollIntoView({ behavior: "smooth", block: "nearest" }); });
+  }
   $("cats").querySelectorAll("[data-cat]").forEach((b) => {
     b.style.color = b.classList.contains("on") ? "" : catColor(b.dataset.cat);
     b.addEventListener("click", () => { S.category = b.dataset.cat; S.genre = "All"; S.subGenre = "All"; renderAll(); });
@@ -5981,7 +6090,7 @@ function renderWeek() {
   const counts = new Map();
   inView.forEach((e) => counts.set(e.date, (counts.get(e.date) || 0) + 1));
   $("weekStrip").innerHTML =
-    `<button class="chip" id="wkPrev" aria-label="Previous week">&#8249;</button>` +
+    `<button class="chip" id="wkPrev" aria-label="${esc(T().prevWeek)}">&#8249;</button>` +
     days.map((d) => {
       const k = iso(d);
       const n = counts.get(k) || 0;
@@ -5990,7 +6099,7 @@ function renderWeek() {
         `<span class="lbl wknum">${d.getDate()}</span>` +
         `</button>`;
     }).join("") +
-    `<button class="chip" id="wkNext" aria-label="Next week">&#8250;</button>`;
+    `<button class="chip" id="wkNext" aria-label="${esc(T().nextWeek)}">&#8250;</button>`;
   $("wkPrev").addEventListener("click", () => { weekOff--; renderAll(); });
   $("wkNext").addEventListener("click", () => { weekOff++; renderAll(); });
   $("weekStrip").querySelectorAll("[data-day]").forEach((b) =>
@@ -6110,6 +6219,13 @@ window.addEventListener("scroll", () => {
   requestAnimationFrame(() => {
     $("controls").classList.toggle("scrolled", window.scrollY > 120);
     updateProfileFab();
+    //  Auto-close the Impressum when the user scrolls back up past it (20 Oct 2026, Andrea request):
+    //  close only when the whole legal block is fully below the viewport, i.e. the reader has
+    //  moved on; while it is (even partially) visible it stays open.
+    var lg = document.getElementById("legal");
+    if (lg && lg.style.display !== "none" && lg.getBoundingClientRect().top > window.innerHeight) {
+      lg.style.display = "none";
+    }
     scrollTicking = false;
   });
 }, { passive: true });
@@ -6140,8 +6256,9 @@ function updateProfileChip() {
     $("profileBtn").classList.add("active");
     c.style.display = "inline-flex";
     const gens = (S.pGenres.length && S.pCats.indexOf("Music") !== -1) ? S.pGenres.join(", ") : "";
-    $("profileChipTxt").textContent = T().profileChip(S.pCats.join(", "), gens);
-    $("profileFab").textContent = T().profileChip(S.pCats.join(", "), gens);
+    const catStr = S.pCats.map(catLbl).join(", ");
+    $("profileChipTxt").textContent = T().profileChip(catStr, gens);
+    $("profileFab").textContent = T().profileChip(catStr, gens);
     $("profileFab").title = T().profileHint;
   } else { c.style.display = "none"; $("profileBtn").classList.remove("active"); $("profileFab").style.display = "none"; }
   updateProfileFab();
@@ -6153,7 +6270,7 @@ function updateProfileFab() {
 }
 function renderProfilePanel() {
   $("profileCats").innerHTML = PROFILE_CATS.map((cat) =>
-    `<button class="chip${pSel.cats.indexOf(cat) !== -1 ? " on" : ""}" data-pc="${cat}">${cat}</button>`).join("");
+    `<button class="chip${pSel.cats.indexOf(cat) !== -1 ? " on" : ""}" data-pc="${cat}">${esc(catLbl(cat))}</button>`).join("");
   $("profileCats").querySelectorAll("[data-pc]").forEach((b) =>
     b.addEventListener("click", () => { const i = pSel.cats.indexOf(b.dataset.pc); if (i === -1) pSel.cats.push(b.dataset.pc); else pSel.cats.splice(i, 1); renderProfilePanel(); }));
   $("profileGenresWrap").style.display = pSel.cats.indexOf("Music") !== -1 ? "block" : "none";
