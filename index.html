@@ -115,13 +115,28 @@
   body.dark #count.archived { color: #fcd34d; }
   .ev { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
   .evmain { display: flex; align-items: baseline; gap: 1rem; }
+  /* Long-title fix (20 Oct 2026, Andrea report: long event titles break the row layout):
+     the inner text div is a flex item and needs min-width 0 to wrap INSIDE its own box
+     instead of overflowing and displacing the .evside button cell */
+  .evmain > div { min-width: 0; }
   .evdatecol { width: 5rem; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-start; gap: .2rem; }
   .evdatecol .star { margin: .45rem auto 0 auto; }
   .evdate { font-size: .85rem; font-weight: 500; }
   .evtitle { font-size: 1rem; font-weight: 500; }
   .evhead { display: flex; align-items: flex-start; gap: .3rem; }
   .evhead .evtitle { flex: 1 1 auto; min-width: 0; }
-  .evacts { flex: 0 0 auto; margin-left: auto; display: flex; align-items: center; gap: .45rem; padding-top: .1rem; }
+  /* Title wrapper (20 Oct 2026): holds the per-artist pieces (name + play buttons + separators) so they
+     flow as inline text inside ONE flex item instead of spreading as separate flex items of .evhead */
+  .evtw { flex: 1 1 auto; min-width: 0; }
+  .evart { } .evsep { opacity: .75; }
+  /* Inline per-artist play button: smaller halo than the old evside one, tuned for text lines */
+  .aply { padding: .2rem .28rem; margin: 0; font-size: .85rem; }
+  /* Right button cell (20 Oct 2026, Andrea request: play/calendar/link in an autonomous cell on the right,
+     stacked vertically, detached from the text/venue block - all events show the buttons on the same column);
+     the halo of the playbtn keeps only its horizontal negative margins inside the column */
+  .evside { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: .6rem;
+    padding: .05rem 0 .05rem .5rem; align-self: center; }
+  .evside .playbtn { margin: 0 -.2rem; }
   .evtitle:hover { text-decoration: underline; }
   .evartists { display: block; margin-top: .15rem; }
   .meta { font-size: .85rem; color: #737373; margin-top: .15rem; }
@@ -208,15 +223,34 @@
     transition: opacity .18s ease, transform .18s ease; max-width: min(20rem, 90vw); text-align: center; }
   #toast.show { opacity: 1; transform: translate(-50%, -12px) scale(1); }
   body.dark #toast { color: #e5e5e5; background: #2a2208; border-color: #a16207; box-shadow: 0 3px 12px rgba(0,0,0,.5); }
+  /* Listen popover (20 Oct 2026, Andrea request): streaming-search links for the artist */
+  #listenPanel { position: fixed; left: 0; top: 0; z-index: 40; background: #fff; border: 1px solid #d4d4d4; border-radius: .6rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,.18); padding: .6rem .7rem; min-width: 10.5rem; display: none; }
+  #listenPanel.show { display: block; }
+  #listenPanel .lpArtist { font-size: .72rem; color: #525252; margin: 0 0 .45rem 0; font-weight: 600; max-width: 16rem;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #listenPanel a { display: block; padding: .32rem .4rem; margin: .12rem 0; border-radius: .4rem; text-decoration: none;
+    font-size: .8rem; color: inherit; }
+  #listenPanel a:hover { background: #f5f5f5; }
+  body.dark #listenPanel { background: #171717; border-color: #404040; color: #e5e5e5; }
+  body.dark #listenPanel .lpArtist { color: #a3a3a3; }
+  body.dark #listenPanel a:hover { background: #262626; }
 
   /*  Favorites, calendar & venue links  */
   .star { cursor: pointer; user-select: none; font-size: 1rem; background: none; border: none; padding: 0; color: inherit; }
   .star.on { color: #f59e0b; }
   body.dark .star.on { color: #fbbf24; }
-  .icsbtn { cursor: pointer; background: none; border: none; padding: 0; font-size: .8rem; color: #a3a3a3; vertical-align: baseline; }
+  .icsbtn { cursor: pointer; background: none; border: none; padding: 0; font-size: 1.05rem; color: #a3a3a3; vertical-align: baseline; }
   .icsbtn:hover { color: inherit; }
-  .sharebtn { cursor: pointer; background: none; border: none; padding: 0; font-size: .8rem; color: #a3a3a3; vertical-align: baseline; }
+  .sharebtn { cursor: pointer; background: none; border: none; padding: 0; font-size: 1.05rem; color: #a3a3a3; vertical-align: baseline; }
   .sharebtn:hover { color: inherit; }
+  /* Listen button (20 Oct 2026, Andrea request): play button next to music titles opens streaming-search links */
+  /* Listen button (20 Oct 2026, Andrea request; enlarged 20 Oct after mobile feedback - too easy to hit title/calendar by mistake):
+     visually a bit bigger than ics/share and with an invisible padding halo (negative margin cancels the layout growth),
+     so the TAP TARGET on phones is much larger than the visible triangle */
+  .playbtn { cursor: pointer; background: none; border: none; padding: .3rem .34rem; margin: -.28rem -.2rem; font-size: .75rem; line-height: 1; color: #a3a3a3; vertical-align: baseline; }
+  .playbtn:hover { color: #16a34a; }
+  body.dark .playbtn:hover { color: #4ade80; }
   @keyframes evflash { 0% { background: #fef3c7; } 100% { background: transparent; } }
   #list li.flash { animation: evflash 2.2s ease-out 1; }
   .vlink { cursor: pointer; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: .2em; }
@@ -225,9 +259,10 @@
   .star.on { opacity: 1; }
   #list li:hover .star { opacity: 1; }
   .icsbtn { opacity: .35; transition: opacity .15s; }
-  #list li:hover .icsbtn, #list li:hover .sharebtn { opacity: 1; }
+  #list li:hover .icsbtn, #list li:hover .sharebtn, #list li:hover .playbtn { opacity: 1; }
   .sharebtn { opacity: .35; transition: opacity .15s; }
-  @media (hover: none) { .star, .icsbtn, .sharebtn { opacity: .55; } .star.on { opacity: 1; } }
+  .playbtn { opacity: .35; transition: opacity .15s; }
+  @media (hover: none) { .star, .icsbtn, .sharebtn, .playbtn { opacity: .55; } .star.on { opacity: 1; } }
   /* Expandable row details (address) */
   .morebtn { border: none; background: none; cursor: pointer; color: #a3a3a3; font-size: .75rem;
     padding: .2rem .3rem; flex-shrink: 0; align-self: center; transition: transform .15s; }
@@ -312,14 +347,28 @@
     #venueChip { font-size: .68rem; padding: .22rem .5rem; }
     #genres, #subgenres { gap: .3rem; }
     #list li { padding: 1rem 0; }
-    .ev { flex-direction: column; align-items: flex-start; gap: .2rem; }
+    /* .ev stays a ROW on mobile too (20 Oct 2026 fix, Andrea report: the button cell dropped below the text on phones):
+       the text block wraps inside .evmain (min-width 0) and the .evside button cell keeps its right column.
+       20 Oct follow-up (Andrea request): ONLY the chevron returns BELOW the event as before - the .ev row wraps
+       and the morebtn takes the full second line, left-aligned like the old mobile layout */
+    .ev { gap: .6rem; flex-wrap: wrap; }
+    /* flex-basis 0 is the KEY (20 Oct fix v2 for long/split titles like Maquina/Thank): with basis auto the
+       wrap decision used the text block's natural width, so on long titles .evside dropped to its own line
+       in the middle; basis 0 + grow 1 lets the text start at zero width and fill whatever is left after
+       the button cell on line 1 - the cell NEVER wraps on any title length */
+    .evmain { flex: 1 1 0; min-width: 0; }
+    /* 20 Oct spacing tune (Andrea request: buttons too squeezed at the right screen edge; text rows closer
+       to the dates to gain width): gap date->text .55rem (was 1rem), .evside gets right padding .5rem */
+    .evmain { gap: .55rem; }
+    .evside { padding-left: .2rem; padding-right: .5rem; }
+    .morebtn { order: 3; flex-basis: 100%; align-self: flex-start; padding: .2rem 0 0 0; }
     .evdate { width: auto; }
     #topBtn { bottom: 1rem; width: 2.6rem; height: 2.6rem; }
     #profileFab { bottom: 4.8rem; padding: .38rem .7rem; font-size: .7rem; max-width: 60vw; }
   }
 
   @media print {
-    .controls, #topBtn, .updated-badge, #genreWrap, #panel, .star, .icsbtn, .sharebtn, .morebtn, #stats, #unkBar, #toast, #profileBar, #profileChip, #profilePanel, #profileFab { display: none !important; }
+    .controls, #topBtn, .updated-badge, #genreWrap, #panel, .star, .icsbtn, .sharebtn, .playbtn, .morebtn, #stats, #unkBar, #toast, #listenPanel, #profileBar, #profileChip, #profilePanel, #profileFab { display: none !important; }
     .evdet { display: block !important; }
     body { background: #fff; color: #000; }
     .wrap { max-width: 100%; }
@@ -447,6 +496,7 @@
 </div>
 <button id="topBtn" aria-label="Back to top">&#8593;</button>
 <div id="toast" role="status" aria-live="polite"></div>
+<div id="listenPanel" role="dialog"></div>
 <script>
 const EVENTS = [
   { date: "2026-09-30", time: "20:30", title: "Drunk at Your Wedding + Bleu Reine", venue: "Donau115", price: "Entry: donation", genre: "Electric Folk, Dream Rock", smokeFree: true, wheelchair: true, source: "cryptpad" },
@@ -5391,6 +5441,7 @@ const LANGS = {
     clearSearch: "Clear search", clearDay: "Clear day filter", clearPrice: "Clear price filter",
     backTop: "Back to top", prevWeek: "Previous week", nextWeek: "Next week", removeView: "Remove saved view",
     favTitle: "Favorite", icsTitle: "Add to calendar", shareTitle: "Copy link to this event", detailsTitle: "Details",
+    listenTitle: "Listen to this artist",
     osmTitle: "Open in OpenStreetMap", venueOnly: "Show only events at this venue" },
   de: { upcoming: "Bevorstehend", archive: "Archiv", search: "K\u00fcnstler, Venues, Genres suchen\u2026", filters: "Filter", reset: "\u21ba Zur\u00fccksetzen",
     free: "Nur frei / Spende", access: "Nur barrierefrei oder rauchfrei", source: "Quelle", district: "Bezirk",
@@ -5424,6 +5475,7 @@ const LANGS = {
     clearSearch: "Suche l\u00f6schen", clearDay: "Tag-Filter l\u00f6schen", clearPrice: "Preis-Filter l\u00f6schen",
     backTop: "Zur\u00fcck nach oben", prevWeek: "Vorherige Woche", nextWeek: "N\u00e4chste Woche", removeView: "Gespeicherte Ansicht entfernen",
     favTitle: "Favorit", icsTitle: "Zum Kalender hinzuf\u00fcgen", shareTitle: "Link zu dieser Veranstaltung kopieren", detailsTitle: "Details",
+    listenTitle: "Diesen K\u00fcnstler anh\u00f6ren",
     osmTitle: "In OpenStreetMap \u00f6ffnen", venueOnly: "Nur Veranstaltungen in dieser Venue zeigen" },
   it: { upcoming: "In arrivo", archive: "Archivio", search: "Cerca artisti, venue, generi\u2026", filters: "Filtri", reset: "\u21ba Azzera",
     free: "Solo gratuiti / offerta", access: "Solo accessibili o senza fumo", source: "Fonte", district: "Quartiere",
@@ -5457,6 +5509,7 @@ const LANGS = {
     clearSearch: "Cancella la ricerca", clearDay: "Cancella il filtro giorno", clearPrice: "Cancella il filtro prezzo",
     backTop: "Torna su", prevWeek: "Settimana precedente", nextWeek: "Settimana successiva", removeView: "Rimuovi la vista salvata",
     favTitle: "Preferito", icsTitle: "Aggiungi al calendario", shareTitle: "Copia il link a questo evento", detailsTitle: "Dettagli",
+    listenTitle: "Ascolta l'artista",
     osmTitle: "Apri in OpenStreetMap", venueOnly: "Mostra solo gli eventi in questa venue" },
 };
 const T = () => LANGS[S.lang] || LANGS.en;
@@ -5780,6 +5833,48 @@ function showToast(msg, x, y) {
   if (toastTimer) clearTimeout(toastTimer);
   toastTimer = setTimeout(() => { el.classList.remove("show"); }, 2000);
 }
+// Listen popover (20 Oct 2026, Andrea request): service-agnostic streaming search for the artist -
+// Tidal, Spotify, YouTube, Apple Music, Deezer, SoundCloud, Bandcamp; no per-artist ID database needed,
+// each service receives a search URL for the promoter-stripped artist name.
+const LISTEN_SERVICES = [
+  { name: "TIDAL", url: function (q) { return "https://listen.tidal.com/search?q=" + q; } },
+  { name: "Spotify", url: function (q) { return "https://open.spotify.com/search/" + q; } },
+  { name: "YouTube", url: function (q) { return "https://www.youtube.com/results?search_query=" + q; } },
+  { name: "Apple Music", url: function (q) { return "https://music.apple.com/de/search?term=" + q; } },
+  { name: "Deezer", url: function (q) { return "https://www.deezer.com/search/" + q; } },
+  { name: "SoundCloud", url: function (q) { return "https://soundcloud.com/search?q=" + q; } },
+  { name: "Bandcamp", url: function (q) { return "https://bandcamp.com/search?q=" + q; } }
+];
+function artistQuery(e) {
+  // Promoter-stripped artist text (same regex + Wedding Present guard as eventRow); falls back to the full title
+  const pm = (e.title || "").match(/^(.*\b(?:prsnts|presents?|prsnt|pres\.|pr\u00e4sentiert|presentiert)\b\s*:?\s*)(.+)$/i);
+  const t = (pm && pm[1].trim() && pm[2].trim() && !/\bwedding present\b/i.test(pm[1])) ? pm[2].trim() : (e.title || "");
+  return encodeURIComponent(t.trim());
+}
+function toggleListen(e, btn) {
+  const el = $("listenPanel");
+  if (!el) return;
+  const aname = (btn.dataset && btn.dataset.a) ? btn.dataset.a : null;
+  const idx = String(Number(btn.dataset.i)) + "|" + String(aname || "");
+  if (el.classList.contains("show") && el.dataset.for === idx) { el.classList.remove("show"); return; }
+  const q = aname ? encodeURIComponent(aname) : artistQuery(e);
+  const at = aname || (e.title || "");
+  el.innerHTML = `<p class="lpArtist">${esc(at.length > 40 ? at.slice(0, 40) + "\u2026" : at)}</p>`
+    + LISTEN_SERVICES.map(function (s) { return `<a href="${s.url(q)}" target="_blank" rel="noreferrer">${esc(s.name)}</a>`; }).join("");
+  el.dataset.for = idx;
+  el.classList.add("show");
+  const r = btn.getBoundingClientRect();
+  const w = el.offsetWidth, h = el.offsetHeight;
+  el.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, r.left)) + "px";
+  el.style.top = ((r.bottom + 6 + h > window.innerHeight) ? Math.max(8, r.top - h - 6) : r.bottom + 6) + "px";
+}
+document.addEventListener("click", function (ev) {
+  const el = $("listenPanel");
+  if (!el) return;
+  // Click on a service link: open it, then close the panel (20 Oct 2026, Andrea request - it stayed open when coming back)
+  if (ev.target.closest("#listenPanel a")) { el.classList.remove("show"); return; }
+  if (el.classList.contains("show") && !ev.target.closest("#listenPanel") && !ev.target.closest(".playbtn")) el.classList.remove("show");
+});
 function openSharedEvent(fk) {
   const date = (fk || "").split("|")[0];
   if (!date) return;
@@ -5958,9 +6053,35 @@ function eventRow(e, i) {
   // intentionally does NOT match (\bpresent\b fails inside "presented") - those 2 titles stay unsplit.
   const pm = (e.title || "").match(/^(.*\b(?:prsnts|presents?|prsnt|pres\.|pr\u00e4sentiert|presentiert)\b\s*:?\s*)(.+)$/i);
   if (pm && pm[1].trim() && pm[2].trim() && !/\bwedding present\b/i.test(pm[1])) { tmain = pm[1].trim(); tsub = pm[2].trim(); }
-  const title = (!lnk)
-    ? `<span class="evtitle nolink"${col} title="${esc(T().noLink)}">${esc(tmain)}${tsub ? `<span class="evartists">${esc(tsub)}</span>` : ""}</span>`
-    : `<a class="evtitle" href="${esc(lnk)}" target="_blank" rel="noreferrer"${col}>${esc(tmain)}${tsub ? `<span class="evartists">${esc(tsub)}</span>` : ""}</a>`;
+  // Per-artist play buttons (20 Oct 2026, Andrea request: every artist of the event gets its own play
+  // button next to its name, searching THAT artist only; calendar/link stay in the right .evside cell).
+  // Segments are split on the same separators as inferGenre (spaces required around them, so "AC/DC"
+  // stays whole); a split is rejected if any segment is shorter than 3 chars (too generic to be an artist).
+  const isMus = e.category === "Music" || !e.category;
+  const ART_SEG = /(\s+[+&]\s+|\s+\/\s+|\s*,\s*|\s+w\/\s+|\s+feat\.?\s+|\s+vs\.?\s+)/i;
+  const nameA = (nm) => (!lnk)
+    ? `<span class="evtitle nolink"${col} title="${esc(T().noLink)}">${esc(nm)}</span>`
+    : `<a class="evtitle" href="${esc(lnk)}" target="_blank" rel="noreferrer"${col}>${esc(nm)}</a>`;
+  const aply = (nm) => isMus ? `<button class="playbtn aply" data-i="${i}" data-a="${esc(nm)}" title="${esc(T().listenTitle)}" aria-label="${esc(T().listenTitle)}">\u25b6</button>` : "";
+  const renderArtists = function (str, plain) {
+    if (!isMus) return nameA(String(str || ""));
+    const raw = String(str || "");
+    if (plain) return nameA(raw);
+    const parts = raw.split(ART_SEG);
+    const segs = [];
+    for (let k = 0; k < parts.length; k += 2) { const nm = (parts[k] || "").trim(); if (nm) segs.push(nm); }
+    if (segs.length < 2 || segs.some((nm) => nm.length < 3)) return nameA(raw) + " " + aply(raw.trim());
+    let out = "";
+    for (let k = 0; k < parts.length; k++) {
+      if (k % 2 === 1) { out += `<span class="evsep"${col}>${esc(parts[k].trim())}</span> `; continue; }
+      const nm = (parts[k] || "").trim();
+      if (nm) out += `<span class="evart">${nameA(nm)} ${aply(nm)}</span>`;
+    }
+    return out;
+  };
+  const title = tsub
+    ? `${renderArtists(tmain, true)}<span class="evartists">${renderArtists(tsub, false)}</span>`
+    : renderArtists(tmain, false);
   const flags = (e.smokeFree || e.wheelchair)
     ? `<span class="flags">${e.smokeFree ? "\ud83d\udead " : ""}${e.wheelchair ? "\u267f\ufe0f" : ""}</span>` : "";
   const vinfo = e.venue ? venueInfo(e.venue) : null;
@@ -5970,7 +6091,6 @@ function eventRow(e, i) {
   // Non-music desc/venue swap (17 Oct 2026, Andrea request, uniform with the genre-venue swap of music events):
   // non-music events render the description UNDER the title, BEFORE the .meta venue line, so the venue line
   // is the last line before the .evdet address panel for ALL events. Music events keep desc after the notes.
-  const isMus = e.category === "Music" || !e.category;
   const descP = e.description ? `<p class="desc">${esc(e.description)}</p>` : "";
   const det = `<div class="evdet">`
     + (vinfo && vinfo.addr ? `<a class="evaddr" href="https://www.openstreetmap.org/search?query=${encodeURIComponent(vinfo.addr)}" target="_blank" rel="noreferrer" title="${esc(T().osmTitle)}">\ud83d\udccd ${esc(vinfo.addr)}</a>` : "")
@@ -5978,7 +6098,7 @@ function eventRow(e, i) {
   return `<li class="${e.postponed ? "postponed" : ""}" data-fk="${esc(favKey(e))}"><div class="ev"><div class="evmain">
     <div class="evdatecol"><span class="evdate">${fmtDate(e.date)}</span>${star}</div>
     <div>
-      <div class="evhead">${title}<span class="evacts">${ics}${shr}</span></div>
+      <div class="evhead"><span class="evtw">${title}</span></div>
       ${(genreOf(e) ? `<p class="genre">${esc(genreOf(e))}</p>` : (isCover(e) ? `<p class="genre genre-cover">${esc(T().coverNote)}</p>` : ((e.category === "Music" || !e.category) ? `<p class="genre genre-unknown">${esc(T().unknownGenre)}</p>` : "")))}
       ${!isMus ? descP : ""}
       <p class="meta">${vname}${e.time ? " \u00b7 " + esc(e.time) : ""}${e.price ? " \u00b7 " + esc(e.price) : ""}${flags}</p>
@@ -5988,7 +6108,7 @@ function eventRow(e, i) {
       ${isMus ? descP : ""}
       ${det}
     </div>
-  </div><button class="morebtn" aria-label="${esc(T().detailsTitle)}" aria-expanded="false">\u25be</button></div></li>`;
+  </div><div class="evside">${ics}${shr}</div><button class="morebtn" aria-label="${esc(T().detailsTitle)}" aria-expanded="false">\u25be</button></div></li>`;
 }
 
 function renderChips() {
@@ -6197,6 +6317,7 @@ $("list").addEventListener("click", (ev) => {
   }
   if (t.classList.contains("icsbtn")) { downloadIcs(LAST[Number(t.dataset.i)]); return; }
   if (t.classList.contains("sharebtn")) { shareLink(LAST[Number(t.dataset.i)]); return; }
+  if (t.classList.contains("playbtn")) { toggleListen(LAST[Number(t.dataset.i)], t); return; }
   if (t.classList.contains("vlink")) {
     const li = t.closest("li");
     const fk = li ? li.dataset.fk : "";
@@ -6214,6 +6335,9 @@ $("topBtn").addEventListener("click", () => window.scrollTo({ top: 0, behavior: 
 let scrollTicking = false;
 window.addEventListener("scroll", () => {
   $("topBtn").style.display = window.scrollY > 400 ? "block" : "none";
+  // Close the listen popover on any scroll (20 Oct 2026, Andrea request): its anchor button scrolls away
+  const lp = $("listenPanel");
+  if (lp && lp.classList.contains("show")) lp.classList.remove("show");
   if (scrollTicking) return;
   scrollTicking = true;
   requestAnimationFrame(() => {
