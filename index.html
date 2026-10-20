@@ -128,7 +128,10 @@
   /* Title wrapper (20 Oct 2026): holds the per-artist pieces (name + play buttons + separators) so they
      flow as inline text inside ONE flex item instead of spreading as separate flex items of .evhead */
   .evtw { flex: 1 1 auto; min-width: 0; }
-  .evart { } .evsep { opacity: .75; }
+  /* Artist name + play button stay TOGETHER on one line (20 Oct 2026, Andrea report: the play dropped to
+     the next line when the artist name ended at the line edge, e.g. Daniela Huerta / Elektrokohle):
+     inline-block + nowrap makes the pair wrap as one unit - if they don't fit, BOTH move to the next line */
+  .evart { display: inline-block; white-space: nowrap; } .evsep { opacity: .75; }
   /* Inline per-artist play button: smaller halo than the old evside one, tuned for text lines */
   .aply { padding: .2rem .28rem; margin: 0; font-size: .85rem; }
   /* Right button cell (20 Oct 2026, Andrea request: play/calendar/link in an autonomous cell on the right,
@@ -464,12 +467,12 @@
   </main>
 
   <footer id="sources">
-    <p>Berlin Events &#183; Berlin-Gigs (Cryptpad) + mytrueintent.blogspot.com + web picks &#183; <span id="tot"></span><span id="totLbl"> events, deduplicated</span></p>
+    <p>Berlin Events &#183; Berlin-Gigs community pad + mytrueintent.blogspot.com + web picks &#183; <span id="tot"></span><span id="totLbl"> events, deduplicated</span></p>
     <p id="stats" class="mini-label" style="margin-bottom:.5rem"></p>
     <p class="updated-badge" style="margin-top:.5rem"><span class="dot"></span><span class="updLbl">Sources last updated: </span><span class="lastupdated">8 October 2026</span></p>
     <p class="disclaimer" id="disclaimerP">&#9888;&#65039; <strong>This is an experimental site, a constant work in progress &#8212; it is by no means exhaustive, just an attempt to aggregate lesser-known events in one place.</strong> Always double-check dates, times and tickets with the organizers or venues before going. This site aggregates external sources and assumes no responsibility for errors, changes or cancellations.</p>
     <p class="src-title"><span id="srcTitle">Sources</span> <b style="font-size:.9rem">*</b></p>
-    <p id="srcGigsP"><strong>&#128241; Gigs</strong> &#8212; the <em>Berlin-Gigs</em> community pad on Cryptpad, a DIY list of concerts with time, price, genre, smoke-free and wheelchair info.</p>
+    <p id="srcGigsP"><strong>&#128241; Gigs</strong> &#8212; the <em>Berlin-Gigs</em> community pad, a DIY list of concerts with time, price, genre, smoke-free and wheelchair info.</p>
     <p id="srcMtiP"><strong>&#127928; MTI</strong> &#8212; <a href="https://mytrueintent.blogspot.com" target="_blank" rel="noreferrer">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog, imported from its spreadsheet export.</p>
     <p id="srcMobP"><strong>&#127914; Mob</strong> &#8212; <a href="https://mobilize.berlin" target="_blank" rel="noreferrer">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.</p>
     <p id="srcWebP"><strong>&#127760; Web</strong> &#8212; events found on the web on official sites and venue pages; each links directly to its source page.</p>
@@ -691,7 +694,7 @@ const EVENTS = [
 
   // \u2500\u2500 mytrueintent.blogspot.com (CSV export: Gigs Berlin.xlsx, Oct 2026 \u2013 May 2027) \u2500\u2500
   { date: "2026-10-08", title: "Myles Smith", venue: "Columbiahalle", source: "mytrueintent" },
-  { date: "2026-10-08", title: "Sing\u00fclar - Symphonie der Grossstadt", venue: "Emmauskirche", source: "mytrueintent" },
+  { date: "2026-10-08", title: "Singul\u00e4r - Symphonie der Grossstadt", venue: "Emmauskirche", source: "mytrueintent" },
   { date: "2026-10-08", title: "The Narrator", venue: "Frannz", source: "mytrueintent" },
   { date: "2026-10-08", title: "Matt Maeson", venue: "Gretchen", source: "mytrueintent" },
   { date: "2026-10-08", title: "Unprocessed", venue: "Hole44", source: "mytrueintent" },
@@ -5428,7 +5431,7 @@ const LANGS = {
     mostVenue: (v, n) => "Most active venue: " + v + " (" + n + ")",
     disclaimer: "&#9888;&#65039; <strong>Experimental site \u2014 a work in progress, by no means exhaustive \u2014 compiled automatically from the sources below, not individually reviewed by a human.</strong> Always double-check dates, times and tickets with the organizers or venues; report errors or missing events via the source links. No responsibility is assumed for errors, changes or cancellations.",
     srcTitle: "Sources",
-    srcGigs: "<strong>&#128241; Gigs</strong> \u2014 the <em>Berlin-Gigs</em> community pad on Cryptpad, a DIY list of concerts with time, price, genre, smoke-free and wheelchair info.",
+    srcGigs: "<strong>&#128241; Gigs</strong> \u2014 the <em>Berlin-Gigs</em> community pad, a DIY list of concerts with time, price, genre, smoke-free and wheelchair info.",
     srcMti: "<strong>&#127928; MTI</strong> \u2014 <a href=\"https://mytrueintent.blogspot.com\" target=\"_blank\" rel=\"noreferrer\">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog, imported from its spreadsheet export.",
     srcMob: "<strong>&#127914; Mob</strong> \u2014 <a href=\"https://mobilize.berlin\" target=\"_blank\" rel=\"noreferrer\">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.",
     srcWeb: "<strong>&#127760; Web</strong> \u2014 events found on the web on official sites and venue pages; each links directly to its source page.",
@@ -5462,7 +5465,7 @@ const LANGS = {
     mostVenue: (v, n) => "Aktivste Venue: " + v + " (" + n + ")",
     disclaimer: "&#9888;&#65039; <strong>Experimentelle Seite \u2014 in Arbeit, keineswegs vollst\u00e4ndig \u2014 automatisch aus den unten genannten Quellen zusammengestellt, nicht einzeln von Hand gepr\u00fcft.</strong> Datum, Uhrzeit und Tickets immer bei den Veranstaltern oder Venues pr\u00fcfen; Fehler bitte \u00fcber die Quell-Links melden. Keine Haftung f\u00fcr Fehler, \u00c4nderungen oder Absagen.",
     srcTitle: "Quellen",
-    srcGigs: "<strong>&#128241; Gigs</strong> \u2014 das <em>Berlin-Gigs</em> Community-Pad auf Cryptpad, eine DIY-Liste von Konzerten mit Uhrzeit, Preis, Genre, Rauch- und Rollstuhl-Info.",
+    srcGigs: "<strong>&#128241; Gigs</strong> \u2014 das <em>Berlin-Gigs</em> Community-Pad, eine DIY-Liste von Konzerten mit Uhrzeit, Preis, Genre, Rauch- und Rollstuhl-Info.",
     srcMti: "<strong>&#127928; MTI</strong> \u2014 <a href=\"https://mytrueintent.blogspot.com\" target=\"_blank\" rel=\"noreferrer\">mytrueintent.blogspot.com</a>, ein Berliner Indie/Rock-Konzert-Blog, importiert aus seinem Tabellen-Export.",
     srcMob: "<strong>&#127914; Mob</strong> \u2014 <a href=\"https://mobilize.berlin\" target=\"_blank\" rel=\"noreferrer\">mobilize.berlin</a>, eine Berliner Mobilizon-Instanz: f\u00f6derierte DIY-Plattform f\u00fcr Konzerte, Parties und Community-Events.",
     srcWeb: "<strong>&#127760; Web</strong> \u2014 im Web gefundene Veranstaltungen von offiziellen Seiten und Venue-Seiten; jeder Eintrag verlinkt direkt auf seine Quell-Seite.",
@@ -5496,7 +5499,7 @@ const LANGS = {
     mostVenue: (v, n) => "Venue pi\u00f9 attiva: " + v + " (" + n + ")",
     disclaimer: "&#9888;&#65039; <strong>Sito sperimentale \u2014 in costruzione, per niente completo \u2014 compilato automaticamente dalle fonti qui sotto, non controllato una a una a mano.</strong> Verifica sempre date, orari e biglietti con gli organizzatori o le venue; segnala errori o mancanze tramite i link alle fonti. Nessuna responsabilit\u00e0 per errori, cambi o annullamenti.",
     srcTitle: "Fonti",
-    srcGigs: "<strong>&#128241; Gigs</strong> \u2014 il pad comunitario <em>Berlin-Gigs</em> su Cryptpad, una lista DIY di concerti con orario, prezzo, genere e info su fumo e accessibilit\u00e0.",
+    srcGigs: "<strong>&#128241; Gigs</strong> \u2014 il pad comunitario <em>Berlin-Gigs</em>, una lista DIY di concerti con orario, prezzo, genere e info su fumo e accessibilit\u00e0.",
     srcMti: "<strong>&#127928; MTI</strong> \u2014 <a href=\"https://mytrueintent.blogspot.com\" target=\"_blank\" rel=\"noreferrer\">mytrueintent.blogspot.com</a>, un blog di concerti indie/rock berlinese, importato dal suo export a foglio di calcolo.",
     srcMob: "<strong>&#127914; Mob</strong> \u2014 <a href=\"https://mobilize.berlin\" target=\"_blank\" rel=\"noreferrer\">mobilize.berlin</a>, un'istanza Mobilizon di Berlino: piattaforma DIY federata per concerti, feste ed eventi della comunit\u00e0.",
     srcWeb: "<strong>&#127760; Web</strong> \u2014 eventi trovati sul web su siti ufficiali e pagine delle venue; ognuno linka direttamente alla pagina di origine.",
@@ -6063,6 +6066,49 @@ function eventRow(e, i) {
     ? `<span class="evtitle nolink"${col} title="${esc(T().noLink)}">${esc(nm)}</span>`
     : `<a class="evtitle" href="${esc(lnk)}" target="_blank" rel="noreferrer"${col}>${esc(nm)}</a>`;
   const aply = (nm) => isMus ? `<button class="playbtn aply" data-i="${i}" data-a="${esc(nm)}" title="${esc(T().listenTitle)}" aria-label="${esc(T().listenTitle)}">\u25b6</button>` : "";
+  // artistOf (20 Oct 2026, Andrea request: the play must sit ONLY next to the real artist name, not the
+  // tour/show/series text that shares the segment, e.g. "Isolation Berlin - Und aus den Wolken...").
+  // Conservative chain: trailing parens/brackets (country/role notes) -> nested promoter credit ->
+  // ft./feat. credit (main artist) -> series colon "Series: Artist" -> dash tour/show tail (keywords).
+  const ART_DASH = /release|anniversary|birthday|\bday\b|tour|live|show|konzert|benefit|fundraiser|vol\.|\bep\b|\blp\b|stripped|matin|acoustic|unplugged|session|special|jahre|years|symphon|battle|happy|edition|presented|presents|record/i;
+  const ART_COLBAD = /['"]|live|show|night|session|edition|tour|stripped|werke|premiere|lied|songs|konzert/i;
+  const ART_FTGEN = /night|session|club|\bfest|party|gala/i;
+  const artistOf = function (nmIn) {
+    let a = String(nmIn || "").trim();
+    for (let k = 0; k < 3; k++) a = a.replace(/\s*[\(\[\u27e8][^\)\]\u27e9]*[\)\]\u27e9]\s*$/, "").trim();
+    const pp = a.match(/^.*(?:\b(?:prsnts|presents?|prsnt|pr\u00e4sentiert|pr\u00e4sentieren|presentiert)\b|\bpres\.)\s*:?\s*(.+)$/i);
+    if (pp && pp[1].trim()) a = pp[1].trim();
+    const fts = a.split(/\s+(?:ft\.|feat\.?)\s+/i);
+    if (fts.length > 1 && !ART_FTGEN.test(fts[0])) a = fts[0].trim();
+    const cl = a.match(/^(.+): (.+)$/);
+    if (cl && cl[1].trim().length > 2 && !/[-\u2013]/.test(cl[1])) {
+      const tl = cl[2].trim();
+      const wds = tl.split(/\s+/);
+      if (!ART_COLBAD.test(tl) && wds.length >= 1 && wds.length <= 5 && !/^berlin$/i.test(tl)) a = tl;
+    }
+    const dm = a.match(/^(.+?)\s+[-\u2013]\s+(.+)$/);
+    if (dm && dm[1].trim().length >= 2) {
+      const tl = dm[2].trim();
+      if (ART_DASH.test(tl) || tl.split(/\s+/).length >= 5) a = dm[1].trim();
+    }
+    return a;
+  };
+  // renderSeg: if the artist is only PART of the segment, anchor+button sit on the artist and the
+  // remaining tour/series text stays visible as plain .evsep text around it (display unchanged)
+  const renderSeg = function (nm) {
+    if (!isMus) return nameA(nm);
+    const art = artistOf(nm);
+    if (art && art !== nm) {
+      const ix = nm.toLowerCase().indexOf(art.toLowerCase());
+      if (ix >= 0) {
+        const pre = nm.slice(0, ix).trim(), post = nm.slice(ix + art.length).trim();
+        return (pre ? `<span class="evsep"${col}>${esc(pre)}</span> ` : "")
+          + `<span class="evart">${nameA(nm.slice(ix, ix + art.length))} ${aply(nm.slice(ix, ix + art.length))}</span>`
+          + (post ? ` <span class="evsep"${col}>${esc(post)}</span>` : "");
+      }
+    }
+    return `<span class="evart">${nameA(nm)} ${aply(nm)}</span>`;
+  };
   const renderArtists = function (str, plain) {
     if (!isMus) return nameA(String(str || ""));
     const raw = String(str || "");
@@ -6070,12 +6116,12 @@ function eventRow(e, i) {
     const parts = raw.split(ART_SEG);
     const segs = [];
     for (let k = 0; k < parts.length; k += 2) { const nm = (parts[k] || "").trim(); if (nm) segs.push(nm); }
-    if (segs.length < 2 || segs.some((nm) => nm.length < 3)) return nameA(raw) + " " + aply(raw.trim());
+    if (segs.length < 2 || segs.some((nm) => nm.length < 3)) return renderSeg(raw.trim());
     let out = "";
     for (let k = 0; k < parts.length; k++) {
       if (k % 2 === 1) { out += `<span class="evsep"${col}>${esc(parts[k].trim())}</span> `; continue; }
       const nm = (parts[k] || "").trim();
-      if (nm) out += `<span class="evart">${nameA(nm)} ${aply(nm)}</span>`;
+      if (nm) out += renderSeg(nm);
     }
     return out;
   };
