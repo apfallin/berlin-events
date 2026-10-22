@@ -386,7 +386,7 @@
   <header>
     <div>
       <h1>What's on in <b>Berlin</b></h1>
-      <p class="sub"><span id="subTitle">A minimal digest of concerts, theatre, art and cinema in Berlin &#8212; gathered from independent sources</span><span class="nowrap">.<a id="srcLink" title="About the sources">*</a></span></p>
+      <p class="sub"><span id="subTitle">A minimal digest of concerts, performing arts, art and cinema in Berlin &#8212; gathered from independent sources</span><span class="nowrap">.<a id="srcLink" title="About the sources">*</a></span></p>
       <p class="subhint" id="calHint">Save any event straight to your calendar</p>
       <p class="sub"><small class="updated-badge"><span class="dot"></span><span class="updLbl">Sources last updated: </span><span class="lastupdated">8 October 2026</span></small></p>
     </div>
@@ -806,7 +806,7 @@ const EVENTS = [
   { date: "2026-10-13", title: "Blood Red Shoes", venue: "Festsaal Kreuzberg", source: "mytrueintent" },
   { date: "2026-10-13", title: "Soulgigs presents: PJ MORTON", venue: "Gretchen", source: "mytrueintent" },
   { date: "2026-10-13", title: "Laibach", venue: "Huxleys", source: "mytrueintent" },
-  { date: "2026-10-13", title: "Ferris & Sylvester", venue: "Monarch", source: "mytrueintent" },
+  { date: "2026-10-13", title: "Ferris & Sylvester", venue: "Monarch", genre: "folk, americana", source: "mytrueintent" },
   { date: "2026-10-13", title: "Liars", venue: "Neue Zukunft", source: "mytrueintent",  price: "Sold out" },
   { date: "2026-10-13", title: "Spirit Mother / Yawn Man", venue: "Neue Zukunft", source: "mytrueintent" },
   { date: "2026-10-13", title: "Sebastian Schub", venue: "Prachtwerk", source: "mytrueintent" },
@@ -849,7 +849,7 @@ const EVENTS = [
   { date: "2026-10-15", title: "Berre", venue: "Prachtwerk", source: "mytrueintent" },
   { date: "2026-10-15", title: "I Promised The World", venue: "Privatclub", source: "mytrueintent" },
   { date: "2026-10-15", title: "Rika Bender + MEDU\u03a3A", venue: "Schokoladen", source: "mytrueintent" },
-  { date: "2026-10-15", title: "Tito + Tarantula - Best Of Tour", venue: "SO36", source: "mytrueintent" },
+  { date: "2026-10-15", title: "Tito + Tarantula - Best Of Tour", venue: "SO36", genre: "rock, americana, desert rock", source: "mytrueintent" },
   { date: "2026-10-15", title: "Annett Louisan", venue: "Tempodrom", source: "mytrueintent" },
   { date: "2026-10-15", title: "The Strokes", venue: "Uber Arena", source: "mytrueintent" },
   { date: "2026-10-15", title: "Miss Allie", venue: "Waschhaus Potsdam", source: "mytrueintent" },
@@ -1067,7 +1067,7 @@ const EVENTS = [
   { date: "2026-10-26", title: "Olli Schulz", venue: "Admiralspalast", source: "mytrueintent",  price: "Sold out" },
   { date: "2026-10-26", title: "Fabian Kuhn", venue: "Badehaus", source: "mytrueintent" },
   // Berwyn @Gretchen 26 Oct REMOVED 17 Oct 2026: venue's own page marks the show cancelled ("Die Show wurde abgesagt"); re-add if a new date is announced
-  { date: "2026-10-26", title: "Kitty, Daisy + Lewis", venue: "Huxleys", source: "mytrueintent" },
+  { date: "2026-10-26", title: "Kitty, Daisy + Lewis", venue: "Huxleys", genre: "rockabilly, rock and roll, garage rock", source: "mytrueintent" },
   { date: "2026-10-26", title: "Lots Of Hands", venue: "Kantine Berghain", source: "mytrueintent" },
   { date: "2026-10-26", title: "Hyd", venue: "Privatclub", source: "mytrueintent" },
   { date: "2026-10-26", title: "Ella Eyre", venue: "Quasimodo", source: "mytrueintent" },
@@ -1132,7 +1132,7 @@ const EVENTS = [
   { date: "2026-10-30", title: "Die Sterne / Hackedepicciotto / Joachim Franz B\u00fcchner Duo", venue: "Astra", source: "mytrueintent" },
   { date: "2026-10-30", title: "Campa - Record Release", venue: "Badehaus", source: "mytrueintent" },
   { date: "2026-10-30", title: "Boris / Planning For Burial", venue: "Bi Nuu", source: "mytrueintent" },
-  { date: "2026-10-30", title: "Conny + Liser", venue: "Columbia Theater", source: "mytrueintent" },
+  { date: "2026-10-30", title: "Conny + Liser", venue: "Columbia Theater", genre: "comedy, pop", source: "mytrueintent" },
   { date: "2026-10-30", title: "badm\u00f3mzjay", venue: "Columbiahalle", source: "mytrueintent" },
   { date: "2026-10-30", title: "Botticelli Baby - 15 Years Gretchen", venue: "Gretchen", source: "mytrueintent" },
   { date: "2026-10-30", title: "Jules Ahoi", venue: "Heimathafen Neuk\u00f6lln", source: "mytrueintent" },
@@ -1413,7 +1413,7 @@ const EVENTS = [
   { date: "2026-11-13", title: "Jakuzi", venue: "Lido", source: "mytrueintent" },
   { date: "2026-11-13", title: "Dying Phoenix / Moran Magal", venue: "Maschinenhaus", source: "mytrueintent" },
   { date: "2026-11-13", title: "Davina Michelle", venue: "Mikropol", source: "mytrueintent" },
-  { date: "2026-11-13", title: "Luna", venue: "Modus", source: "mytrueintent" },
+  { date: "2026-11-13", time: "20:00", title: "Luna", venue: "Modus", price: "from 39,95 \u20ac", genre: "pop, synth pop", description: "LUNA (DE) - 'Nicht allein auf dieser Welt - Shows 2026': the German singer's pure pop with dark synth worlds.", link: "https://www.eventim.de/event/luna-nicht-allein-auf-dieser-welt-shows-2026-modus-berlin-21874482/", source: "mytrueintent" },
   { date: "2026-11-13", title: "Water Damage / Gavial / Gaffa Ghandi", venue: "Neue Zukunft", source: "mytrueintent" },
   { date: "2026-11-13", title: "Veljanov", venue: "Peter Edel", source: "mytrueintent" },
   { date: "2026-11-13", title: "DAVID KRAKAUER & KATHLEEN TAGG", venue: "Pierre Boulez Saal", source: "mytrueintent" },
@@ -1423,7 +1423,7 @@ const EVENTS = [
   { date: "2026-11-13", title: "8MM Fest 2026 - Day 1", venue: "Several Locations", link: "https://mytrueintent.blogspot.com", source: "mytrueintent" },
   { date: "2026-11-13", title: "Yasuaki Shimizu", venue: "Silent Green", source: "mytrueintent" },
   { date: "2026-11-13", title: "Pigor und Eichhorn", venue: "Waschhaus Potsdam", source: "mytrueintent" },
-  { date: "2026-11-13", title: "Matt Charette & The Truer Sound / Frankie & The Deadbeats", venue: "Wild At Heart", source: "mytrueintent" },
+  { date: "2026-11-13", title: "Matt Charette & The Truer Sound / Frankie & The Deadbeats", venue: "Wild At Heart", genre: "country, punk", source: "mytrueintent" },
   { date: "2026-11-13", title: "Sababa 5", venue: "Gretchen", source: "mytrueintent" },
   { date: "2026-11-13", title: "FLIGHTMODE w/ KWASI, JUSS MILLS & WILDFLOWERS live", venue: "Schokoladen", source: "mytrueintent" },
   { date: "2026-11-14", title: "In Extremo \u2013 Tranquilo II", venue: "Admiralspalast", source: "mytrueintent" },
@@ -1483,7 +1483,7 @@ const EVENTS = [
   { date: "2026-11-16", title: "Marthe X Pilani Bubu", venue: "Gretchen", source: "mytrueintent" },
   { date: "2026-11-16", title: "Jessie Ware / Naomi Scott", venue: "Huxleys", source: "mytrueintent" },
   { date: "2026-11-16", title: "Connor Kelly & The Time Warp", venue: "Lark", source: "mytrueintent" },
-  { date: "2026-11-16", title: "Frankie + The Witch Fingers / Iguana Death Cult / No Sugar", venue: "Lido", source: "mytrueintent" },
+  { date: "2026-11-16", title: "Frankie + The Witch Fingers / Iguana Death Cult / No Sugar", venue: "Lido", genre: "psychedelic rock, garage rock", source: "mytrueintent" },
   { date: "2026-11-16", title: "BOULEZ ENSEMBLE & MATTHIAS PINTSCHER Labyrinth: Werke von Boulez, Pintscher und Widmann", venue: "Pierre Boulez Saal", source: "mytrueintent" },
   { date: "2026-11-16", title: "Placebo", venue: "Uber Arena", source: "mytrueintent",  price: "Sold out" },
   { date: "2026-11-16", title: "Omar Doom", venue: "Kantine am Berghain", source: "mytrueintent" },
@@ -1537,7 +1537,7 @@ const EVENTS = [
   { date: "2026-11-19", title: "Eluveitie", venue: "Huxleys", source: "mytrueintent" },
   { date: "2026-11-19", title: "Mollie Elizabeth", venue: "Maschinenhaus", source: "mytrueintent" },
   { date: "2026-11-19", title: "Imperial Triumphant / Knoll", venue: "Neue Zukunft", source: "mytrueintent" },
-  { date: "2026-11-19", title: "Yes, I'm very tired now", venue: "Privatclub", source: "mytrueintent" },
+  { date: "2026-11-19", title: "Yes, I'm very tired now", venue: "Privatclub", genre: "dark indie, new wave", source: "mytrueintent" },
   { date: "2026-11-19", title: "Infinity Song", venue: "S\u00e4\u00e4lchen", source: "mytrueintent" },
   { date: "2026-11-19", title: "Apart / Llana", venue: "Schokoladen", source: "mytrueintent" },
   { date: "2026-11-19", title: "Die Anstalt / G\u00fcner K\u00fcnier / The Pleasure Majenta", venue: "SO36", source: "mytrueintent" },
@@ -1612,7 +1612,7 @@ const EVENTS = [
   { date: "2026-11-22", title: "Genesis Owusu", venue: "Metropol", source: "mytrueintent" },
   { date: "2026-11-22", title: "Gong", venue: "Neue Zukunft", source: "mytrueintent" },
   { date: "2026-11-22", title: "Joan As A Police Woman", venue: "RBB Sendesaal", source: "mytrueintent" },
-  { date: "2026-11-22", title: "Blood & Sun / Society Of The Silver Cross / Linnea Hjert\u00e9n", venue: "Urban Spree", source: "mytrueintent" },
+  { date: "2026-11-22", title: "Blood & Sun / Society Of The Silver Cross / Linnea Hjert\u00e9n", venue: "Urban Spree", genre: "dark folk, doom", source: "mytrueintent" },
   { date: "2026-11-22", title: "Zelo", venue: "Hole44", source: "mytrueintent" },
   { date: "2026-11-23", title: "Chelsea Wolfe", venue: "Admiralspalast", source: "mytrueintent" },
   { date: "2026-11-23", title: "Yaris", venue: "Badehaus", source: "mytrueintent" },
@@ -1644,11 +1644,11 @@ const EVENTS = [
   { date: "2026-11-24", title: "June Coc\u00f3", venue: "Kulturhaus Insel", source: "mytrueintent" },
   { date: "2026-11-24", title: "Glaive / Kurtains", venue: "Lido", source: "mytrueintent" },
   { date: "2026-11-24", title: "Tophouse / Raynes", venue: "Maschinenhaus", source: "mytrueintent" },
-  { date: "2026-11-24", title: "Hey, Nothing", venue: "Modus", source: "mytrueintent" },
+  { date: "2026-11-24", title: "Hey, Nothing", venue: "Modus", genre: "indie rock", source: "mytrueintent" },
   { date: "2026-11-24", title: "Grace Cummings", venue: "Neue Zukunft", source: "mytrueintent" },
   { date: "2026-11-24", title: "Dorothee Mields, Stefan Temmingh & Capricornus Consort Basel", venue: "Pierre Boulez Saal", source: "mytrueintent" },
   { date: "2026-11-24", title: "Lynnic / Itsarius", venue: "Privatclub", source: "mytrueintent" },
-  { date: "2026-11-24", title: "Shelter / Cosmic Joke / Bad Beat", venue: "SO36", source: "mytrueintent" },
+  { date: "2026-11-24", title: "Shelter / Cosmic Joke / Bad Beat", venue: "SO36", genre: "hardcore punk", source: "mytrueintent" },
   { date: "2026-11-24", title: "The Kid Laroi", venue: "Uber Eats Music Hall", source: "mytrueintent" },
   { date: "2026-11-24", title: "Will Church", venue: "Prachtwerk", source: "mytrueintent" },
   { date: "2026-11-25", title: "Wasia Project", venue: "Astra", source: "mytrueintent" },
@@ -2010,7 +2010,7 @@ const EVENTS = [
   { date: "2026-12-17", title: "Le Fly", venue: "Mikropol", source: "mytrueintent" },
   { date: "2026-12-17", title: "Rebekka Bakken", venue: "Passionskirche", source: "mytrueintent" },
   { date: "2026-12-17", title: "Los Baby Jaguars", venue: "Schokoladen", source: "mytrueintent" },
-  { date: "2026-12-17", title: "Peter + The Test Tube Babies / Kann Karate", venue: "SO36", source: "mytrueintent" },
+  { date: "2026-12-17", title: "Peter + The Test Tube Babies / Kann Karate", venue: "SO36", genre: "punk", source: "mytrueintent" },
   { date: "2026-12-17", title: "Die Fantastischen Vier", venue: "Uber Arena", source: "mytrueintent" },
   { date: "2026-12-17", title: "Total", venue: "Wild At Heart", source: "mytrueintent" },
   { date: "2026-12-17", title: "Lail & Lomar", venue: "Lombardo Bar", source: "mytrueintent" },
@@ -2949,6 +2949,7 @@ const EVENTS = [
   { date: "2026-10-14", time: "18:00", title: "Ukrainian Film Festival Berlin \u2014 7th edition", venue: "Various cinemas", price: "from \u20ac8", category: "Cinema", description: "Latest contemporary films from Ukraine, theme 'Emergency Spaces', until 18 Oct.", link: "https://uffberlin.de", source: "web" },
   { date: "2026-10-09", time: "19:00", title: "Arsenal Filminstitut \u2014 Ninjin Club film series", venue: "Kino Arsenal, silent green", price: "from \u20ac7", category: "Cinema", description: "October series dedicated to the Japanese studio founded by actresses Ineko Arima, Keiko Kishi and Yoshiko Kuga \u2014 arthouse and experimental cinema all month.", link: "https://arsenal-berlin.de", source: "web" },
   { date: "2026-11-10", time: "18:00", title: "INTERFILM 42 \u2014 International Short Film Festival", venue: "Babylon, Roter Salon, Eiszeit Kino & more", price: "from \u20ac9", category: "Cinema", description: "42nd edition of Berlin's short film festival: fiction, animation and documentary, until 15 Nov.", link: "https://www.interfilm.de/en/", source: "web" },
+  { date: "2026-11-08", time: "", title: "KUKI .19 \u2014 Young Short Film Festival Berlin", venue: "Filmtheater am Friedrichshain, ACUD Kino & more", price: "4-10\u20ac", category: "Cinema", description: "19th edition of the young/children's short film festival (8-15 Nov): 13 programmes for kids, teens and school classes at Filmtheater am Friedrichshain, City Kino Wedding, Zeiss-Gro\u00dfplanetarium, ACUD Kino and Unterfilm Clubkino.", link: "https://www.interfilm.de/en/kuki-festival-2026/", source: "web" },
   { date: "2027-02-10", time: "19:00", title: "77th Berlinale \u2014 Berlin International Film Festival", venue: "Berlinale Palast & cinemas city-wide", price: "from \u20ac9", category: "Cinema", description: "The festival adds an extra day and runs 10\u201321 Feb 2027; awards ceremony on 19 Feb.", link: "https://www.berlinale.de", source: "web" },
   { date: "2026-10-01", time: "18:00", title: "Zeughauskino \u2014 historical film series", venue: "Deutsches Historisches Museum, Mitte", price: "from \u20ac6", category: "Cinema", description: "The DHM's cinema curates special series on film history \u2014 restorations, retrospectives and themed programmes, with introductions.", link: "https://www.dhm.de/zeughauskino/en/", source: "web" },
   { date: "2026-10-11", time: "20:00", title: "Eiszeit Kino \u2014 independent & repertory screenings", venue: "Eiszeit Kino, Kreuzberg", price: "from \u20ac8", category: "Cinema", description: "Long-running Kreuzberg arthouse: curated series, festival programmes and independent premieres away from the multiplexes.", link: "https://eiszeit-kino.de", source: "web" },
@@ -3135,6 +3136,7 @@ const EVENTS = [
   { date: "2026-10-28", time: "20:00", title: "CYCLOPS (Z\u00e9 de Paiva)", venue: "Ballhaus Naunynstra\u00dfe", price: "Ticketed", category: "Theatre", description: "New production by Z\u00e9 de Paiva.", link: "https://ballhausnaunynstrasse.de/events", source: "web" },
   { date: "2026-10-29", time: "20:00", title: "CYCLOPS (Z\u00e9 de Paiva)", venue: "Ballhaus Naunynstra\u00dfe", price: "Ticketed", category: "Theatre", description: "", link: "https://ballhausnaunynstrasse.de/events", source: "web" },
   { date: "2026-10-30", time: "20:00", title: "CYCLOPS (Z\u00e9 de Paiva)", venue: "Ballhaus Naunynstra\u00dfe", price: "Ticketed", category: "Theatre", description: "", link: "https://ballhausnaunynstrasse.de/events", source: "web" },
+  { date: "2026-10-30", time: "", title: "Theatre of Things Festival (15th edition)", venue: "Schaubude Berlin", price: "Ticketed", category: "Theatre", description: "International puppet and object theatre festival, theme 'The World as a Model': productions, installations and exhibitions. Runs 30 Oct - 5 Nov 2026.", link: "https://www.schaubude.com/en/", source: "web" },
   { date: "2026-10-31", time: "20:00", title: "CYCLOPS (Z\u00e9 de Paiva)", venue: "Ballhaus Naunynstra\u00dfe", price: "Ticketed", category: "Theatre", description: "", link: "https://ballhausnaunynstrasse.de/events", source: "web" },
   { date: "2026-11-07", time: "20:00", title: "Amigues Adios (Bishop Black)", venue: "Ballhaus Naunynstra\u00dfe", price: "Ticketed", category: "Theatre", description: "", link: "https://ballhausnaunynstrasse.de/events", source: "web" },
   { date: "2026-11-08", time: "19:00", title: "Amigues Adios (Bishop Black)", venue: "Ballhaus Naunynstra\u00dfe", price: "Ticketed", category: "Theatre", description: "", link: "https://ballhausnaunynstrasse.de/events", source: "web" },
@@ -3156,6 +3158,11 @@ const EVENTS = [
   { date: "2026-10-30", time: "20:00", title: "Szymon Mika Quartet", venue: "Little Stage", price: "Spende-Donations", genre: "Jazz", description: "One of Poland's most acclaimed jazz guitarists (2026 Fryderyk Award winner), with Thiago Duarte (bass) and Peter Somos (drums). Part of the Peppi Guggenheim Exil Musikprogramm.", link: "https://mobilize.berlin/events/27390f55-376e-426b-9ca4-58d985377bb5", source: "mobilize" },
   { date: "2026-10-31", time: "20:00", title: "Prince Gabriel Presents: Drag and Music (Halloween Special)", venue: "Little Stage", price: "Spende-Donations", description: "Drag performances by Toilette Paypr and Prince Gabriel, with music by Carolin Pook, Tina Schauer and Rieko Okuda. Part of the Peppi Guggenheim Exil Musikprogramm.", link: "https://mobilize.berlin/events/7b776f57-8633-4e08-a3c0-61048ff1b214", source: "mobilize" },
   { date: "2026-11-06", time: "20:00", title: "John Q Irritated", venue: "Little Stage", price: "Spende-Donations", genre: "Jazz", description: "New Orleans jazz, gritty secondline grooves and a dash of 60s pop. Part of the Peppi Guggenheim Exil Musikprogramm.", link: "https://mobilize.berlin/events/6d152a27-59b8-4277-a160-5d140a21578d", source: "mobilize" },
+  { date: "2026-11-07", time: "20:00", title: "Supersalad", venue: "Little Stage", price: "Spende-Donations", genre: "Jazz", description: "Modern jazz quartet with Jan von Klewitz (sax), Paul Peuker (guitar), Ben von Poser (keys) and Thomas F\u00fclbier (drums) playing their own compositions, at the Little Stage Bar. Part of the Peppi Guggenheim Exil Musikprogramm.", link: "https://mobilize.berlin/events/d9a2679d-0dd6-4f3b-b638-aab02cacd7aa", source: "mobilize" },
+  { date: "2026-11-13", time: "20:00", title: "Slow Loris Quartet", venue: "Little Stage", price: "Spende-Donations", genre: "Jazz", description: "Album release show for 'Auszeiten': modern jazz by Carl Justus Kr\u00f6ning (guitar) with Christopher L\u00fcbeck (piano), Johannes Fricke (bass) and Claas Lausen (drums), chamber-music density meets rock energy, at the Little Stage Bar. Part of the Peppi Guggenheim Exil Musikprogramm.", link: "https://mobilize.berlin/events/e0a28b9e-26b3-4d54-ba7f-883a848e728f", source: "mobilize" },
+  { date: "2026-11-20", time: "20:00", title: "Do Like Larry", venue: "Little Stage Club", price: "Spende-Donations", genre: "Funk, Soul", description: "Andr\u00e9 Matov (guitar), Philipp Cieslewicz (Wurlitzer), Alex Binder (bass) and Hans Otto (drums): funky grooves with soulful retro vibes and fiery solos. Part of the Peppi Guggenheim Exil Musikprogramm.", link: "https://mobilize.berlin/events/e5065dec-1351-42d4-a8e9-3967d44868fd", source: "mobilize" },
+  { date: "2026-11-28", time: "21:00", title: "Malefixio + El \u00c1ngel Exterminador", venue: "K\u00d8PI", genre: "Death Rock, Post Punk", description: "Konzert im K (A): Malefixio (Death Rock Post Punk, Barcelona) and El \u00c1ngel Exterminador (Post Dark Punk Wave, Berlin).", link: "https://mobilize.berlin/events/7eedcf53-adf0-49dd-9915-fea5cfea1ef2", source: "mobilize" },
+  { date: "2026-12-04", time: "21:00", title: "Special Forces + Party Force + Scheisse Minelli", venue: "K\u00d8PI", genre: "Hardcore Punk", description: "Konzert im K (A): Special Forces (US Hardcore Punk, California), Party Force (US Hardcore Punk, California) and Scheisse Minelli (Punk Hardcore, Frankfurt/Main).", link: "https://mobilize.berlin/events/a2c3d15c-f2fb-4b0d-808c-1dde4cb7dcd9", source: "mobilize" },
   { date: "2026-11-07", time: "21:00", title: "Popperklopper (New Album Release Show) + Hausvabot + Ad Nauseam", venue: "Mehringhof", genre: "Punk", description: "Popperklopper (Punk, Koblenz) album release show with Hausvabot (Punk, Berlin) and Ad Nauseam (Punk, Bremen), plus DJ aftershow.", link: "https://mobilize.berlin/events/2c4eca7d-4b95-48f0-ab78-f81bd9ccb28c", source: "mobilize" },
   { date: "2026-11-28", time: "21:00", title: "The Zips + The Melmacs + Erotic Devices", venue: "Clash", prevVenue: "Mehringhof", genre: "Punk", price: "AK 20,- \u20ac", description: "Gers, Olli & Stefan Birthday Bash: The Zips (Punk Rock, Glasgow), The Melmacs (Power Pop Punk, Dresden), Erotic Devices (Punk Rock, Berlin), with DJ aftershow.", link: "https://mobilize.berlin/events/9f748660-d440-43b7-b835-6efaff0ec776", source: "mobilize" },
   { date: "2026-11-05", time: "17:00", title: "Lithuanian Cinema Goes Berlin - Day 1", venue: "ACUD Kino & Sputnik Kino", price: "Ticketed", category: "Cinema", description: "16th edition of the Lithuanian film festival, motto 'Come closer': award-winning features, short film series and Q&As at ACUD Kino and Sputnik Kino.", link: "http://ltkinogoesberlin.de", source: "web" },
@@ -3328,7 +3335,6 @@ var MB_GENRES = {
   "bloc party": "indie rock, alternative rock, post-punk revival",
   "blondshell": "indie rock, grunge, alternative rock",
   "blood red shoes": "garage rock, indie rock, alternative rock",
-  "blood": "deathgrind, grindcore",
   "bloody hawk": "hip hop",
   "bluthund": "rap metal",
   "bojan": "hip hop",
@@ -3387,7 +3393,6 @@ var MB_GENRES = {
   "codefendants": "folk punk, hip hop, rap rock",
   "coilguns": "mathcore, post-hardcore, sludge metal",
   "comeback kid": "hardcore punk, melodic hardcore",
-  "conny": "levenslied",
   "cr7z": "hip hop",
   "crashdiet": "glam rock, hard rock",
   "crush 40": "hard rock",
@@ -3474,7 +3479,6 @@ var MB_GENRES = {
   "elif": "pop, pop rap",
   "elisabeth leonskaja": "classical",
   "ella eyre": "alternative r&b, neo soul",
-  "elle": "blues rock, alternative country, americana",
   "elmiene": "r&b",
   "eluveitie": "folk metal, melodic death metal, celtic metal",
   "el\u00e4kel\u00e4iset": "humppa",
@@ -3507,7 +3511,6 @@ var MB_GENRES = {
   "fat dog": "dance-punk, ebm, new rave",
   "fatoni": "hip hop",
   "feeble little horse": "indie rock, noise pop, shoegaze",
-  "ferris": "hip hop",
   "fink": "blues, dub, indie folk",
   "first aid kit": "indie folk, folk, folk rock",
   "fischer-z": "rock",
@@ -3521,7 +3524,6 @@ var MB_GENRES = {
   "forced to mode": "synth-pop",
   "foreigner": "rock, pop rock, aor",
   "forever pavot": "electronic, krautrock, production music",
-  "frankie": "traditional pop, western",
   "french 79": "electronic, pop, french house",
   "freya ridings": "soul",
   "freya skye": "pop",
@@ -3585,7 +3587,6 @@ var MB_GENRES = {
   "herbert pixner projekt": "folk",
   "heretoir": "blackgaze, shoegaze",
   "hermanos guti\u00e9rrez": "ambient americana, cumbia, cumbia mexicana",
-  "hey": "rock",
   "heylucas": "electronic, dance",
   "hgich.t": "electropop, goa trance, techno",
   "high fade": "dance, disco, funk",
@@ -3660,7 +3661,6 @@ var MB_GENRES = {
   "kassa overall": "hip hop, jazz, r&b",
   "kate ryan": "dance, dance-pop, electronic",
   "kati k": "alternative pop",
-  "kay": "jazz, vocal jazz",
   "kayef": "hip hop",
   "kc rebell": "hip hop, trap",
   "kehlani": "hip hop, neo soul, pop",
@@ -3673,7 +3673,6 @@ var MB_GENRES = {
   "kim wilde": "pop, synth-pop, dance-pop",
   "king buffalo": "stoner rock, desert rock, heavy psych",
   "kingfishr": "folk",
-  "kitty": "country, traditional country, country gospel",
   "klone": "progressive metal, metal, death metal",
   "kmfdm": "industrial rock, electro-industrial, industrial",
   "knitting": "indie rock",
@@ -3722,7 +3721,6 @@ var MB_GENRES = {
   "lucy bedroque": "cloud rap, digicore, hyperpop",
   "lugatti": "hip hop",
   "luka bloom": "folk",
-  "luna": "rock, alternative rock, gothic",
   "lune": "hip hop, trap",
   "lychee lassi": "avant-garde jazz, instrumental hip hop",
   "lynnic": "deep house, house, melodic house",
@@ -3853,7 +3851,6 @@ var MB_GENRES = {
   "paula paula": "indie pop",
   "peter hammill": "art rock, rock, progressive rock",
   "peter kraus": "rock and roll, schlager",
-  "peter": "art rock, pop rock, progressive rock",
   "philip sayce": "blues rock",
   "phoebe bridgers": "singer-songwriter, indie folk, indie rock",
   "pierre-laurent aimard": "classical",
@@ -4053,7 +4050,6 @@ var MB_GENRES = {
   "tingvall trio": "jazz",
   "tinie tempah": "grime",
   "tir nan og": "folk rock, irish folk",
-  "tito": "jazz, latin, latin jazz",
   "to athena": "singer-songwriter",
   "tokio hotel": "pop rock, electropop, electronic",
   "tokyo tea room": "dream pop",
@@ -4732,7 +4728,6 @@ var MB_GENRES = {
   "sharp pins": "indie rock",
   "she wants revenge": "post-punk revival, dark wave, alternative dance",
   "shearwater": "alternative rock",
-  "shelter": "reggae, dub",
   "sind": "alternative rock",
   "sinem": "alternative rock, soul",
   "siovo": "pop",
@@ -5222,8 +5217,9 @@ SUBGENRES.forEach(function (s) { SUB_RE[s.label] = s.re; });
 const CATEGORIES = ["All", "Music", "Theatre", "Art", "Cinema"];
 //  Localized category labels (display only; data-cat values stay English - 20 Oct 2026, Andrea request) 
 const CAT_LBL = {
-  de: { "All": "Alle", "Music": "Musik", "Theatre": "Theater", "Art": "Kunst", "Cinema": "Kino" },
-  it: { "All": "Tutti", "Music": "Musica", "Theatre": "Teatro", "Art": "Arte", "Cinema": "Cinema" },
+  en: { "All": "All", "Music": "Music", "Theatre": "Performing Arts", "Art": "Art", "Cinema": "Cinema" },
+  de: { "All": "Alle", "Music": "Musik", "Theatre": "Performing Arts", "Art": "Kunst", "Cinema": "Kino" },
+  it: { "All": "Tutti", "Music": "Musica", "Theatre": "Performing Arts", "Art": "Arte", "Cinema": "Cinema" },
 };
 const catLbl = (c) => (CAT_LBL[S.lang] && CAT_LBL[S.lang][c]) || c;
 
@@ -5237,7 +5233,21 @@ const S = {
 };
 const today = new Date().toISOString().slice(0, 10);
 const $ = (id) => document.getElementById(id);
-const LAST_UPDATED = "21 October 2026";
+const LAST_UPDATED = "22 October 2026";
+// Localized display of the date above (the const itself stays English "D Month YYYY" - weekly automation rule).
+// German "22. Oktober 2026", Italian "22 ottobre 2026"; any other language and parse failures fall back to the const.
+const UPD_MONTHS = {
+  de: ["Januar", "Februar", "M\u00e4rz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+  it: ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"],
+};
+const updDate = (lang) => {
+  const m = LAST_UPDATED.match(/^(\d{1,2}) (\w+) (\d{4})$/);
+  const en = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  if (!m || en.indexOf(m[2]) === -1) return LAST_UPDATED;
+  if (lang === "de") return m[1] + ". " + UPD_MONTHS.de[en.indexOf(m[2])] + " " + m[3];
+  if (lang === "it") return m[1] + " " + UPD_MONTHS.it[en.indexOf(m[2])] + " " + m[3];
+  return LAST_UPDATED;
+};
 
 //  Venue links (single source of truth) 
 // Event-specific links (mobilize/web) take precedence; otherwise the venue's site is used.
@@ -5331,6 +5341,7 @@ const VENUE_LINKS = {
   "Baketown": "https://baketown.berlin/",
   "Artistania": "https://www.artistania.org/",
   "ACUD Club": "https://www.acud.de/",
+  "Filmtheater am Friedrichshain": "https://www.yorck.de/kinos/filmtheater-am-friedrichshain",
   "Little Stage: CAROLINA LEE": "https://littlestageclubneukoelln.wordpress.com/",
   "Little Stage: Gur Liraz Trio": "https://littlestageclubneukoelln.wordpress.com/",
   "Little Stage: Hear Now Where": "https://littlestageclubneukoelln.wordpress.com/",
@@ -5373,6 +5384,7 @@ const VENUE_LINKS = {
   "Passionskirche": "https://www.kght.de/informieren/unsere-orte/passionskirche",
   "Quasimodo": "https://quasimodo.club/en/",
   "KM28": "https://www.km28.de/",
+  "K\u00d8PI": "https://koepi137.de/",
   "S\u00e4\u00e4lchen": "https://ra.co/clubs/183948",
   "Lindenpark Potsdam": "https://lindenpark.de/",
   "Philharmonie": "https://www.berliner-philharmoniker.de/en/",
@@ -5401,6 +5413,7 @@ const VENUE_LINKS = {
   "HAU Hebbel am Ufer": "https://www.hebbel-am-ufer.de/en/",
   "Sophiens\u00e6le": "https://sophiensaele.com/en/",
   "Schaub\u00fchne": "https://www.schaubuehne.de/de/spielplan/programm.html",
+  "Schaubude Berlin": "https://www.schaubude.com/en/",
   "Berliner Ensemble": "https://www.berliner-ensemble.de/spielplan",
   "Radialsystem": "https://www.radialsystem.de/de/programm/programm/",
   "Kino Babylon": "https://babylonberlin.eu/programm",
@@ -5456,7 +5469,7 @@ const LANGS = {
     free: "Free / donation only", access: "Accessible or smoke-free only", source: "Source", district: "District",
     price: "Price range (events with a price only)", genre: "Genre", tonight: "Today", favs: "\u2b50 Favorites", all: "All", unknownGenre: "Genre not yet identified",
     unkHidden: (n) => n + " music events without a known genre are hidden \u2014 include them?", unkInclude: "Include", unkHide: "Hide them", coverNote: "Cover / tribute band", postponedNote: "Postponed \u2014 new date to be announced", venueChanged: (v) => "Venue changed \u2014 previously: " + v, dateChanged: (d) => "Date changed \u2014 previously: " + d, noLink: "No link available for this event \u2014 sorry",
-    subTitle: "A minimal digest of concerts, theatre, art and cinema in Berlin \u2014 gathered from independent sources",
+    subTitle: "A minimal digest of concerts, performing arts, art and cinema in Berlin \u2014 gathered from independent sources",
     calHint: "Save any event straight to your calendar",
     count: (v, d) => (d === "archive" ? "Archive" : "Upcoming") + " \u00b7 " + v + " events",
     empty: "Nothing matches \u2014 try another day, search or filter.",
@@ -5490,7 +5503,7 @@ const LANGS = {
     free: "Nur frei / Spende", access: "Nur barrierefrei oder rauchfrei", source: "Quelle", district: "Bezirk",
     price: "Preisspanne (nur Events mit Preis)", genre: "Genre", tonight: "Heute", favs: "\u2b50 Favoriten", all: "Alle", unknownGenre: "Genre noch nicht identifiziert",
     unkHidden: (n) => n + " Musik-Events ohne bekanntes Genre sind ausgeblendet \u2014 einblenden?", unkInclude: "Einblenden", unkHide: "Ausblenden", coverNote: "Cover-/Tribute-Band", postponedNote: "Verschoben \u2014 neuer Termin wird bekannt gegeben", venueChanged: (v) => "Ort ge\u00e4ndert \u2014 vorher: " + v, dateChanged: (d) => "Termin ge\u00e4ndert \u2014 vorher: " + d, noLink: "Kein Link f\u00fcr diese Veranstaltung verf\u00fcgbar \u2014 Entschuldigung",
-    subTitle: "Ein minimales Digest von Konzerten, Theater, Kunst und Kino in Berlin \u2014 aus unabh\u00e4ngigen Quellen zusammengetragen",
+    subTitle: "Ein minimales Digest von Konzerten, Performing Arts, Kunst und Kino in Berlin \u2014 aus unabh\u00e4ngigen Quellen zusammengetragen",
     calHint: "Speichere jede Veranstaltung direkt in deinem Kalender",
     count: (v, d) => (d === "archive" ? "Archiv" : "Bevorstehend") + " \u00b7 " + v + " Veranstaltungen",
     empty: "Nichts gefunden \u2014 anderen Tag, Suche oder Filter probieren.",
@@ -5524,7 +5537,7 @@ const LANGS = {
     free: "Solo gratuiti / offerta", access: "Solo accessibili o senza fumo", source: "Fonte", district: "Quartiere",
     price: "Fascia di prezzo (solo eventi con prezzo)", genre: "Genere", tonight: "Oggi", favs: "\u2b50 Preferiti", all: "Tutti", unknownGenre: "Genere non ancora identificato",
     unkHidden: (n) => n + " eventi musicali senza genere noto sono nascosti \u2014 includerli?", unkInclude: "Includili", unkHide: "Nascondili", coverNote: "Cover / tribute band", postponedNote: "Posticipato \u2014 nuova data da annunciare", venueChanged: (v) => "Venue cambiata \u2014 prima: " + v, dateChanged: (d) => "Data cambiata \u2014 prima: " + d, noLink: "Nessun link disponibile per questo evento \u2014 scusa",
-    subTitle: "Un digest essenziale di concerti, teatro, arte e cinema a Berlino \u2014 raccolto da fonti indipendenti",
+    subTitle: "Un digest essenziale di concerti, arti performative, arte e cinema a Berlino \u2014 raccolto da fonti indipendenti",
     calHint: "Salva ogni evento direttamente nel tuo calendario",
     count: (v, d) => (d === "archive" ? "Archivio" : "In arrivo") + " \u00b7 " + v + " eventi",
     empty: "Nessun risultato \u2014 prova un altro giorno, ricerca o filtro.",
@@ -5587,6 +5600,7 @@ function applyLang() {
   $("visitLbl").textContent = t.visits;
   // Full-site localization (20 Oct 2026, Andrea request): every static English text follows the language
   document.querySelectorAll(".updLbl").forEach((el) => { el.textContent = t.updLbl; });
+  document.querySelectorAll(".lastupdated").forEach((el) => { el.textContent = updDate(S.lang); });
   $("srcLink").title = t.srcLinkTitle;
   $("totLbl").textContent = t.totLbl;
   $("disclaimerP").innerHTML = t.disclaimer;
@@ -5622,6 +5636,7 @@ const VENUES = {
   "Bethaniendamm": ["Bethaniendamm 28, 10997 Berlin", "Kreuzberg"],
   "90mil": ["Krossener Str. 42, 10245 Berlin", "Friedrichshain"],
   "ACUD Kunsthaus": ["Veteranenstra\u00dfe 21, 10119 Berlin", "Mitte"],
+  "Filmtheater am Friedrichshain": ["B\u00f6tzowstra\u00dfe 1-5, 10407 Berlin", "Prenzlauer Berg"],
   "Admiralspalast": ["Friedrichstra\u00dfe 101, 10117 Berlin", "Mitte"],
   "Archiv Potsdam": ["Leipziger Stra\u00dfe 60, 14773 Potsdam", "Potsdam"],
   "Artistania": ["Neckarstra\u00dfe 19, 12053 Berlin", "Neuk\u00f6lln"],
@@ -5669,6 +5684,7 @@ const VENUES = {
   "Kino Zukunft": ["Alt-Stralau 68, 10245 Berlin", "Friedrichshain"],
   "Kieztreff Kamine": ["Prinzenallee 58, 13359 Berlin", "Wedding"],
   "KM28": ["Karl-Marx-Stra\u00dfe 28, 12043 Berlin", "Neuk\u00f6lln"],
+  "K\u00d8PI": ["K\u00f6penicker Str. 137, 10179 Berlin", "Mitte"],
   "Kulturbrauerei": ["Sch\u00f6nhauser Allee 36, 10435 Berlin", "Prenzlauer Berg"],
   "Kulturhaus Insel": ["Alt-Treptow 6, 12435 Berlin", "Alt-Treptow"],
   "Lark": ["Holzmarktstra\u00dfe 15-18, 10179 Berlin", "Friedrichshain"],
@@ -5733,6 +5749,7 @@ const VENUES = {
   "HAU Hebbel am Ufer": ["Hallesches Ufer 32, 10963 Berlin", "Kreuzberg"],
   "Sophiens\u00e6le": ["Sophienstra\u00dfe 18, 10178 Berlin", "Mitte"],
   "Schaub\u00fchne": ["Kurf\u00fcrstendamm 153, 10709 Berlin", "Charlottenburg"],
+  "Schaubude Berlin": ["Greifswalder Str. 81-84, 10405 Berlin", "Prenzlauer Berg"],
   "Berliner Ensemble": ["Bertolt-Brecht-Platz 1, 10117 Berlin", "Mitte"],
   "Radialsystem": ["Holzmarktstra\u00dfe 33, 10243 Berlin", "Friedrichshain"],
   "Kino Babylon": ["Rosa-Luxemburg-Stra\u00dfe 18, 10178 Berlin", "Mitte"],
@@ -5781,6 +5798,7 @@ const VENUES = {
 const VENUE_ALIASES = {
   "ACUD Club": "ACUD Kunsthaus",
   "ACUD Kino & Sputnik Kino": "ACUD Kunsthaus",
+  "Filmtheater am Friedrichshain, ACUD Kino & more": "Filmtheater am Friedrichshain",
   "Kantine Berghain": "Berghain Kantine",
   "Kantine am Berghain": "Berghain Kantine",
   "@ Kantine am Berghain": "Berghain Kantine",
@@ -6003,7 +6021,7 @@ function readHash() {
 // \u2500\u2500 Derived data \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 const DEDUP = dedupe(EVENTS);
 $("tot").textContent = DEDUP.length;
-document.querySelectorAll(".lastupdated").forEach(function (el) { el.textContent = LAST_UPDATED; });
+document.querySelectorAll(".lastupdated").forEach(function (el) { el.textContent = updDate(S.lang); });
 var IMP_NAME = [65,110,100,114,101,97,32,80,105,114,97,115,60,98,114,62,90,119,105,110,103,108,105,115,116,114,97,223,101,32,50,54,60,98,114,62,49,48,53,53,53,32,66,101,114,108,105,110,60,98,114,62,68,101,117,116,115,99,104,108,97,110,100];
 var IMP_CONTACT = [69,45,77,97,105,108,58,32,119,111,105,98,46,97,111,51,100,98,64,112,97,115,115,105,110,98,111,120,46,99,111,109];
 var IMP_RESP = [65,110,100,114,101,97,32,80,105,114,97,115,44,32,65,110,115,99,104,114,105,102,116,32,119,105,101,32,111,98,101,110];
