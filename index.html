@@ -15,7 +15,7 @@
      switches smoothly instead of body only. The class is added/removed by the themeBtn listener;
      never leave it permanent. */
   body.theming, body.theming *, body.theming *::before, body.theming *::after {
-    transition: background-color .15s ease, background .15s ease, color .15s ease, border-color .15s ease, box-shadow .15s ease, fill .15s ease, stroke .15s ease, opacity .15s ease !important;
+    transition: background-color .15s ease, color .15s ease, border-color .15s ease !important;
   }
   @media (prefers-reduced-motion: reduce) { body.theming *, body.theming, body.theming *::before, body.theming *::after { transition: none !important; } }
   body.dark { background: #0a0a0a; color: #f5f5f5; }
@@ -6066,7 +6066,10 @@ function filtered() {
     const okCat = S.category === "All" || e.category === S.category || (S.category === "Music" && !e.category);
     const unknownMusic = (e.category === "Music" || !e.category) && !genreOf(e) && !isCover(e); // genreless music events pass genre filters here; renderList hides them unless S.unkOn (banner lets the user include them); cover/tribute acts are out of scope
     const okGenre = S.genre === "All" || unknownMusic || splitGenres(genreOf(e)).some((g) => genreToMacro(g) === S.genre);
-    const okSub = S.subGenre === "All" || unknownMusic || splitGenres(genreOf(e)).some((g) => SUB_RE[S.subGenre].test(g.toLowerCase()));
+    //  Multi-subgenre selection (22 Oct 2026, Andrea request): S.subGenre holds a comma-joined list
+    //  of subgenre labels (or "All"). An event matches if it hits ANY of the selected subgenres (OR).
+    const subSel = S.subGenre === "All" ? [] : S.subGenre.split(",").map((s) => s.trim()).filter((s) => SUB_RE[s]);
+    const okSub = S.subGenre === "All" || unknownMusic || (subSel.length > 0 && splitGenres(genreOf(e)).some((g) => { const gl = g.toLowerCase(); return subSel.some((s) => SUB_RE[s].test(gl)); }));
     const okFree = !S.freeOnly || /free|0 \u20ac|donation|spende/i.test(e.price || "");
     const p = parsePrice(e.price);
     const okPrice = !priceActive || (p !== null && (pm === null || p.max >= pm) && (px === null || p.min <= px));
@@ -6174,11 +6177,11 @@ function eventRow(e, i) {
       if (ix >= 0) {
         const pre = nm.slice(0, ix).trim(), post = nm.slice(ix + art.length).trim();
         return (pre ? `<span class="evsep"${col}>${esc(pre)}</span> ` : "")
-          + `<span class="evart">${nameA(nm.slice(ix, ix + art.length))} ${aply(nm.slice(ix, ix + art.length))}</span>`
+          + `<span class="evart">${nameA(nm.slice(ix, ix + art.length))}\u00a0${aply(nm.slice(ix, ix + art.length))}</span>`
           + (post ? ` <span class="evsep"${col}>${esc(post)}</span>` : "");
       }
     }
-    return `<span class="evart">${nameA(nm)} ${aply(nm)}</span>`;
+    return `<span class="evart">${nameA(nm)}\u00a0${aply(nm)}</span>`;
   };
   const renderArtists = function (str, plain) {
     if (!isMus) return nameA(String(str || ""));
@@ -6187,6 +6190,10 @@ function eventRow(e, i) {
     const parts = raw.split(ART_SEG);
     const segs = [];
     for (let k = 0; k < parts.length; k += 2) { const nm = (parts[k] || "").trim(); if (nm) segs.push(nm); }
+    //  Joint-band-name guard (22 Oct 2026, Andrea report "Florian Paul & die Kapelle der letzten Hoffnung"):
+    //  "Name & die/der/das ..." is ONE band name (German joint-band pattern), NOT two artists - keep it
+    //  whole so the play button searches the full band name instead of two broken fragments.
+    if (segs.length === 2 && /^(die|der|das|eine|meine|deine)\s/i.test(segs[1])) return renderSeg(raw.trim());
     if (segs.length < 2 || segs.some((nm) => nm.length < 3)) return renderSeg(raw.trim());
     let out = "";
     for (let k = 0; k < parts.length; k++) {
@@ -6255,11 +6262,22 @@ function renderChips() {
     const subs = availableSubs();
     if (S.genre !== "All" && subs.length > 0) {
       sg.style.display = "flex";
-      sg.innerHTML = `<button class="subchip${S.subGenre === "All" ? " on" : ""}" data-sg="All">All ${esc(S.genre)}</button>` +
+      //  Multi-subgenre chips (22 Oct 2026): toggle each subgenre on/off; "All [genre]" clears the selection.
+      const sel = S.subGenre === "All" ? [] : S.subGenre.split(",").map((s) => s.trim());
+      sg.innerHTML = `<button class="subchip${sel.length === 0 ? " on" : ""}" data-sg="All">All ${esc(S.genre)}</button>` +
         subs.map(([l, c]) =>
-          `<button class="subchip${S.subGenre === l ? " on" : ""}" data-sg="${esc(l)}">${esc(l)} <span class="cnt">${c}</span></button>`).join("");
+          `<button class="subchip${sel.indexOf(l) !== -1 ? " on" : ""}" data-sg="${esc(l)}">${esc(l)} <span class="cnt">${c}</span></button>`).join("");
       sg.querySelectorAll("[data-sg]").forEach((b) =>
-        b.addEventListener("click", () => { S.subGenre = b.dataset.sg; renderAll(); }));
+        b.addEventListener("click", () => {
+          if (b.dataset.sg === "All") { S.subGenre = "All"; }
+          else {
+            const list = S.subGenre === "All" ? [] : S.subGenre.split(",").map((s) => s.trim());
+            const i = list.indexOf(b.dataset.sg);
+            if (i !== -1) list.splice(i, 1); else list.push(b.dataset.sg);
+            S.subGenre = list.length ? list.join(",") : "All";
+          }
+          renderAll();
+        }));
     } else { sg.style.display = "none"; sg.innerHTML = ""; }
   } else { gm.classList.remove("open"); sg.style.display = "none"; sg.innerHTML = ""; }
 }
@@ -6373,7 +6391,14 @@ $("themeBtn").addEventListener("click", () => {
   renderAll();
 });
 $("archChk").addEventListener("change", (e) => { S.view = e.target.checked ? "archive" : "upcoming"; S.autoArch = false; S.dayFilter = ""; $("day").value = ""; renderAll(); });
-$("q").addEventListener("input", (e) => { S.query = e.target.value; $("qClear").style.display = e.target.value ? "block" : "none"; renderAll(); });
+//  Search debounce (22 Oct 2026, Andrea request: typing felt sluggish vs normal inputs): renderAll()
+//  rebuilds the whole 2600+ event list - running it on EVERY keystroke was the lag. Now the state +
+//  clear button update instantly, the heavy render runs once 140ms after the last keystroke.
+let qDeb = null;
+$("q").addEventListener("input", (e) => {
+  S.query = e.target.value; $("qClear").style.display = e.target.value ? "block" : "none";
+  clearTimeout(qDeb); qDeb = setTimeout(renderAll, 140);
+});
 $("qClear").addEventListener("click", () => { S.query = ""; $("q").value = ""; $("qClear").style.display = "none"; renderAll(); $("q").focus(); });
 $("day").addEventListener("change", (e) => {
   S.dayFilter = e.target.value;
