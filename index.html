@@ -8,7 +8,16 @@
   :root { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
   * { box-sizing: border-box; }
   html { overflow-anchor: none; } /* disable native scroll anchoring: it fights the manual venue-filter anchoring */
-  body { margin: 0; background: #fff; color: #171717; transition: background .25s, color .25s; }
+  body { margin: 0; background: #fff; color: #171717; transition: background .15s, color .15s; }
+  /* Theme cross-fade (22 Oct 2026, Andrea request; SHORTENED to .15s same day after a friend's feedback:
+     at .25s the switch felt unresponsive on mobile and invited double-clicks). While body.theming is
+     set (200ms around a theme toggle) EVERY element cross-fades colors together, so the whole page
+     switches smoothly instead of body only. The class is added/removed by the themeBtn listener;
+     never leave it permanent. */
+  body.theming, body.theming *, body.theming *::before, body.theming *::after {
+    transition: background-color .15s ease, background .15s ease, color .15s ease, border-color .15s ease, box-shadow .15s ease, fill .15s ease, stroke .15s ease, opacity .15s ease !important;
+  }
+  @media (prefers-reduced-motion: reduce) { body.theming *, body.theming, body.theming *::before, body.theming *::after { transition: none !important; } }
   body.dark { background: #0a0a0a; color: #f5f5f5; }
   .wrap { max-width: 42rem; margin: 0 auto; padding: 0 1.5rem 6rem; }
   a { color: inherit; text-decoration: none; }
@@ -345,7 +354,7 @@
     #day { width: auto; }
     .chip { min-height: 2.35rem; padding: .35rem .8rem; }
     .row.scrollrow { margin-right: -1rem; padding-right: 1rem; }
-    #panel, #genreWrap { padding: .8rem; }
+    #panel, #genreWrap { padding: .8rem; max-height: 60vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
     .chip.action { min-height: 1.85rem; padding: .22rem .5rem; font-size: .68rem; }
     #venueChip { font-size: .68rem; padding: .22rem .5rem; }
     #genres, #subgenres { gap: .3rem; }
@@ -6353,6 +6362,10 @@ function buildDistricts() {
 }
 
 $("themeBtn").addEventListener("click", () => {
+  //  Cross-fade helper (22 Oct 2026; 200ms after mobile feedback - .25s felt unresponsive):
+  //  add .theming briefly so all elements animate the switch together, snappily.
+  document.body.classList.add("theming");
+  setTimeout(() => document.body.classList.remove("theming"), 200);
   S.theme = S.theme === "dark" ? "light" : "dark";
   try { localStorage.setItem("be-theme", S.theme); } catch (err) {}
   document.body.classList.toggle("dark", S.theme === "dark");
@@ -6449,7 +6462,12 @@ window.addEventListener("scroll", () => {
   if (scrollTicking) return;
   scrollTicking = true;
   requestAnimationFrame(() => {
-    $("controls").classList.toggle("scrolled", window.scrollY > 120);
+    //  Menu-stay-open rule (22 Oct 2026, Andrea request): while the genre bar or the filters panel
+    //  is OPEN, the controls must NOT collapse at the first pixel of scroll (the user may still be
+    //  picking genres/subgenres) - a HIGHER threshold applies; once the user really scrolls into
+    //  the list the menu gets out of the way (and reappears when scrolling back above it).
+    const menuOpen = $("genreWrap").classList.contains("open") || $("panel").classList.contains("open");
+    $("controls").classList.toggle("scrolled", window.scrollY > (menuOpen ? 340 : 120));
     updateProfileFab();
     //  Auto-close the Impressum when the user scrolls back up past it (20 Oct 2026, Andrea request):
     //  close only when the whole legal block is fully below the viewport, i.e. the reader has
