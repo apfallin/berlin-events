@@ -12,8 +12,10 @@ A single self-contained HTML page: no build step, no backend, no tracking, no de
 
 - **All of Berlin's scene in one list** — music (from DIY basement shows to major venues), theatre, dance and performance, art exhibitions and special art events, and curated arthouse cinema.
 - **Powerful filtering** — by category, genre, district, venue, price range, day (with a week strip and a date picker), free-only and accessible/smoke-free-only views, full-text search.
+- **My view** — pick your categories and music genres once; the site remembers them and shows only your events on every visit.
+- **Listen to the artists** — a play button next to every artist name opens streaming search links (Tidal, Spotify, YouTube, Apple Music, Deezer, SoundCloud, Bandcamp).
 - **Add to calendar** — one tap generates an `.ics` file with the full event details (title, venue with address, genre, price, link to the official event page).
-- **Shareable links** — copy a link that opens the site directly on a specific event.
+- **Shareable links** — copy a link that opens the site directly on a specific event, or show the QR code button to share the whole site.
 - **Favorites** — star events and keep a personal shortlist (stored in your browser, per device).
 - **Three languages** — English, Deutsch, Italiano.
 - **Dark mode** — automatic, with a manual toggle.
@@ -29,12 +31,13 @@ Just open the page. Everything runs client-side in your browser:
 
 - Tap a day on the week strip or use the 📅 date picker to see what's on.
 - Click a venue name to see everything happening there.
-- Tap the 📅 on an event row to download the calendar file, 🔗 to copy a share link, ⭐ to favorite.
+- Tap ▶ next to an artist to open streaming search links, 📅 on an event row to download the calendar file, 🔗 to copy a share link, ⭐ to favorite.
 - Click any event row to expand its address with an OpenStreetMap link.
+- Tap **My view** to save your personal categories and genres; the QR button shares the site.
 
 ## Contributing / Feedback
 
-Found a mistake, a missing event or a venue with a wrong address? Please open an issue or reach out.
+Found a mistake, a missing event or a venue with a wrong address? Please open an issue, or write to the feedback address in the site footer.
 
 ## Disclaimer
 
