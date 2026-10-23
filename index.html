@@ -6147,11 +6147,16 @@ function filtered() {
     const okDay = !S.dayFilter || e.date === S.dayFilter;
     const okCat = S.category === "All" || e.category === S.category || (S.category === "Music" && !e.category);
     const unknownMusic = (e.category === "Music" || !e.category) && !genreOf(e) && !isCover(e); // genreless music events pass genre filters here; renderList hides them unless S.unkOn (banner lets the user include them); cover/tribute acts are out of scope
-    const okGenre = S.genre === "All" || unknownMusic || splitGenres(genreOf(e)).some((g) => genreToMacro(g) === S.genre);
+    //  "multi-genre" events (mixed-format nights, multi-genre festivals, 23 Oct 2026, Andrea request):
+    //  they pass EVERY genre/subgenre filter because the lineup genuinely spans genres - the user
+    //  filtering Rap or Metal must still see them. Unlike unknownMusic they are NEVER hidden
+    //  (they carry a genre value, so the renderList unknown-hide does not apply to them).
+    const multiG = splitGenres(genreOf(e)).indexOf("multi-genre") !== -1;
+    const okGenre = S.genre === "All" || unknownMusic || multiG || splitGenres(genreOf(e)).some((g) => genreToMacro(g) === S.genre);
     //  Multi-subgenre selection (22 Oct 2026, Andrea request): S.subGenre holds a comma-joined list
     //  of subgenre labels (or "All"). An event matches if it hits ANY of the selected subgenres (OR).
     const subSel = S.subGenre === "All" ? [] : S.subGenre.split(",").map((s) => s.trim()).filter((s) => SUB_RE[s]);
-    const okSub = S.subGenre === "All" || unknownMusic || (subSel.length > 0 && splitGenres(genreOf(e)).some((g) => { const gl = g.toLowerCase(); return subSel.some((s) => SUB_RE[s].test(gl)); }));
+    const okSub = S.subGenre === "All" || unknownMusic || multiG || (subSel.length > 0 && splitGenres(genreOf(e)).some((g) => { const gl = g.toLowerCase(); return subSel.some((s) => SUB_RE[s].test(gl)); }));
     const okFree = !S.freeOnly || /free|0 \u20ac|donation|spende/i.test(e.price || "");
     const p = parsePrice(e.price);
     const okPrice = !priceActive || (p !== null && (pm === null || p.max >= pm) && (px === null || p.min <= px));
@@ -6164,7 +6169,7 @@ function filtered() {
     // Personal view ("My view"): persistent multi-category + optional music-genre selection (localStorage "be-profile").
     const okPCat = !S.pCats.length || S.pCats.indexOf(e.category || "Music") !== -1;
     const pGen = S.pGenres.length > 0 && S.pCats.indexOf("Music") !== -1;
-    const okPGen = !pGen || (e.category && e.category !== "Music") || unknownMusic ||
+    const okPGen = !pGen || (e.category && e.category !== "Music") || unknownMusic || multiG ||
       splitGenres(genreOf(e)).some((g) => S.pGenres.indexOf(genreToMacro(g)) !== -1);
     return okView && okDay && okCat && okGenre && okSub && okFree && okPrice && okQuery &&
       okFav && okAccess && okDistrict && okVenue && okPCat && okPGen;
