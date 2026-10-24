@@ -6496,7 +6496,11 @@ $("themeBtn").addEventListener("click", () => {
   //  pulse a transitional half glyph while .theming is active, land the real sun/moon when it closes.
   $("themeBtn").textContent = "\u25d0";
   setTimeout(() => { $("themeBtn").textContent = S.theme === "dark" ? "\u2600\ufe0f" : "\ud83c\udf19"; }, 200);
-  renderAll();
+  //  NO renderAll() here (24 Oct 2026, Andrea report: a fraction of a second of dead click on both
+  //  Firefox and Vivaldi, no glyph either): the theme is PURE CSS (body.dark + .dark rules) and no
+  //  rendered element depends on S.theme, so the full 2600-event list rebuild in this listener was
+  //  pure wasted work - and being synchronous it blocked the FIRST PAINT, so even the transitional
+  //  glyph could only appear after the whole list was rebuilt. Removing it makes the switch instant.
 });
 $("archChk").addEventListener("change", (e) => { S.view = e.target.checked ? "archive" : "upcoming"; S.autoArch = false; S.dayFilter = ""; $("day").value = ""; renderAll(); });
 //  Search debounce (22 Oct 2026, Andrea request: typing felt sluggish vs normal inputs): renderAll()
