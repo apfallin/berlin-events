@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -156,6 +157,11 @@
   .evart { display: inline-block; max-width: 100%; overflow-wrap: break-word; } .evsep { opacity: .75; }
   /* Inline per-artist play button: smaller halo than the old evside one, tuned for text lines */
   .aply { padding: .2rem .28rem; margin: 0; font-size: .85rem; }
+  /* Name+play-button pair (24 Oct 2026, Andrea report: the play button STILL dropped alone to the next
+     line under "Maedchenname Mademann" / "Doomed Metropolis II" on Chromium-based mobile browsers): Chromium
+     allows a line break between a no-break space and an inline-block, ignoring the no-break-space fix of 22 Oct.
+     white-space:nowrap on this wrapper removes that break opportunity, so the button can never be alone. */
+  .artbtn { white-space: nowrap; }
   /* Right button cell (20 Oct 2026, Andrea request: play/calendar/link in an autonomous cell on the right,
      stacked vertically, detached from the text/venue block - all events show the buttons on the same column);
      the halo of the playbtn keeps only its horizontal negative margins inside the column */
@@ -6264,11 +6270,11 @@ function eventRow(e, i) {
       if (ix >= 0) {
         const pre = nm.slice(0, ix).trim(), post = nm.slice(ix + art.length).trim();
         return (pre ? `<span class="evsep"${col}>${esc(pre)}</span> ` : "")
-          + `<span class="evart">${nameA(nm.slice(ix, ix + art.length))}\u00a0${aply(nm.slice(ix, ix + art.length))}</span>`
+          + `<span class="evart">${nameA(nm.slice(ix, ix + art.length))}<span class="artbtn">\u00a0${aply(nm.slice(ix, ix + art.length))}</span></span>`
           + (post ? ` <span class="evsep"${col}>${esc(post)}</span>` : "");
       }
     }
-    return `<span class="evart">${nameA(nm)}\u00a0${aply(nm)}</span>`;
+    return `<span class="evart">${nameA(nm)}<span class="artbtn">\u00a0${aply(nm)}</span></span>`;
   };
   const renderArtists = function (str, plain) {
     if (!isMus) return nameA(String(str || ""));
