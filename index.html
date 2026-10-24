@@ -230,12 +230,10 @@
   #resetBtn:hover { color: #fff; transform: scale(1.05); }
   body.dark #resetBtn { background: #e5e5e5; color: #171717; border-color: #e5e5e5; }
   body.dark #resetBtn:hover { color: #171717; }
-  .updated-badge { display: inline-flex; align-items: center; margin-top: .35rem !important;
-    font-size: .72rem !important; font-weight: 400; color: #16a34a;
-    border-radius: 999px; padding: .25rem .2rem .25rem 0; background: transparent; }
+  /* Last-updated badge (24 Oct 2026, Andrea request): now INLINE in the Sources* title line, green
+     parenthesized date right after the word (asterisk first, dot removed) - no standalone line */
+  .updated-badge { font-size: .72rem !important; font-weight: 400; color: #16a34a; }
   body.dark .updated-badge { color: #4ade80; }
-  .updated-badge .dot { display: inline-block; margin: 0 .55rem 0 .8rem; width: .4rem; height: .4rem;
-    border-radius: 999px; background: currentColor; flex-shrink: 0; }
   #disclaimerP { scroll-margin-top: 10rem; } /* srcLink: fallback margin; the listener also subtracts the live controls height */
   .disclaimer { border-left: 4px solid #f59e0b; background: #fffbeb; color: #78350f;
     border-radius: .5rem; padding: .6rem .8rem; margin-top: .75rem; font-weight: 500; font-size: .78rem; }
@@ -511,8 +509,7 @@
     <p>Berlin Events &#183; Berlin-Gigs community pad + mytrueintent.blogspot.com + web picks &#183; <span id="tot"></span><span id="totLbl"> events, deduplicated</span></p>
     <p id="stats" class="mini-label" style="margin-bottom:.5rem"></p>
     <p class="disclaimer" id="disclaimerP">&#9888;&#65039; <strong>This site does not claim to list every event in Berlin &#8212; that would be impossible &#8212; but tries to cover as much of the scene as possible; it is compiled automatically from the sources below, not reviewed by a human event by event.</strong> Always double-check dates, times and tickets with the organizers or venues before going. The genres shown are assigned automatically and may sometimes be inaccurate. This site aggregates external sources and assumes no responsibility for errors, changes or cancellations.</p>
-    <p class="src-title"><span id="srcTitle">Sources</span> <b style="font-size:.9rem">*</b></p>
-    <p class="updated-badge"><span class="dot"></span><span class="updLbl">Sources last updated: </span><span class="lastupdated">8 October 2026</span></p>
+    <p class="src-title"><b style="font-size:.9rem">*</b> <span id="srcTitle">Sources</span> <span class="updated-badge">(<span class="updLbl">last updated: </span><span class="lastupdated">23 October 2026</span>)</span></p>
     <p id="srcGigsP"><strong>&#128241; Gigs</strong> &#8212; the <em>Berlin-Gigs</em> community pad, a DIY list of concerts with time, price, genre, smoke-free and wheelchair info.</p>
     <p id="srcMtiP"><strong>&#127928; MTI</strong> &#8212; <a href="https://mytrueintent.blogspot.com" target="_blank" rel="noreferrer">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog, imported from its spreadsheet export.</p>
     <p id="srcMobP"><strong>&#127914; Mob</strong> &#8212; <a href="https://mobilize.berlin" target="_blank" rel="noreferrer">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.</p>
@@ -3147,7 +3144,6 @@ const EVENTS = [
   { date: "2026-10-20", time: "19:30", title: "Korea Independent 2026: Opening \u2014 Becoming Kim + Q&A", venue: "Kino Babylon", price: "Ticketed", category: "Cinema", description: "Opening film of the Korean independent film festival, with Q&A afterwards; festival runs until 25 Oct.", link: "https://babylonberlin.eu/programm", source: "web" },
   { date: "2026-10-22", time: "19:30", title: "MetFilm @Babylon: We Are the Best!", venue: "Kino Babylon", price: "Ticketed", category: "Cinema", description: "Lukas Moodysson's 2013 punk classic (OmeU).", link: "https://babylonberlin.eu/programm", source: "web" },
   { date: "2026-10-23", time: "17:30", title: "Korea Independent: Time of Cinema (OmeU)", venue: "Kino Babylon", price: "Ticketed", category: "Cinema", description: "Jongpil Lee, Gaeun Yoon and Kunjae Jang's documentary on Korean cinema history, within Korea Independent 2026.", link: "https://babylonberlin.eu/programm", source: "web" },
-  { date: "2026-10-29", time: "19:30", title: "The Exorcist: Director's Cut", venue: "Kino Babylon", price: "Ticketed", category: "Cinema", description: "William Friedkin's 1973 horror classic, director's cut, on the big screen.", link: "https://babylonberlin.eu/programm", source: "web" },
   { date: "2026-10-29", time: "20:00", title: "MetFilm @Babylon: A Separation (OmeU)", venue: "Kino Babylon", price: "Ticketed", category: "Cinema", description: "Asghar Farhadi's Oscar-winning 2011 drama.", link: "https://babylonberlin.eu/programm", source: "web" },
 
   // \u2500\u2500 Live source test run, 11 Oct 2026 (Ballhaus Ost, Ballhaus Naunynstra\u00dfe, Kino Arsenal, Kino Zukunft) \u2500\u2500
@@ -5571,7 +5567,7 @@ const LANGS = {
     profileHint: "Choose once what interests you \u2014 this will be remembered on this device and the site will always open showing only these events. You can change or remove it at any time via the \"My view\" chip or this button.",
     profileChip: (c, g) => "Your view: " + c + (g ? " \u00b7 " + g : ""),
     visits: "visits since October 2026",
-    updLbl: "Sources last updated: ", srcLinkTitle: "About the sources", totLbl: " events, deduplicated",
+    updLbl: "last updated: ", srcLinkTitle: "About the sources", totLbl: " events, deduplicated",
     mostVenue: (v, n) => "Most active venue: " + v + " (" + n + ")",
     disclaimer: "&#9888;&#65039; <strong>This site does not claim to list every event in Berlin \u2014 that would be impossible \u2014 but tries to cover as much of the scene as possible; it is compiled automatically from the sources below, not reviewed by a human event by event.</strong> Always double-check dates, times and tickets with the organizers or venues; the genres shown are assigned automatically and may sometimes be inaccurate; report errors or missing events via the source links. No responsibility is assumed for errors, changes or cancellations.",
     srcTitle: "Sources",
@@ -5607,7 +5603,7 @@ const LANGS = {
     profileHint: "W\u00e4hle einmal aus, was dich interessiert \u2014 das wird auf diesem Ger\u00e4t gespeichert und die Seite zeigt k\u00fcnftig nur diese Veranstaltungen. \u00dcber den \"Meine Ansicht\"-Chip oder diesen Button kannst du es jederzeit \u00e4ndern oder entfernen.",
     profileChip: (c, g) => "Deine Ansicht: " + c + (g ? " \u00b7 " + g : ""),
     visits: "Besuche seit Oktober 2026",
-    updLbl: "Quellen zuletzt aktualisiert: ", srcLinkTitle: "\u00dcber die Quellen", totLbl: " Veranstaltungen, dedupliziert",
+    updLbl: "zuletzt aktualisiert: ", srcLinkTitle: "\u00dcber die Quellen", totLbl: " Veranstaltungen, dedupliziert",
     mostVenue: (v, n) => "Aktivste Venue: " + v + " (" + n + ")",
     disclaimer: "&#9888;&#65039; <strong>Diese Seite erhebt nicht den Anspruch, jede Veranstaltung in Berlin aufzulisten \u2014 das w\u00e4re unm\u00f6glich \u2014, sondern versucht, die Szene so weit wie m\u00f6glich abzudecken; sie wird automatisch aus den unten genannten Quellen zusammengestellt und nicht einzeln von Hand gepr\u00fcft.</strong> Datum, Uhrzeit und Tickets immer bei den Veranstaltern oder Venues pr\u00fcfen; die angegebenen Genres werden automatisch zugeordnet und k\u00f6nnen mitunter ungenau oder falsch sein; Fehler bitte \u00fcber die Quell-Links melden. Keine Haftung f\u00fcr Fehler, \u00c4nderungen oder Absagen.",
     srcTitle: "Quellen",
@@ -5643,7 +5639,7 @@ const LANGS = {
     profileHint: "Scegli una volta cosa ti interessa \u2014 verr\u00e0 ricordato su questo dispositivo e il sito si aprir\u00e0 sempre mostrando solo questi eventi. Puoi cambiarlo o rimuoverlo in qualsiasi momento tramite il chip \"La mia vista\" o questo pulsante.",
     profileChip: (c, g) => "La tua vista: " + c + (g ? " \u00b7 " + g : ""),
     visits: "visite da ottobre 2026",
-    updLbl: "Ultimo aggiornamento fonti: ", srcLinkTitle: "Info sulle fonti", totLbl: " eventi, deduplicati",
+    updLbl: "ultimo aggiornamento: ", srcLinkTitle: "Info sulle fonti", totLbl: " eventi, deduplicati",
     mostVenue: (v, n) => "Venue pi\u00f9 attiva: " + v + " (" + n + ")",
     disclaimer: "&#9888;&#65039; <strong>Questo sito non ha la pretesa di includere tutti gli eventi di Berlino \u2014 sarebbe impossibile \u2014 ma cerca di coprire la scena il pi\u00f9 possibile; \u00e8 compilato automaticamente dalle fonti qui sotto, senza revisione umana evento per evento.</strong> Verifica sempre date, orari e biglietti con gli organizzatori o le venue; i generi indicati vengono assegnati automaticamente e possono a volte risultare imprecisi o errati; segnala errori o mancanze tramite i link alle fonti. Nessuna responsabilit\u00e0 per errori, cambi o annullamenti.",
     srcTitle: "Fonti",
