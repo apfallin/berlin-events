@@ -183,7 +183,15 @@
   .evtitle:hover { text-decoration: underline; }
   .evartists { display: block; margin-top: .15rem; }
   .meta { font-size: .85rem; color: #737373; margin-top: .15rem; }
-  .flags { margin-left: .5rem; font-size: .75rem; }
+  .flags { margin-left: .5rem; }
+  /* Venue tags (25 Oct 2026, Andrea request: the cryptpad smoke-free/wheelchair emoji read as decoration
+     - clear TEXT tags now, localized via LANGS sfTag/wcTag): small pills, green = smoke-free, blue = wheelchair. */
+  .flags .tag { display: inline-block; border-radius: .3rem; padding: .05rem .3rem; font-size: .6rem;
+    font-weight: 600; letter-spacing: .02em; text-transform: uppercase; margin-right: .25rem; vertical-align: middle; }
+  .flags .sf { background: #f0fdf4; border: 1px solid #bbf7d0; color: #14532d; }
+  body.dark .flags .sf { background: #0f2417; border-color: #14532d; color: #bbf7d0; }
+  .flags .wc { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+  body.dark .flags .wc { background: #172554; border-color: #1e3a8a; color: #bfdbfe; }
   .genre { font-size: .75rem; font-weight: 500; color: #a3a3a3; margin-top: .25rem; text-transform: lowercase; }
   .genre-unknown, .genre-cover { font-weight: 400; opacity: .75; font-style: italic; }
   .desc { font-size: .85rem; color: #525252; margin-top: .35rem; max-width: 32rem; line-height: 1.5;
@@ -238,6 +246,10 @@
   .disclaimer { border-left: 4px solid #f59e0b; background: #fffbeb; color: #78350f;
     border-radius: .5rem; padding: .6rem .8rem; margin-top: .75rem; font-weight: 500; font-size: .78rem; }
   body.dark .disclaimer { background: #1c1503; color: #fde68a; }
+  /* Disclaimer restructure (25 Oct 2026, Andrea request: the block read as one long wall of text):
+     bold intro sentence + the practical notes as short lines in a .dnotes block (lighter, smaller). */
+  .disclaimer .dnotes { display: block; margin-top: .45rem; font-weight: 400; font-size: .72rem; line-height: 1.7; color: #92400e; }
+  body.dark .disclaimer .dnotes { color: #fde68a; opacity: .85; }
   .thanks { border-left: 4px solid #059669; background: #f0fdf4; color: #14532d; padding: .6rem .8rem; border-radius: .4rem; font-size: .8rem; line-height: 1.6; margin: .8rem 0 .4rem; }
   .thanks strong { font-size: .85rem; }
   body.dark .thanks { background: #0f2417; color: #bbf7d0; }
@@ -506,19 +518,20 @@
   </main>
 
   <footer id="sources">
-    <p>Berlin Events &#183; Berlin-Gigs community pad + mytrueintent.blogspot.com + web picks &#183; <span id="tot"></span><span id="totLbl"> events, deduplicated</span></p>
+    <p><span id="tot"></span><span id="totLbl"> events, deduplicated</span></p>
     <p id="stats" class="mini-label" style="margin-bottom:.5rem"></p>
-    <p class="disclaimer" id="disclaimerP">&#9888;&#65039; <strong>This site does not claim to list every event in Berlin &#8212; that would be impossible &#8212; but tries to cover as much of the scene as possible; it is compiled automatically from the sources below, not reviewed by a human event by event.</strong> Always double-check dates, times and tickets with the organizers or venues before going. The genres shown are assigned automatically and may sometimes be inaccurate. This site aggregates external sources and assumes no responsibility for errors, changes or cancellations.</p>
-    <p class="src-title"><b style="font-size:.9rem">*</b> <span id="srcTitle">Sources</span> <span class="updated-badge">(<span class="updLbl">last updated: </span><span class="lastupdated">23 October 2026</span>)</span></p>
-    <p id="srcGigsP"><strong>&#128241; Gigs</strong> &#8212; the <em>Berlin-Gigs</em> community pad, a DIY list of concerts with time, price, genre, smoke-free and wheelchair info.</p>
-    <p id="srcMtiP"><strong>&#127928; MTI</strong> &#8212; <a href="https://mytrueintent.blogspot.com" target="_blank" rel="noreferrer">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog, imported from its spreadsheet export.</p>
-    <p id="srcMobP"><strong>&#127914; Mob</strong> &#8212; <a href="https://mobilize.berlin" target="_blank" rel="noreferrer">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.</p>
-    <p id="srcWebP"><strong>&#127760; Web</strong> &#8212; events found on the web on official sites and venue pages; each links directly to its source page.</p>
-    <p id="srcStageP"><strong>&#127917; Stage</strong> &#8212; theatre, dance and performance from the theatres&#8217; own calendars across the whole Berlin scene, from the big houses to the freie Szene.</p>
-    <p id="srcArthouseP"><strong>&#127916; Arthouse</strong> &#8212; special cinema events from Berlin&#8217;s independent cinemas and the <a href="https://www.indiekino.de/kinoprogramm/en/berlin" target="_blank" rel="noreferrer">INDIEKINO</a> aggregator: premieres with guests, festivals and one-off nights.</p>
-    <p id="srcVenuesP"><strong>&#128205; Venues</strong> &#8212; venue addresses and districts verified via web search; the &#128205; pin next to a venue opens it in OpenStreetMap.</p>
+    <p class="disclaimer" id="disclaimerP">&#9888;&#65039; <strong>This site does not claim to list every event in Berlin &#8212; it is compiled automatically from the sources below and tries to cover as much of the scene as possible.</strong><span class="dnotes">Always double-check dates, times and tickets with the organizers or venues.<br>Genres are assigned automatically and may sometimes be inaccurate.<br>Report errors or missing events via the source links.<br>No responsibility is assumed for errors, changes or cancellations.</span></p>
+    <p class="src-title"><b style="font-size:.9rem">*</b> <span id="srcTitle">Sources</span> <span class="updated-badge">(<span class="updLbl">last updated: </span><span class="lastupdated">25 October 2026</span>)</span></p>
+    <p id="srcGigsP"><strong>Gigs</strong> &#8212; the <em>Berlin-Gigs</em> community pad, a DIY list of concerts with time, price, genre, smoke-free and wheelchair info.</p>
+    <p id="srcMtiP"><strong>MTI</strong> &#8212; <a href="https://mytrueintent.blogspot.com" target="_blank" rel="noreferrer">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog, imported from its spreadsheet export.</p>
+    <p id="srcMobP"><strong>Mob</strong> &#8212; <a href="https://mobilize.berlin" target="_blank" rel="noreferrer">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.</p>
+    <p id="srcWebP"><strong>Web</strong> &#8212; events found on the web on official sites and venue pages; each links directly to its source page.</p>
+    <p id="srcStageP"><strong>Stage</strong> &#8212; theatre, dance and performance from the theatres&#8217; own calendars across the whole Berlin scene, from the big houses to the freie Szene.</p>
+    <p id="srcArtP"><strong>Art</strong> &#8212; exhibitions and vernissages from Berlin museums and galleries, discovered via <a href="https://www.museumsportal.de" target="_blank" rel="noreferrer">museumsportal.de</a> and berlin.de and verified on official sites.</p>
+    <p id="srcArthouseP"><strong>Arthouse</strong> &#8212; special cinema events from Berlin&#8217;s independent cinemas and the <a href="https://www.indiekino.de/kinoprogramm/en/berlin" target="_blank" rel="noreferrer">INDIEKINO</a> aggregator: premieres with guests, festivals and one-off nights.</p>
+    <p id="srcVenuesP"><strong>Venues</strong> &#8212; venue addresses and districts verified via web search; the pin next to a venue opens it in OpenStreetMap.</p>
     <p id="dedupP">Events appearing in more than one source are automatically deduplicated (same title + date).</p>
-    <p class="thanks" id="thanksP">&#128591; <strong>Thanks</strong> &#8212; to everyone who maintains these sources and shares event data, and above all to the artists who make Berlin worth going out for. This site only exists because of their work.</p>
+    <p class="thanks" id="thanksP"><strong>Thanks</strong> &#8212; to everyone who maintains these sources and shares event data, and above all to the artists who make Berlin worth going out for. This site only exists because of their work.</p>
     <p id="visitWrap" style="display:none"><span id="visitDigits" aria-hidden="true"></span> <span class="mini-label" id="visitLbl" style="margin:0"></span></p>
     <p style="margin:.9rem 0 0 0"><span id="fbLbl"></span> <a href="#" id="fbMail"></a></p>
     <p style="margin:.3rem 0 0 0"><a href="#" id="legalLink" class="mini-label" style="text-decoration:underline">Impressum &amp; Datenschutz</a></p>
@@ -598,7 +611,7 @@ const EVENTS = [
   { date: "2026-10-13", time: "19:00", title: "BRAK - 'Tweak Couture' EP release: BRAK + Slut Shaman + Circular Ruins + kittykill", venue: "Killa Dubiosum", price: "", genre: "Noise, Punk, No Wave, Experimental", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-14", time: "20:00", title: "silent green presents: Alpha Maid + Dylan Kerr & Madeline Stepien", venue: "silent green", price: "19,20\u20ac", genre: "Experimental", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-14", time: "19:00", title: "Crunch Tapes and Positive Transmitter present: Dazzling Killmen (US), Prophet & Flesh", venue: "Neue Zukunft (Garage)", price: "\u20ac17.99", genre: "noise rock, math rock", smokeFree: true, wheelchair: true, source: "cryptpad" },
-  { date: "2026-10-14", time: "20:00", title: "colectivo salo x 90mil: My New Band Believe + Jasper Llewellyn (Caroline)", venue: "90mil", price: "15\u20ac", genre: "post-rock, folk, experimental \ud83d\udead\u267f\ufe0f", smokeFree: true, wheelchair: true, source: "cryptpad" },
+  { date: "2026-10-14", time: "20:00", title: "colectivo salo x 90mil: My New Band Believe + Jasper Llewellyn (Caroline)", venue: "90mil", price: "15\u20ac", genre: "post-rock, folk, experimental", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-14", time: "19:00", title: "annibale, beav boloney & little league shows prsnt: Cosmic Kitten + tba", venue: "Schokoladen", price: "\u20ac11,40-16,10", genre: "Post-Grunge, Punk", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-14", time: "19:00", title: "Salvage My Dream + Johnny Campbell", venue: "Hank Chinaski", price: "", genre: "folk, indie, songwriter", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-15", time: "19:00", title: "Indie In Town presents: M. Lucky (NL) + Vence + Mirrors For Princes + Yunni", venue: "Urban Spree", price: "12-15\u20ac", genre: "Indie, Electronic/Synth, Pop Rock", smokeFree: true, wheelchair: true, source: "cryptpad" },
@@ -630,7 +643,7 @@ const EVENTS = [
   { date: "2026-10-20", time: "19:00", title: "thirsty & miserable + Crunch Tapes presents: Thank + Lvft", venue: "Schokoladen", price: "10 - 16\u20ac", genre: "Noise-Rock, Post-Punk", smokeFree: false, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-21", time: "19:00", title: "brighter agency & little league shows present: Mleko & Whisker", venue: "Schokoladen", price: "\u20ac11-15,60", genre: "post-rock, exp-folk, art-rock", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-21", time: "19:00", title: "Powerline Agency present: Nina Winder-Lind", venue: "Neue Zukunft (Garage)", price: "19,80\u20ac", genre: "Folk, Garage Rock, Art Rock", smokeFree: false, wheelchair: false, source: "cryptpad" },
-  { date: "2026-10-21", time: "19:30", title: "Music for Cinemas presents: Nadja Live Score", venue: "Filmrauschpalast Moabit", price: "16 \u20ac", genre: "audiovisual, experimental, electronic \ud83d\udead", smokeFree: true, wheelchair: false, source: "cryptpad" },
+  { date: "2026-10-21", time: "19:30", title: "Music for Cinemas presents: Nadja Live Score", venue: "Filmrauschpalast Moabit", price: "16 \u20ac", genre: "audiovisual, experimental, electronic", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-21", time: "19:00", title: "Plattenbau Deathcult", venue: "Wild At Heart, Kreuzberg", price: "", genre: "Metal, Hardcore", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-22", time: "19:00", title: "Puschen presents: Roomer + Jules Reidy", venue: "Neue Zukunft", price: "19,80 \u20ac", genre: "guitar-driven folk, shoegaze density, indie", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-10-22", time: "19:00", title: "Modern Age presents: StrawberryJam + Personality + Klang", venue: "Gibney's Berlin", price: "15 \u20ac", genre: "Indie, Post-punk, Alternative", smokeFree: true, wheelchair: true, source: "cryptpad" },
@@ -650,7 +663,7 @@ const EVENTS = [
   { date: "2026-10-25", time: "", title: "Crunch Tapes presents: Lagrimas (US) + ONLY + Greetings From", venue: "Neue Zukunft (Garage)", price: "", genre: "", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-25", time: "18:00", title: "Organ Sequences Presents: The international nothing + Jessie Marino + Werner Durand + Werner Dafeldecker + R\u00e9gis Lemberthe + Sophie Renger + Romain C. Bertheau", venue: "Taborkirche", price: "\u20ac15", genre: "", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-25", time: "19:00", title: "brighter agency and BIS! presents: Massimo Silverio + Tara Nome Doyle", venue: "Kantine am Berghain", price: "16 - 21 - 26\u20ac", genre: "post-rock, folk", smokeFree: false, wheelchair: false, source: "cryptpad" },
-  { date: "2026-10-25", time: "19:00", title: "re:natura #06 \u2013 Hexapoda", venue: "ACUD Club", price: "15-18 \u20ac", genre: "conceptual, experimental, electronic \ud83d\udead", smokeFree: true, wheelchair: false, source: "cryptpad" },
+  { date: "2026-10-25", time: "19:00", title: "re:natura #06 \u2013 Hexapoda", venue: "ACUD Club", price: "15-18 \u20ac", genre: "conceptual, experimental, electronic", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-26", time: "19:00", title: "brighter agency presents: Jeffrey Lewis + Mumbles", venue: "Neue Zukunft", price: "17-27\u20ac", genre: "anti folk, punk folk", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-10-26", time: "19:00", title: "thirsty & miserable present: marcel + Jetzt werd ich dumm", venue: "Schokoladen", price: "from 10,99 \u20ac", genre: "Noise-Rock, Post-Punk, Post-HC", smokeFree: false, wheelchair: true, link: "https://www.schokoladen-mitte.de/", source: "cryptpad" },
   { date: "2026-10-27", time: "20:00", title: "amSTARt presents: g.rag / zelig implosion deluxxe", venue: "Dave Lombardo Bar", price: "0 \u20ac", genre: "No Wave", smokeFree: false, wheelchair: false, source: "cryptpad" },
@@ -675,16 +688,16 @@ const EVENTS = [
   { date: "2026-11-02", time: "19:00", title: "Puschen & little league shows present: Robber Robber + studio20", venue: "Schokoladen", price: "11,50-15,70 \u20ac", genre: "experimental indie-rock, alt-pop", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-11-02", time: "19:00", title: "brighter agency presents: Victoryland", venue: "Neue Zukunft", price: "16-26\u20ac", genre: "Experimental Pop-Rock", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-03", time: "", title: "Crunch Tapes and Positive Transmitter present: Sunset Images (MX)", venue: "8MM Bar", price: "15,76 \u20ac", genre: "krautrock, shoegaze, punk", smokeFree: false, wheelchair: false, source: "cryptpad" },
-  { date: "2026-11-04", time: "19:30", title: "Puschen present: Quiet Light", venue: "Monarch", price: "18,70 \u20ac", genre: "electropop dream-sequences, ambient, folk I \ud83d\udead", smokeFree: true, wheelchair: false, source: "cryptpad" },
+  { date: "2026-11-04", time: "19:30", title: "Puschen present: Quiet Light", venue: "Monarch", price: "18,70 \u20ac", genre: "electropop dream-sequences, ambient, folk I", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-04", time: "19:00", title: "twintoe recs & little league shows prsnt: Moving as a Giant & Soul Clear", venue: "Schokoladen", price: "\u20ac11-15,70", genre: "Noise-Rock, Shoegaze, Post-Punk", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-11-05", time: "19:00", title: "BeyondBooking presents: Jessica Moss [post-rock/Berlin] x Radwan Ghazi Moumneh & Fre\u0301de\u0301ric D Oberland [ritual electronics/drone/Constellation Records/CAN]", venue: "Kantine am Berghain", price: "19,80 \u20ac", genre: "", smokeFree: false, wheelchair: false, source: "cryptpad" },
-  { date: "2026-11-05", time: "20:00", title: "colectivo salo x 90mil: Dagmar Zuniga + nykolaes & Dani\u00ebl Paul", venue: "90mil", price: "15\u20ac", genre: "experimental, folk \ud83d\udead\u267f\ufe0f", smokeFree: true, wheelchair: true, source: "cryptpad" },
+  { date: "2026-11-05", time: "20:00", title: "colectivo salo x 90mil: Dagmar Zuniga + nykolaes & Dani\u00ebl Paul", venue: "90mil", price: "15\u20ac", genre: "experimental, folk", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-11-06", time: "19:00", title: "Loge. Kneipenkollekitv presents: Silk + Support", venue: "Loge.", price: "10-15\u20ac", genre: "Alternative, Garage, Punk", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-06", time: "19:00", title: "brighter agency presents: Eilis Frawley", venue: "Rough Trade", price: "", genre: "spoken word/kraut/pop", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-06", time: "19:00", title: "trusty chords, mangel & little league shows prsnt: Fervents & Ulla Suspekt", venue: "Schokoladen", price: "\u20ac11-15,70", genre: "Punk-Rock, Post-Punk, Indie", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-11-07", time: "19:00", title: "Loge. Kneipenkollekitv presents: Monad + Sweetspot", venue: "Loge.", price: "10-15\u20ac", genre: "Alternative, Dreampop", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-07", time: "19:00", title: "amSTARt presents: Mittekill & Die Hochzeitsband + Cora Peter Frost + DJ Florian Illing", venue: "B.L.O. Kantine", price: "18,35 \u20ac", genre: "Techno-Blues, Punk-House, Piano-Chansons", smokeFree: true, wheelchair: true, source: "cryptpad" },
-  { date: "2026-11-07", time: "20:00", title: "Frictive Frequencies presents: Matthias Koole + Lorena Izquierdo + Mizuki Ishikawa", venue: "ausland. Lychener Str. 60", price: "10,- \u20ac", genre: "experimental, improvisation \ud83d\udead contact us for accessibility needs.", smokeFree: true, wheelchair: false, source: "cryptpad" },
+  { date: "2026-11-07", time: "20:00", title: "Frictive Frequencies presents: Matthias Koole + Lorena Izquierdo + Mizuki Ishikawa", venue: "ausland. Lychener Str. 60", price: "10,- \u20ac", genre: "experimental, improvisation", description: "Contact the venue for accessibility needs.", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-07", time: "20:30", title: "The Tulips & Hatless Cat", venue: "Trxxxter", price: "", genre: "Garage, Rock'n'Roll, Ska", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-07", time: "19:00", title: "The David Watts Foundation presents: fluppe + Support: Sid Vision", venue: "8mm Bar", price: "14,45\u20ac", genre: "Alternative, Dreampop, Postpunk", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-08", time: "19:00", title: "East Side Delta, Lockkunst e.V. and YaYaYeah present: T\u00d5 Y\u00d5 + Daisy Confused + Sector 7G", venue: "B.L.O. Kantine", price: "13,70\u20ac", genre: "psychedelic rock, krautrock, visual live performance", smokeFree: true, wheelchair: true, source: "cryptpad" },
@@ -723,7 +736,7 @@ const EVENTS = [
   { date: "2026-12-05", time: "19:00", title: "Loge. Kneipenkollekitv presents: Schwindel + Tribes Of The City", venue: "Loge.", price: "10-15\u20ac", genre: "PostHardcore Punk", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-12-05", time: "20:00", title: "131.2 Punkrock Crew Berlin presents: Verschleisz + Gnatz + Pornscars", venue: "Sama32", price: "Donation", genre: "Punkrock", smokeFree: false, wheelchair: true, source: "cryptpad" },
   { date: "2026-12-05", time: "19:00", title: "Kreuzburg Music presents: Dukes + Bonsai Kitten", venue: "Clash", price: "VVK 18,47 \u20ac / AK 20,- \u20ac", genre: "Hard Rock, Metal", smokeFree: false, wheelchair: false, source: "cryptpad" },
-  { date: "2026-12-05", time: "20:00", title: "Frictive Frequencies presents: Alexandra Maci\u00e1 + Zustand D. + Winona Lin", venue: "ausland. Lychener Str. 60", price: "10,- \u20ac", genre: "experimental, improvisation \ud83d\udead contact us for accessibility needs.", smokeFree: true, wheelchair: false, source: "cryptpad" },
+  { date: "2026-12-05", time: "20:00", title: "Frictive Frequencies presents: Alexandra Maci\u00e1 + Zustand D. + Winona Lin", venue: "ausland. Lychener Str. 60", price: "10,- \u20ac", genre: "experimental, improvisation", description: "Contact the venue for accessibility needs.", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-12-06", time: "19:00", title: "brighter agency presents: St\u00e4dtische Manieren", venue: "Donau 115", price: "Donation", genre: "post-punk, experimental pop", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-12-10", time: "19:30", title: "Wonderska + Jopa Jotakin", venue: "ausland", price: "\u20ac10+", genre: "", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-12-11", time: "19:00", title: "Loge. Kneipenkollekitv presents: Bluten + Support", venue: "Loge.", price: "10-15\u20ac", genre: "Postpunk", smokeFree: true, wheelchair: false, source: "cryptpad" },
@@ -2982,6 +2995,18 @@ const EVENTS = [
   { date: "2026-11-01", time: "10:00", title: "Berlin Science Week", venue: "City-wide (Festival Centre: Haus der Kulturen der Welt)", price: "Free (pass required)", category: "Art", description: "1\u201310 Nov: city-wide science festival; Festival Centre at HKW 6\u20138 Nov with free 3-day pass.", link: "https://berlinscienceweek.com", source: "web" },
   { date: "2026-11-07", time: "19:00", title: "Barocktage 2026", venue: "Staatsoper Unter den Linden", price: "from \u20ac9", genre: "Baroque, Classical", category: "Music", description: "Staatsoper's Baroque Days, 7\u201327 Nov: from the first decades of opera to contemporary works.", link: "https://www.staatsoper-berlin.de/de/spielplan/barocktage-2026/", source: "web" },
   { date: "2026-11-18", time: "17:00", title: "Christmas Garden Berlin", venue: "Botanischer Garten", price: "from \u20ac16.90", category: "Art", description: "Light-art trail through the Botanical Garden, 18 Nov\u201310 Jan; closed 23, 24 and 30 Nov.", link: "https://www.christmas-garden.de/en/berlin/", source: "web" },
+
+  // \u2500\u2500 Photography: museums & foundations (added 25 Oct 2026) \u2500\u2500
+  { date: "2026-11-05", time: "18:00", title: "Rooms / Stages: Meet the Artists! \u2014 public artist tour", venue: "Museum f\u00fcr Fotografie", price: "", category: "Art", description: "Public tour with the participating photographers of the group exhibition 'Rooms / Stages' and 'Helmut Newton's One-off Album' at the Helmut Newton Foundation.", link: "https://newton-foundation.org/ausstellungen/rooms-stages-helmut-newtons-one-off-album/", source: "web" },
+  { date: "2026-11-19", time: "19:00", title: "After-Work Tour + Drink: Carrie Mae Weems . Stelios Kallinikou . Susanne Kriemann", venue: "C/O Berlin", price: "25 \u20ac (incl. exhibition + drink)", category: "Art", description: "Evening guided tour in German through 'Carrie Mae Weems . The Heart of the Matter' and the 'After Nature Prize 26' exhibitions, plus a drink.", link: "https://co-berlin.org/de/veranstaltungen/after-work-tour-drink-29", source: "web" },
+  { date: "2026-12-02", time: "", title: "New exhibition opening at the Helmut Newton Foundation", venue: "Museum f\u00fcr Fotografie", price: "", category: "Art", description: "The Newton Foundation opens a new exhibition dedicated to Helmut Newton's three early iconic publications (runs 3 Dec 2026 \u2013 16 May 2027).", link: "https://newton-foundation.org/", source: "web" },
+  { date: "2026-12-17", time: "", title: "After-Work Tour + Drink: Carrie Mae Weems . Stelios Kallinikou . Susanne Kriemann", venue: "C/O Berlin", price: "Ticketed", category: "Art", description: "December edition of the evening guided tour in German through the current exhibitions, plus a drink.", link: "https://co-berlin.org/de/fuehrungen", source: "web" },
+
+  // \u2500\u2500 Laden 2 (laden2.org, DIY Kulturraum Wedding \u2014 added 25 Oct 2026) \u2500\u2500
+  { date: "2026-10-28", time: "19:30", title: "Book launch: Norient \u2014 Home Is Where The Heart Strives", venue: "Laden 2", price: "", category: "Theatre", description: "Poetry, sound and other ways of being here \u2014 launch of the Norient book with readings and performances.", link: "https://laden2.org/", source: "web" },
+  { date: "2026-10-29", time: "19:30", title: "General Knowledge Session (Hybrid Set)", venue: "Laden 2", price: "", genre: "experimental", category: "Music", description: "Hybrid live session at the DIY Kulturraum in Wedding.", link: "https://laden2.org/", source: "web" },
+  { date: "2026-10-30", time: "19:30", title: "Ghorab and his friends", venue: "Laden 2", price: "", genre: "psychedelic", category: "Music", description: "A psychedelic music trip through the historic cemeteries of Cairo.", link: "https://laden2.org/", source: "web" },
+  { date: "2026-10-31", time: "18:00", title: "Amor Eterno x Dia de los Muertos: 'Sobre Las Cuatro Casas' Release", venue: "Laden 2", price: "", category: "Music", description: "Release by Do25inco & GEEGEE.", link: "https://laden2.org/", source: "web" },
 
   // \u2500\u2500 Cinema: indie & special film events \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
   { date: "2026-10-14", time: "18:00", title: "Ukrainian Film Festival Berlin \u2014 7th edition", venue: "Various cinemas", price: "from \u20ac8", category: "Cinema", description: "Latest contemporary films from Ukraine, theme 'Emergency Spaces', until 18 Oct.", link: "https://uffberlin.de", source: "web" },
@@ -5320,7 +5345,7 @@ const S = {
 };
 const today = new Date().toISOString().slice(0, 10);
 const $ = (id) => document.getElementById(id);
-const LAST_UPDATED = "23 October 2026";
+const LAST_UPDATED = "25 October 2026";
 // Localized display of the date above (the const itself stays English "D Month YYYY" - weekly automation rule).
 // German "22. Oktober 2026", Italian "22 ottobre 2026"; any other language and parse failures fall back to the const.
 const UPD_MONTHS = {
@@ -5339,6 +5364,9 @@ const updDate = (lang) => {
 //  Venue links (single source of truth) 
 // Event-specific links (mobilize/web) take precedence; otherwise the venue's site is used.
 const VENUE_LINKS = {
+  "C/O Berlin": "https://co-berlin.org/",
+  "Laden 2": "https://laden2.org/",
+  "Museum f\u00fcr Fotografie": "https://newton-foundation.org/",
   "Schokoladen": "https://schokoladen-mitte.de/",
   "Loge.": "https://www.loge-berlin.org/",
   "Loge": "https://www.loge-berlin.org/",
@@ -5553,7 +5581,7 @@ const linkOf = (e) => (e && e.link) || VENUE_LINKS[(e && e.venue || "").trim()] 
 //  UI languages 
 const LANGS = {
   en: { upcoming: "Upcoming", archive: "Archive", search: "Search artists, venues, genres\u2026", filters: "Filters", reset: "\u21ba Reset",
-    free: "Free / donation only", access: "Accessible or smoke-free only", source: "Source", district: "District",
+    free: "Free / donation only", access: "Accessible or smoke-free only", sfTag: "smoke-free", wcTag: "wheelchair", source: "Source", district: "District",
     price: "Price range (events with a price only)", genre: "Genre", tonight: "Today", favs: "\u2b50 Favorites", all: "All", unknownGenre: "Genre not yet identified",
     unkHidden: (n) => n + " music events without a known genre are hidden \u2014 include them?", unkInclude: "Include", unkHide: "Hide them", coverNote: "Cover / tribute band", postponedNote: "Postponed \u2014 new date to be announced", venueChanged: (v) => "Venue changed \u2014 previously: " + v, dateChanged: (d) => "Date changed \u2014 previously: " + d, noLink: "No link available for this event \u2014 sorry",
     subTitle: "A minimal digest of concerts, performing arts, art and cinema in Berlin \u2014 gathered from independent sources",
@@ -5569,19 +5597,20 @@ const LANGS = {
     visits: "visits since October 2026",
     updLbl: "last updated: ", srcLinkTitle: "About the sources", totLbl: " events, deduplicated",
     mostVenue: (v, n) => "Most active venue: " + v + " (" + n + ")",
-    disclaimer: "&#9888;&#65039; <strong>This site does not claim to list every event in Berlin \u2014 that would be impossible \u2014 but tries to cover as much of the scene as possible; it is compiled automatically from the sources below, not reviewed by a human event by event.</strong> Always double-check dates, times and tickets with the organizers or venues; the genres shown are assigned automatically and may sometimes be inaccurate; report errors or missing events via the source links. No responsibility is assumed for errors, changes or cancellations.",
+    disclaimer: "&#9888;&#65039; <strong>This site does not claim to list every event in Berlin \u2014 it is compiled automatically from the sources below and tries to cover as much of the scene as possible.</strong><span class=\"dnotes\">Always double-check dates, times and tickets with the organizers or venues.<br>Genres are assigned automatically and may sometimes be inaccurate.<br>Report errors or missing events via the source links.<br>No responsibility is assumed for errors, changes or cancellations.</span>",
     srcTitle: "Sources",
-    srcGigs: "<strong>&#128241; Gigs</strong> \u2014 the <em>Berlin-Gigs</em> community pad, a DIY list of concerts with time, price, genre, smoke-free and wheelchair info.",
-    srcMti: "<strong>&#127928; MTI</strong> \u2014 <a href=\"https://mytrueintent.blogspot.com\" target=\"_blank\" rel=\"noreferrer\">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog, imported from its spreadsheet export.",
-    srcMob: "<strong>&#127914; Mob</strong> \u2014 <a href=\"https://mobilize.berlin\" target=\"_blank\" rel=\"noreferrer\">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.",
-    srcWeb: "<strong>&#127760; Web</strong> \u2014 events found on the web on official sites and venue pages; each links directly to its source page.",
-    srcStage: "<strong>&#127917; Stage</strong> \u2014 theatre, dance and performance from the theatres\u2019 own calendars across the whole Berlin scene, from the big houses to the freie Szene.",
-    srcArthouse: "<strong>&#127916; Arthouse</strong> \u2014 special cinema events from Berlin\u2019s independent cinemas and the <a href=\"https://www.indiekino.de/kinoprogramm/en/berlin\" target=\"_blank\" rel=\"noreferrer\">INDIEKINO</a> aggregator: premieres with guests, festivals and one-off nights.",
-    srcVenues: "<strong>&#128205; Venues</strong> \u2014 venue addresses and districts verified via web search; the &#128205; pin next to a venue opens it in OpenStreetMap.",
+    srcGigs: "<strong>Gigs</strong> \u2014 the <em>Berlin-Gigs</em> community pad, a DIY list of concerts with time, price, genre, smoke-free and wheelchair info.",
+    srcMti: "<strong>MTI</strong> \u2014 <a href=\"https://mytrueintent.blogspot.com\" target=\"_blank\" rel=\"noreferrer\">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog, imported from its spreadsheet export.",
+    srcMob: "<strong>Mob</strong> \u2014 <a href=\"https://mobilize.berlin\" target=\"_blank\" rel=\"noreferrer\">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.",
+    srcWeb: "<strong>Web</strong> \u2014 events found on the web on official sites and venue pages; each links directly to its source page.",
+    srcStage: "<strong>Stage</strong> \u2014 theatre, dance and performance from the theatres\u2019 own calendars across the whole Berlin scene, from the big houses to the freie Szene.",
+    srcArt: "<strong>Art</strong> \u2014 exhibitions and vernissages from Berlin museums and galleries, discovered via <a href=\"https://www.museumsportal.de\" target=\"_blank\" rel=\"noreferrer\">museumsportal.de</a> and berlin.de and verified on official sites.",
+    srcArthouse: "<strong>Arthouse</strong> \u2014 special cinema events from Berlin\u2019s independent cinemas and the <a href=\"https://www.indiekino.de/kinoprogramm/en/berlin\" target=\"_blank\" rel=\"noreferrer\">INDIEKINO</a> aggregator: premieres with guests, festivals and one-off nights.",
+    srcVenues: "<strong>Venues</strong> \u2014 venue addresses and districts verified via web search; the pin next to a venue opens it in OpenStreetMap.",
     fbLbl: "For feedback or corrections write to",
     qrTitle: "Show this QR to share the site",
     dedupNote: "Events appearing in more than one source are automatically deduplicated (same title + date).",
-    thanksNote: "&#128591; <strong>Thanks</strong> \u2014 to everyone who maintains these sources and shares event data, and above all to the artists who make Berlin worth going out for. This site only exists because of their work.",
+    thanksNote: "<strong>Thanks</strong> \u2014 to everyone who maintains these sources and shares event data, and above all to the artists who make Berlin worth going out for. This site only exists because of their work.",
     resetTitle: "Reset all filters", langTitle: "Language", themeTitle: "Toggle theme", dayTitle: "Pick a day",
     clearSearch: "Clear search", clearDay: "Clear day filter", clearPrice: "Clear price filter",
     backTop: "Back to top", prevWeek: "Previous week", nextWeek: "Next week", removeView: "Remove saved view",
@@ -5589,7 +5618,7 @@ const LANGS = {
     listenTitle: "Listen to this artist",
     osmTitle: "Open in OpenStreetMap", venueOnly: "Show only events at this venue" },
   de: { upcoming: "Bevorstehend", archive: "Archiv", search: "K\u00fcnstler, Venues, Genres suchen\u2026", filters: "Filter", reset: "\u21ba Zur\u00fccksetzen",
-    free: "Nur frei / Spende", access: "Nur barrierefrei oder rauchfrei", source: "Quelle", district: "Bezirk",
+    free: "Nur frei / Spende", access: "Nur barrierefrei oder rauchfrei", sfTag: "rauchfrei", wcTag: "barrierefrei", source: "Quelle", district: "Bezirk",
     price: "Preisspanne (nur Events mit Preis)", genre: "Genre", tonight: "Heute", favs: "\u2b50 Favoriten", all: "Alle", unknownGenre: "Genre noch nicht identifiziert",
     unkHidden: (n) => n + " Musik-Events ohne bekanntes Genre sind ausgeblendet \u2014 einblenden?", unkInclude: "Einblenden", unkHide: "Ausblenden", coverNote: "Cover-/Tribute-Band", postponedNote: "Verschoben \u2014 neuer Termin wird bekannt gegeben", venueChanged: (v) => "Ort ge\u00e4ndert \u2014 vorher: " + v, dateChanged: (d) => "Termin ge\u00e4ndert \u2014 vorher: " + d, noLink: "Kein Link f\u00fcr diese Veranstaltung verf\u00fcgbar \u2014 Entschuldigung",
     subTitle: "Ein minimales Digest von Konzerten, Performing Arts, Kunst und Kino in Berlin \u2014 aus unabh\u00e4ngigen Quellen zusammengetragen",
@@ -5605,19 +5634,20 @@ const LANGS = {
     visits: "Besuche seit Oktober 2026",
     updLbl: "zuletzt aktualisiert: ", srcLinkTitle: "\u00dcber die Quellen", totLbl: " Veranstaltungen, dedupliziert",
     mostVenue: (v, n) => "Aktivste Venue: " + v + " (" + n + ")",
-    disclaimer: "&#9888;&#65039; <strong>Diese Seite erhebt nicht den Anspruch, jede Veranstaltung in Berlin aufzulisten \u2014 das w\u00e4re unm\u00f6glich \u2014, sondern versucht, die Szene so weit wie m\u00f6glich abzudecken; sie wird automatisch aus den unten genannten Quellen zusammengestellt und nicht einzeln von Hand gepr\u00fcft.</strong> Datum, Uhrzeit und Tickets immer bei den Veranstaltern oder Venues pr\u00fcfen; die angegebenen Genres werden automatisch zugeordnet und k\u00f6nnen mitunter ungenau oder falsch sein; Fehler bitte \u00fcber die Quell-Links melden. Keine Haftung f\u00fcr Fehler, \u00c4nderungen oder Absagen.",
+    disclaimer: "&#9888;&#65039; <strong>Diese Seite erhebt nicht den Anspruch, jede Veranstaltung in Berlin aufzulisten \u2014 sie wird automatisch aus den unten genannten Quellen zusammengestellt und versucht, die Szene so weit wie m\u00f6glich abzudecken.</strong><span class=\"dnotes\">Datum, Uhrzeit und Tickets immer bei den Veranstaltern oder Venues pr\u00fcfen.<br>Die angegebenen Genres werden automatisch zugeordnet und k\u00f6nnen mitunter ungenau sein.<br>Fehler bitte \u00fcber die Quell-Links melden.<br>Keine Haftung f\u00fcr Fehler, \u00c4nderungen oder Absagen.</span>",
     srcTitle: "Quellen",
-    srcGigs: "<strong>&#128241; Gigs</strong> \u2014 das <em>Berlin-Gigs</em> Community-Pad, eine DIY-Liste von Konzerten mit Uhrzeit, Preis, Genre, Rauch- und Rollstuhl-Info.",
-    srcMti: "<strong>&#127928; MTI</strong> \u2014 <a href=\"https://mytrueintent.blogspot.com\" target=\"_blank\" rel=\"noreferrer\">mytrueintent.blogspot.com</a>, ein Berliner Indie/Rock-Konzert-Blog, importiert aus seinem Tabellen-Export.",
-    srcMob: "<strong>&#127914; Mob</strong> \u2014 <a href=\"https://mobilize.berlin\" target=\"_blank\" rel=\"noreferrer\">mobilize.berlin</a>, eine Berliner Mobilizon-Instanz: f\u00f6derierte DIY-Plattform f\u00fcr Konzerte, Parties und Community-Events.",
-    srcWeb: "<strong>&#127760; Web</strong> \u2014 im Web gefundene Veranstaltungen von offiziellen Seiten und Venue-Seiten; jeder Eintrag verlinkt direkt auf seine Quell-Seite.",
-    srcStage: "<strong>&#127917; Stage</strong> \u2014 Theater, Tanz und Performance aus den Spielpl\u00e4nen der H\u00e4user der ganzen Berliner Szene, von den gro\u00dfen B\u00fchnen bis zur freien Szene.",
-    srcArthouse: "<strong>&#127916; Arthouse</strong> \u2014 besondere Kino-Events aus Berlins Programmkinos und dem <a href=\"https://www.indiekino.de/kinoprogramm/en/berlin\" target=\"_blank\" rel=\"noreferrer\">INDIEKINO</a>-Aggregator: Premieren mit G\u00e4sten, Festivals und einmalige Abende.",
-    srcVenues: "<strong>&#128205; Venues</strong> \u2014 Venue-Adressen und Bezirke per Websuche verifiziert; der &#128205;-Pin neben einer Venue \u00f6ffnet sie in OpenStreetMap.",
+    srcGigs: "<strong>Gigs</strong> \u2014 das <em>Berlin-Gigs</em> Community-Pad, eine DIY-Liste von Konzerten mit Uhrzeit, Preis, Genre, Rauch- und Rollstuhl-Info.",
+    srcMti: "<strong>MTI</strong> \u2014 <a href=\"https://mytrueintent.blogspot.com\" target=\"_blank\" rel=\"noreferrer\">mytrueintent.blogspot.com</a>, ein Berliner Indie/Rock-Konzert-Blog, importiert aus seinem Tabellen-Export.",
+    srcMob: "<strong>Mob</strong> \u2014 <a href=\"https://mobilize.berlin\" target=\"_blank\" rel=\"noreferrer\">mobilize.berlin</a>, eine Berliner Mobilizon-Instanz: f\u00f6derierte DIY-Plattform f\u00fcr Konzerte, Parties und Community-Events.",
+    srcWeb: "<strong>Web</strong> \u2014 im Web gefundene Veranstaltungen von offiziellen Seiten und Venue-Seiten; jeder Eintrag verlinkt direkt auf seine Quell-Seite.",
+    srcStage: "<strong>Stage</strong> \u2014 Theater, Tanz und Performance aus den Spielpl\u00e4nen der H\u00e4user der ganzen Berliner Szene, von den gro\u00dfen B\u00fchnen bis zur freien Szene.",
+    srcArt: "<strong>Art</strong> \u2014 Ausstellungen und Vernissagen aus Berliner Museen und Galerien, entdeckt \u00fcber <a href=\"https://www.museumsportal.de\" target=\"_blank\" rel=\"noreferrer\">museumsportal.de</a> und berlin.de, verifiziert auf offiziellen Seiten.",
+    srcArthouse: "<strong>Arthouse</strong> \u2014 besondere Kino-Events aus Berlins Programmkinos und dem <a href=\"https://www.indiekino.de/kinoprogramm/en/berlin\" target=\"_blank\" rel=\"noreferrer\">INDIEKINO</a>-Aggregator: Premieren mit G\u00e4sten, Festivals und einmalige Abende.",
+    srcVenues: "<strong>Venues</strong> \u2014 Venue-Adressen und Bezirke per Websuche verifiziert; der Pin neben einer Venue \u00f6ffnet sie in OpenStreetMap.",
     fbLbl: "F\u00fcr Feedback oder Korrekturen schreib mir an",
     qrTitle: "Zeige diesen QR-Code, um die Seite zu teilen",
     dedupNote: "Veranstaltungen, die in mehreren Quellen erscheinen, werden automatisch dedupliziert (gleicher Titel + Datum).",
-    thanksNote: "&#128591; <strong>Danke</strong> \u2014 an alle, die diese Quellen pflegen und Veranstaltungsdaten teilen, und vor allem an die K\u00fcnstler, die Berlin zu einem Ort machen, f\u00fcr den es sich zu ausgehen lohnt. Diese Seite existiert nur dank ihrer Arbeit.",
+    thanksNote: "<strong>Danke</strong> \u2014 an alle, die diese Quellen pflegen und Veranstaltungsdaten teilen, und vor allem an die K\u00fcnstler, die Berlin zu einem Ort machen, f\u00fcr den es sich zu ausgehen lohnt. Diese Seite existiert nur dank ihrer Arbeit.",
     resetTitle: "Alle Filter zur\u00fccksetzen", langTitle: "Sprache", themeTitle: "Design wechseln", dayTitle: "Tag w\u00e4hlen",
     clearSearch: "Suche l\u00f6schen", clearDay: "Tag-Filter l\u00f6schen", clearPrice: "Preis-Filter l\u00f6schen",
     backTop: "Zur\u00fcck nach oben", prevWeek: "Vorherige Woche", nextWeek: "N\u00e4chste Woche", removeView: "Gespeicherte Ansicht entfernen",
@@ -5625,7 +5655,7 @@ const LANGS = {
     listenTitle: "Diesen K\u00fcnstler anh\u00f6ren",
     osmTitle: "In OpenStreetMap \u00f6ffnen", venueOnly: "Nur Veranstaltungen in dieser Venue zeigen" },
   it: { upcoming: "In arrivo", archive: "Archivio", search: "Cerca artisti, venue, generi\u2026", filters: "Filtri", reset: "\u21ba Azzera",
-    free: "Solo gratuiti / offerta", access: "Solo accessibili o senza fumo", source: "Fonte", district: "Quartiere",
+    free: "Solo gratuiti / offerta", access: "Solo accessibili o senza fumo", sfTag: "senza fumo", wcTag: "accessibile", source: "Fonte", district: "Quartiere",
     price: "Fascia di prezzo (solo eventi con prezzo)", genre: "Genere", tonight: "Oggi", favs: "\u2b50 Preferiti", all: "Tutti", unknownGenre: "Genere non ancora identificato",
     unkHidden: (n) => n + " eventi musicali senza genere noto sono nascosti \u2014 includerli?", unkInclude: "Includili", unkHide: "Nascondili", coverNote: "Cover / tribute band", postponedNote: "Posticipato \u2014 nuova data da annunciare", venueChanged: (v) => "Venue cambiata \u2014 prima: " + v, dateChanged: (d) => "Data cambiata \u2014 prima: " + d, noLink: "Nessun link disponibile per questo evento \u2014 scusa",
     subTitle: "Un digest essenziale di concerti, arti performative, arte e cinema a Berlino \u2014 raccolto da fonti indipendenti",
@@ -5641,19 +5671,20 @@ const LANGS = {
     visits: "visite da ottobre 2026",
     updLbl: "ultimo aggiornamento: ", srcLinkTitle: "Info sulle fonti", totLbl: " eventi, deduplicati",
     mostVenue: (v, n) => "Venue pi\u00f9 attiva: " + v + " (" + n + ")",
-    disclaimer: "&#9888;&#65039; <strong>Questo sito non ha la pretesa di includere tutti gli eventi di Berlino \u2014 sarebbe impossibile \u2014 ma cerca di coprire la scena il pi\u00f9 possibile; \u00e8 compilato automaticamente dalle fonti qui sotto, senza revisione umana evento per evento.</strong> Verifica sempre date, orari e biglietti con gli organizzatori o le venue; i generi indicati vengono assegnati automaticamente e possono a volte risultare imprecisi o errati; segnala errori o mancanze tramite i link alle fonti. Nessuna responsabilit\u00e0 per errori, cambi o annullamenti.",
+    disclaimer: "&#9888;&#65039; <strong>Questo sito non ha la pretesa di includere tutti gli eventi di Berlino \u2014 \u00e8 compilato automaticamente dalle fonti qui sotto e cerca di coprire la scena il pi\u00f9 possibile.</strong><span class=\"dnotes\">Verifica sempre date, orari e biglietti con gli organizzatori o le venue.<br>I generi indicati vengono assegnati automaticamente e possono a volte risultare imprecisi.<br>Segnala errori o mancanze tramite i link alle fonti.<br>Nessuna responsabilit\u00e0 per errori, cambi o annullamenti.</span>",
     srcTitle: "Fonti",
-    srcGigs: "<strong>&#128241; Gigs</strong> \u2014 il pad comunitario <em>Berlin-Gigs</em>, una lista DIY di concerti con orario, prezzo, genere e info su fumo e accessibilit\u00e0.",
-    srcMti: "<strong>&#127928; MTI</strong> \u2014 <a href=\"https://mytrueintent.blogspot.com\" target=\"_blank\" rel=\"noreferrer\">mytrueintent.blogspot.com</a>, un blog di concerti indie/rock berlinese, importato dal suo export a foglio di calcolo.",
-    srcMob: "<strong>&#127914; Mob</strong> \u2014 <a href=\"https://mobilize.berlin\" target=\"_blank\" rel=\"noreferrer\">mobilize.berlin</a>, un'istanza Mobilizon di Berlino: piattaforma DIY federata per concerti, feste ed eventi della comunit\u00e0.",
-    srcWeb: "<strong>&#127760; Web</strong> \u2014 eventi trovati sul web su siti ufficiali e pagine delle venue; ognuno linka direttamente alla pagina di origine.",
-    srcStage: "<strong>&#127917; Stage</strong> \u2014 teatro, danza e performance dai calendari dei teatri di tutta la scena berlinese, dalle grandi case alla scena indipendente.",
-    srcArthouse: "<strong>&#127916; Arthouse</strong> \u2014 eventi speciali al cinema dai cinema indipendenti di Berlino e dall'aggregatore <a href=\"https://www.indiekino.de/kinoprogramm/en/berlin\" target=\"_blank\" rel=\"noreferrer\">INDIEKINO</a>: prime con ospiti, festival e serate uniche.",
-    srcVenues: "<strong>&#128205; Venues</strong> \u2014 indirizzi e quartieri delle venue verificati via ricerca web; la &#128205; accanto a una venue la apre in OpenStreetMap.",
+    srcGigs: "<strong>Gigs</strong> \u2014 il pad comunitario <em>Berlin-Gigs</em>, una lista DIY di concerti con orario, prezzo, genere e info su fumo e accessibilit\u00e0.",
+    srcMti: "<strong>MTI</strong> \u2014 <a href=\"https://mytrueintent.blogspot.com\" target=\"_blank\" rel=\"noreferrer\">mytrueintent.blogspot.com</a>, un blog di concerti indie/rock berlinese, importato dal suo export a foglio di calcolo.",
+    srcMob: "<strong>Mob</strong> \u2014 <a href=\"https://mobilize.berlin\" target=\"_blank\" rel=\"noreferrer\">mobilize.berlin</a>, un'istanza Mobilizon di Berlino: piattaforma DIY federata per concerti, feste ed eventi della comunit\u00e0.",
+    srcWeb: "<strong>Web</strong> \u2014 eventi trovati sul web su siti ufficiali e pagine delle venue; ognuno linka direttamente alla pagina di origine.",
+    srcStage: "<strong>Stage</strong> \u2014 teatro, danza e performance dai calendari dei teatri di tutta la scena berlinese, dalle grandi case alla scena indipendente.",
+    srcArt: "<strong>Art</strong> \u2014 mostre e vernissage di musei e gallerie berlinesi, scoperte tramite <a href=\"https://www.museumsportal.de\" target=\"_blank\" rel=\"noreferrer\">museumsportal.de</a> e berlin.de e verificate sui siti ufficiali.",
+    srcArthouse: "<strong>Arthouse</strong> \u2014 eventi speciali al cinema dai cinema indipendenti di Berlino e dall'aggregatore <a href=\"https://www.indiekino.de/kinoprogramm/en/berlin\" target=\"_blank\" rel=\"noreferrer\">INDIEKINO</a>: prime con ospiti, festival e serate uniche.",
+    srcVenues: "<strong>Venues</strong> \u2014 indirizzi e quartieri delle venue verificati via ricerca web; il pin accanto a una venue la apre in OpenStreetMap.",
     fbLbl: "Per feedback o correzioni scrivimi a",
     qrTitle: "Mostra il QR per condividere il sito",
     dedupNote: "Gli eventi presenti in pi\u00f9 fonti vengono deduplicati automaticamente (stesso titolo + data).",
-    thanksNote: "&#128591; <strong>Grazie</strong> \u2014 a chi mantiene queste fonti e condivide dati sugli eventi, e soprattutto agli artisti che rendono Berlino un posto per cui vale la pena uscire di casa. Questo sito esiste solo grazie al loro lavoro.",
+    thanksNote: "<strong>Grazie</strong> \u2014 a chi mantiene queste fonti e condivide dati sugli eventi, e soprattutto agli artisti che rendono Berlino un posto per cui vale la pena uscire di casa. Questo sito esiste solo grazie al loro lavoro.",
     resetTitle: "Azzera tutti i filtri", langTitle: "Lingua", themeTitle: "Cambia tema", dayTitle: "Scegli un giorno",
     clearSearch: "Cancella la ricerca", clearDay: "Cancella il filtro giorno", clearPrice: "Cancella il filtro prezzo",
     backTop: "Torna su", prevWeek: "Settimana precedente", nextWeek: "Settimana successiva", removeView: "Rimuovi la vista salvata",
@@ -5703,6 +5734,7 @@ function applyLang() {
   $("srcMobP").innerHTML = t.srcMob;
   $("srcWebP").innerHTML = t.srcWeb;
   $("srcStageP").innerHTML = t.srcStage;
+  $("srcArtP").innerHTML = t.srcArt;
   $("srcArthouseP").innerHTML = t.srcArthouse;
   $("srcVenuesP").innerHTML = t.srcVenues;
   $("dedupP").textContent = t.dedupNote;
@@ -5750,6 +5782,7 @@ const VENUES = {
   "Bis aufs Messer": ["Boxhagener Str. 19, 10245 Berlin", "Friedrichshain"],
   "Cassiopeia": ["Revaler Str. 99 (RAW-Gel\u00e4nde), 10245 Berlin", "Friedrichshain"],
   "Ch\u00e2teau Royal": ["Unter den Linden 78, 10117 Berlin", "Mitte"],
+  "C/O Berlin": ["Hardenbergstra\u00dfe 20-24 (Amerika Haus), 10623 Berlin", "Charlottenburg"],
   "Colosseum": ["Gleimstr. 31-33, 10437 Berlin", "Prenzlauer Berg"],
   "Columbia Theater": ["Columbiadamm 9-11, 10965 Berlin", "Kreuzberg"],
   "Columbiahalle": ["Columbiadamm 13-21, 10965 Berlin", "Kreuzberg"],
@@ -5781,6 +5814,7 @@ const VENUES = {
   "Kino Zukunft": ["Alt-Stralau 68, 10245 Berlin", "Friedrichshain"],
   "Kieztreff Kamine": ["Prinzenallee 58, 13359 Berlin", "Wedding"],
   "KM28": ["Karl-Marx-Stra\u00dfe 28, 12043 Berlin", "Neuk\u00f6lln"],
+  "Laden 2": ["Brunnenstra\u00dfe 65, 13355 Berlin", "Wedding"],
   "K\u00d8PI": ["K\u00f6penicker Str. 137, 10179 Berlin", "Mitte"],
   "Kulturbrauerei": ["Sch\u00f6nhauser Allee 36, 10435 Berlin", "Prenzlauer Berg"],
   "Kulturhaus Insel": ["Alt-Treptow 6, 12435 Berlin", "Alt-Treptow"],
@@ -5799,6 +5833,7 @@ const VENUES = {
   "Mikropol": ["Nollendorfplatz 5 (im Metropol), 10777 Berlin", "Sch\u00f6neberg"],
   "Modus": ["Ritterstra\u00dfe 24-27, 10969 Berlin", "Mitte"],
   "Monarch": ["Kottbusser Tor, Neues Kreuzberger Zentrum, 10999 Berlin", "Kreuzberg"],
+  "Museum f\u00fcr Fotografie": ["Jebensstra\u00dfe 2, 10623 Berlin", "Charlottenburg"],
   "Neue Nationalgalerie": ["Potsdamer Stra\u00dfe 50, 10785 Berlin", "Tiergarten"],
   "Neue Zukunft": ["Alt-Stralau 68, 10245 Berlin", "Friedrichshain"],
   "Orwohaus": ["Frank-Zappa-Stra\u00dfe 19, 12681 Berlin", "Marzahn"],
@@ -6308,7 +6343,7 @@ function eventRow(e, i) {
     ? `${renderArtists(tmain, true)}<span class="evartists">${renderArtists(tsub, false)}</span>`
     : renderArtists(tmain, false);
   const flags = (e.smokeFree || e.wheelchair)
-    ? `<span class="flags">${e.smokeFree ? "\ud83d\udead " : ""}${e.wheelchair ? "\u267f\ufe0f" : ""}</span>` : "";
+    ? `<span class="flags">${e.smokeFree ? `<span class="tag sf">${esc(T().sfTag)}</span>` : ""}${e.wheelchair ? `<span class="tag wc">${esc(T().wcTag)}</span>` : ""}</span>` : "";
   const vinfo = e.venue ? venueInfo(e.venue) : null;
   const vtip = vinfo && vinfo.addr ? `${esc(e.venue)} \u00b7 ${esc(vinfo.addr)}` : T().venueOnly;
   const vname = e.venue
