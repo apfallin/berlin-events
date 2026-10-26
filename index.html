@@ -6179,7 +6179,7 @@ var IMP_NAME = [65,110,100,114,101,97,32,80,105,114,97,115,60,98,114,62,90,119,1
 var IMP_CONTACT = [69,45,77,97,105,108,58,32,119,111,105,98,46,97,111,51,100,98,64,112,97,115,115,105,110,98,111,120,46,99,111,109];
 var IMP_RESP = [65,110,100,114,101,97,32,80,105,114,97,115,44,32,65,110,115,99,104,114,105,102,116,32,119,105,101,32,111,98,101,110];
 function impStr(a) { var s = ""; for (var i = 0; i < a.length; i++) s += String.fromCharCode(a[i]); return s; }
-$("legalLink").addEventListener("click", function (ev) { ev.preventDefault(); var d = $("legal"); if (!d.dataset.f) { $("impName").innerHTML = impStr(IMP_NAME); $("impContact").innerHTML = impStr(IMP_CONTACT); $("impResp").innerHTML = impStr(IMP_RESP); d.dataset.f = 1; } var open = d.style.display !== "none"; d.style.display = open ? "none" : "block"; if (!open) d.scrollIntoView({ behavior: "smooth", block: "nearest" }); });
+$("legalLink").addEventListener("click", function (ev) { ev.preventDefault(); var d = $("legal"); if (!d.dataset.f) { $("impName").innerHTML = impStr(IMP_NAME); $("impContact").innerHTML = impStr(IMP_CONTACT); $("impResp").innerHTML = impStr(IMP_RESP); d.dataset.f = 1; } var open = d.style.display !== "none"; d.style.display = open ? "none" : "block"; if (!open) { renderAllBatches(); /* same progressive-rendering target-shift fix as the srcLink asterisk */ d.scrollIntoView({ behavior: "smooth", block: "nearest" }); } });
 // Feedback line in the footer (23 Oct 2026): the contact email from the Impressum, filled at
 // boot from the obfuscated IMP_CONTACT array so it stays out of scrapers' plain HTML.
 var fbMail = impStr(IMP_CONTACT).replace(/^E-?Mail:\s*/i, "");
@@ -6469,6 +6469,12 @@ function renderUntilFk(fk) {
   while (RENDERED < LAST.length) { appendBatch(); if (found()) return true; }
   return false;
 }
+function renderAllBatches() {
+  // Build the FULL list (footer jumps only, see below): the disclaimer/legal links compute their scroll
+  // target from the document height; with progressive rendering the smooth scroll would trigger more
+  // batches while scrolling, the page would grow and the target would "run away" - landing mid-list.
+  while (RENDERED < LAST.length) appendBatch();
+}
 function renderList() {
   const genreActive = S.genre !== "All" || S.subGenre !== "All" || (S.pGenres.length > 0 && S.pCats.indexOf("Music") !== -1);
   let list = filtered();
@@ -6606,7 +6612,7 @@ $("dayBtn").addEventListener("click", () => { const d = $("day"); try { d.showPi
 // srcLink lands on the DISCLAIMER (23 Oct 2026): scroll target = disclaimer top minus the ACTUAL
 // height of the sticky controls bar (measured at click time, so it works on every screen size and
 // with the genre menu open/closed; a fixed scroll-margin proved insufficient).
-$("srcLink").addEventListener("click", () => { var dp = document.getElementById("disclaimerP"); var top = dp.getBoundingClientRect().top + window.scrollY - (document.getElementById("controls").offsetHeight + 14); window.scrollTo({ top: top, behavior: "smooth" }); });
+$("srcLink").addEventListener("click", () => { renderAllBatches(); /* progressive rendering: build the full list FIRST, or the growing page moves the target during the smooth scroll (26 Oct 2026 bug report: the asterisk no longer reached the disclaimer) */ var dp = document.getElementById("disclaimerP"); var top = dp.getBoundingClientRect().top + window.scrollY - (document.getElementById("controls").offsetHeight + 14); window.scrollTo({ top: top, behavior: "smooth" }); });
 // QR popover (23 Oct 2026, Andrea request): shows the site QR code so someone next to you can scan
 // it. Pattern of #listenPanel: fixed popover under the button, closes on outside click and scroll.
 $("qrBtn").addEventListener("click", function (ev) {
