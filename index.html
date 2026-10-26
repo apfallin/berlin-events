@@ -10,6 +10,11 @@
   * { box-sizing: border-box; }
   html { overflow-anchor: none; } /* disable native scroll anchoring: it fights the manual venue-filter anchoring */
   body { margin: 0; background: #fff; color: #171717; transition: background .15s, color .15s; }
+  /* iOS side-space guard (26 Oct 2026, Andrea report: on an iPhone the page looked slightly zoomed with empty
+     side space on load). If anything ever ends up wider than the viewport, Safari on iPhone zooms-to-fit (and
+     can remember that zoom per site). clip (NOT hidden!) prevents horizontal overflow WITHOUT creating a scroll
+     container, so position:sticky (.controls) keeps working; older browsers that don't know it just ignore it. */
+  html, body { overflow-x: clip; }
   /* Theme cross-fade (22 Oct 2026, Andrea request; SHORTENED to .15s same day after a friend's feedback:
      at .25s the switch felt unresponsive on mobile and invited double-clicks). While body.theming is
      set (200ms around a theme toggle) EVERY element cross-fades colors together, so the whole page
@@ -391,7 +396,13 @@
     .sub { font-size: .78rem; }
     .controls { margin: 0 -1rem; padding: .7rem 1rem; }
     input[type=text], input[type=date], input[type=number] { font-size: 1rem; padding: .35rem .6rem; }
-    #pmin, #pmax { width: 4.2rem; font-size: .95rem; }
+    #pmin, #pmax { width: 4.2rem; font-size: 1rem; }
+    /* iOS zoom fix (26 Oct 2026, Andrea report: on an iPhone the page looked slightly zoomed with empty side space).
+       Safari auto-zooms when a form control with font-size < 16px gets focus, and the zoom PERSISTS after the
+       keyboard closes. The main inputs are already 1rem (16px) above; these two controls were still below
+       threshold: #langSel (.68rem) and the price inputs (.95rem). Both go to 16px on phones only -
+       #langSel gets slimmer padding so the pill stays visually small. NEVER reduce these below 16px on mobile. */
+    #langSel { font-size: 1rem; padding: .1rem .3rem; }
     #q { min-width: 0; }
     #day { width: auto; }
     .chip { min-height: 2.35rem; padding: .35rem .8rem; }
