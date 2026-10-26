@@ -6099,6 +6099,7 @@ function openSharedEvent(fk) {
   if (date < today && S.view !== "archive") { S.view = "archive"; S.autoArch = true; }
   S.dayFilter = date; $("day").value = date;
   renderAll();
+  renderUntilFk(fk); // may not be rendered yet with progressive rendering
   const li = Array.prototype.find.call(document.querySelectorAll("#list li"), function (l) { return l.dataset.fk === fk; });
   if (li) {
     li.classList.add("open", "flash");
@@ -6437,6 +6438,37 @@ function renderChips() {
 }
 
 let LAST = [];
+// ── Progressive list rendering (26 Oct 2026, after a performance note from a friend of Andrea) ──
+// renderList used to build ONE innerHTML with every filtered row (~2600 <li> on All/Upcoming), which is
+// heavy on phones. Now only the first RENDER_BATCH rows exist in the DOM; more batches are appended
+// (synchronously, before paint) while the user approaches the bottom - the UX is EXACTLY the same
+// seamless list as before, but the browser only ever handles the rows near the viewport.
+// Clicks keep working unchanged: the handler is delegated on #list and data-i still indexes LAST.
+// #count above the list keeps showing the FULL filtered length, not the rendered one.
+const RENDER_BATCH = 60;
+let RENDERED = 0;
+function appendBatch() {
+  const n = Math.min(RENDERED + RENDER_BATCH, LAST.length);
+  if (n <= RENDERED) return;
+  const rows = [];
+  for (let i = RENDERED; i < n; i++) rows.push(eventRow(LAST[i], i));
+  $("list").insertAdjacentHTML("beforeend", rows.join(""));
+  RENDERED = n;
+}
+function maybeMore() {
+  // Keep appending while the page bottom is within ~2 screens of the viewport (also fills the first
+  // batch after a render, on tall screens). Cheap when nothing is due: one comparison, no DOM writes.
+  while (RENDERED < LAST.length &&
+         document.documentElement.scrollHeight - (window.scrollY + window.innerHeight) < 1600) appendBatch();
+}
+function renderUntilFk(fk) {
+  // Expand batches until the row with this fk exists (shared-event links + venue links must be able
+  // to jump to a row that may not be rendered yet).
+  const found = () => Array.prototype.some.call(document.querySelectorAll("#list li"), (l) => l.dataset.fk === fk);
+  if (found()) return true;
+  while (RENDERED < LAST.length) { appendBatch(); if (found()) return true; }
+  return false;
+}
 function renderList() {
   const genreActive = S.genre !== "All" || S.subGenre !== "All" || (S.pGenres.length > 0 && S.pCats.indexOf("Music") !== -1);
   let list = filtered();
@@ -6446,7 +6478,9 @@ function renderList() {
   LAST = list;
   $("count").textContent = T().count(list.length, S.view) +
     (S.dayFilter ? ` \u00b7 ${new Date(S.dayFilter + "T12:00:00").toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}` : "");
-  $("list").innerHTML = list.map((e, i) => eventRow(e, i)).join("");
+  RENDERED = 0;
+  $("list").innerHTML = "";
+  maybeMore();
   $("empty").style.display = list.length ? "none" : "block";
   const bar = $("unkBar");
   if (genreActive && unkCount > 0) {
@@ -6634,7 +6668,14 @@ $("list").addEventListener("click", (ev) => {
   if (t.classList.contains("star")) {
     const k = favKey(LAST[Number(t.dataset.i)]);
     if (FAVS.has(k)) FAVS.delete(k); else FAVS.add(k);
-    saveFavs(); renderAll(); return;
+    saveFavs();
+    // Star toggle no longer rebuilds the whole list (26 Oct 2026): with progressive rendering a full
+    // renderAll() would jump the user back to the top batch. The star is updated in place instead;
+    // only in the favorites-only view (small list) does the list still need a rebuild.
+    if (S.favOnly) { renderAll(); return; }
+    t.classList.toggle("on", FAVS.has(k));
+    t.textContent = FAVS.has(k) ? "\u2b50" : "\u2606";
+    return;
   }
   if (t.classList.contains("icsbtn")) { downloadIcs(LAST[Number(t.dataset.i)]); return; }
   if (t.classList.contains("sharebtn")) { shareLink(LAST[Number(t.dataset.i)]); return; }
@@ -6645,6 +6686,7 @@ $("list").addEventListener("click", (ev) => {
     const ofs = li ? li.getBoundingClientRect().top : null;
     S.venue = LAST[Number(t.dataset.v)].venue.trim(); renderAll();
     if (fk && ofs !== null) {
+      renderUntilFk(fk); // may not be rendered yet with progressive rendering
       const nli = Array.prototype.find.call(document.querySelectorAll("#list li"), function (l) { return l.dataset.fk === fk; });
       if (nli) window.scrollBy({ top: nli.getBoundingClientRect().top - ofs, behavior: "auto" });
     }
@@ -6663,6 +6705,7 @@ window.addEventListener("scroll", () => {
   if (qp && qp.classList.contains("show")) qp.classList.remove("show");
   if (scrollTicking) return;
   scrollTicking = true;
+  maybeMore(); // progressive list: append the next batch when the bottom comes near
   requestAnimationFrame(() => {
     //  Menu-stay-open rule (22 Oct 2026, Andrea request): while the genre bar or the filters panel
     //  is OPEN, the controls must NOT collapse at the first pixel of scroll (the user may still be
