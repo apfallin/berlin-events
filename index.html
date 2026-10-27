@@ -5276,6 +5276,11 @@ function inferGenre(title) {
   // Multi-artist matching (17 Oct 2026, Andrea request): match EVERY artist segment of the title,
   // not just the first, and join all found genres - an artist keeps its genre in any combination or solo.
   var body = t.replace(/^.*?\b(presents|prsnts|pr\u00e4sentiert|presentiert)\b\s*:?\s*/, "");
+  // Compound-name guard (27 Oct 2026, same rule as eventRow): a title whose &-spacing removed
+  // matches a known artist key ("rey & kjavik" -> "rey&kjavik") is ONE artist - return its genre
+  // directly instead of splitting the name into segments that match nothing.
+  var joinedBody = body.replace(/\s*&\s*/g, "&");
+  if (MB_GENRES[joinedBody] || ARTIST_GENRES[joinedBody]) return MB_GENRES[joinedBody] || ARTIST_GENRES[joinedBody];
   var segs = body.split(/\s*[+\/&,]|\s+w\/|\s+feat\.?\s+|\s+vs\.?\s+/);
   var found = [];
   var pushG = (g) => { if (!g) return; String(g).split(/\s*,\s*/).forEach((p) => { p = p.trim().toLowerCase(); if (p && found.indexOf(p) < 0) found.push(p); }); };
@@ -6408,6 +6413,12 @@ function eventRow(e, i) {
     const parts = raw.split(ART_SEG);
     const segs = [];
     for (let k = 0; k < parts.length; k += 2) { const nm = (parts[k] || "").trim(); if (nm) segs.push(nm); }
+    // Compound-name guard (27 Oct 2026, Andrea report "Rey & Kjavik" split into two fake artists):
+    // if the name with the &-spacing REMOVED is a KNOWN artist in MB_GENRES/ARTIST_GENRES
+    // (e.g. "rey&kjavik"), it is ONE artist whose name contains "&" - keep it whole, whatever
+    // spacing the source used, so the play button searches the real name instead of two fragments.
+    const joined = raw.replace(/\s*&\s*/g, "&").toLowerCase();
+    if (MB_GENRES[joined] || ARTIST_GENRES[joined]) return renderSeg(raw.trim());
     //  Joint-band-name guard (22 Oct 2026, Andrea report "Florian Paul & die Kapelle der letzten Hoffnung"):
     //  "Name & die/der/das ..." is ONE band name (German joint-band pattern), NOT two artists - keep it
     //  whole so the play button searches the full band name instead of two broken fragments.
