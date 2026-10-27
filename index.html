@@ -4,12 +4,23 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- color-scheme (27 Oct 2026): lets the browser paint NATIVE controls (date input calendar, select dropdown,
+     scrollbars) in the right color for each theme - the JS CSS also sets body { color-scheme: light/dark }
+     so UA widgets follow the theme toggle. Browsers without support ignore it. -->
+<meta name="color-scheme" content="light dark" />
+<!-- preconnect (27 Oct 2026): open DNS+TCP+TLS to the two external services while the page parses,
+     so the analytics/counter fetches start without connection-setup delay. -->
+<link rel="preconnect" href="//gc.zgo.at" />
+<link rel="preconnect" href="https://countapi.mileshilliard.com" />
 <title>Berlin Events &#8212; What's On</title>
 <style>
   :root { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
   * { box-sizing: border-box; }
   html { overflow-anchor: none; } /* disable native scroll anchoring: it fights the manual venue-filter anchoring */
-  body { margin: 0; background: #fff; color: #171717; transition: background .15s, color .15s; }
+  body { margin: 0; background: #fff; color: #171717; transition: background .15s, color .15s; color-scheme: light; }
+  /* Native UA controls follow the site theme (27 Oct 2026): dark mode gets dark date-picker calendar,
+     dark select dropdown and dark scrollbars instead of the default light widgets. */
+  body.dark { color-scheme: dark; }
   /* iOS side-space guard (26 Oct 2026, Andrea report: on an iPhone the page looked slightly zoomed with empty
      side space on load). If anything ever ends up wider than the viewport, Safari on iPhone zooms-to-fit (and
      can remember that zoom per site). clip (NOT hidden!) prevents horizontal overflow WITHOUT creating a scroll
@@ -171,7 +182,12 @@
   .change-note { font-size: .78rem; font-weight: 600; color: #1d4ed8; margin-top: .3rem; }
   body.dark .change-note { color: #60a5fa; }
   #list { list-style: none; margin: 0; padding: 0; }
-  #list li { padding: 1.4rem 0; border-bottom: 1px solid #f0f0f0; transition: background .15s; overflow-anchor: none; }
+  #list li { padding: 1.4rem 0; border-bottom: 1px solid #f0f0f0; transition: background .15s; overflow-anchor: none;
+    /* Offscreen rows skip layout+paint (27 Oct 2026): after the footer jumps expand the FULL list, the browser
+       renders only rows near the viewport; contain-intrinsic-size gives never-seen rows a placeholder height
+       (auto = remember the real height once rendered) so the scrollbar/scroll math stays stable. Harmless
+       in browsers without support - they render everything as before. */
+    content-visibility: auto; contain-intrinsic-size: auto 100px; }
   body.dark #list li { border-color: #1a1a1a; }
   #list li:hover { background: #fafafa; }
   body.dark #list li:hover { background: #101010; }
