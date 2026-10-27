@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -6693,7 +6692,12 @@ $("dayBtn").addEventListener("click", () => { const d = $("day"); try { d.showPi
 // renderAllBatches inside a click listener - it blocks the first paint).
 function footerJump(target, goSmooth) {
   var top = target.getBoundingClientRect().top + window.scrollY - (document.getElementById("controls").offsetHeight + 14);
-  if (RENDERED >= LAST.length) { window.scrollTo({ top: top, behavior: "smooth" }); return; }
+  // v3 (27 Oct 2026, Andrea bug report: FIRST jump works, SECOND jump "stops somewhere mid-list"):
+  // the v2 pinning expands the FULL list, so on the second click RENDERED >= LAST.length and this
+  // branch smooth-scrolled over a ~200,000px distance - Firefox's smooth scroll decelerates over such
+  // distances and appears to stall partway. Instant jump whenever the list is already fully expanded
+  // (positions are stable, no batches can shift the target); smooth scroll only for short hops.
+  if (RENDERED >= LAST.length) { if (goSmooth && Math.abs(top - window.scrollY) < 2500) window.scrollTo({ top: top, behavior: "smooth" }); else window.scrollTo(0, top); return; }
   // v2 (27 Oct 2026, Andrea bug report: on laptop the click landed mid-list): the instant jump fires a
   // scroll event -> maybeMore() appends ALL remaining batches at once -> the target moves thousands of px
   // down. The v1 height-delta pinning missed that (it quit when RENDERED was already full) and never
