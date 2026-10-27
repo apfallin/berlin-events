@@ -114,19 +114,21 @@
      so the chips stand out, and an ACTIVE state that KEEPS the category color instead of the generic black pill.
      Idle = colored text + soft tinted background; Active = SOLID category color with white (dark: near-black) text.
      color-mix is progressive enhancement: browsers without it ignore the tint, the colored text still works.
-     Music has NO CAT_COLORS entry on purpose (catColor() also colors event-row text) - the chip tint is hardcoded here. */
-  #cats .chip[data-cat="Theatre"] { color: #b45309; background: color-mix(in srgb, #b45309 9%, transparent); }
-  #cats .chip[data-cat="Art"] { color: #5b21b6; background: color-mix(in srgb, #5b21b6 9%, transparent); }
-  #cats .chip[data-cat="Cinema"] { color: #0f766e; background: color-mix(in srgb, #0f766e 9%, transparent); }
-  #cats .chip[data-cat="Music"] { color: #be123c; background: color-mix(in srgb, #be123c 9%, transparent); }
+     Music has NO CAT_COLORS entry on purpose (catColor() also colors event-row text) - the chip tint is hardcoded here.
+     BORDER follow-up (27 Oct 2026, Andrea): idle borders ALSO match each category's color, telling the category
+     chips apart from every other chip on the site. */
+  #cats .chip[data-cat="Theatre"] { color: #b45309; border-color: #b45309; background: color-mix(in srgb, #b45309 9%, transparent); }
+  #cats .chip[data-cat="Art"] { color: #5b21b6; border-color: #5b21b6; background: color-mix(in srgb, #5b21b6 9%, transparent); }
+  #cats .chip[data-cat="Cinema"] { color: #0f766e; border-color: #0f766e; background: color-mix(in srgb, #0f766e 9%, transparent); }
+  #cats .chip[data-cat="Music"] { color: #be123c; border-color: #be123c; background: color-mix(in srgb, #be123c 9%, transparent); }
   #cats .chip.on[data-cat="Theatre"] { color: #fff; background: #b45309; border-color: #b45309; }
   #cats .chip.on[data-cat="Art"] { color: #fff; background: #5b21b6; border-color: #5b21b6; }
   #cats .chip.on[data-cat="Cinema"] { color: #fff; background: #0f766e; border-color: #0f766e; }
   #cats .chip.on[data-cat="Music"] { color: #fff; background: #be123c; border-color: #be123c; }
-  body.dark #cats .chip[data-cat="Theatre"] { color: #fbbf24; background: color-mix(in srgb, #fbbf24 13%, transparent); }
-  body.dark #cats .chip[data-cat="Art"] { color: #a78bfa; background: color-mix(in srgb, #a78bfa 13%, transparent); }
-  body.dark #cats .chip[data-cat="Cinema"] { color: #2dd4bf; background: color-mix(in srgb, #2dd4bf 13%, transparent); }
-  body.dark #cats .chip[data-cat="Music"] { color: #fb7185; background: color-mix(in srgb, #fb7185 13%, transparent); }
+  body.dark #cats .chip[data-cat="Theatre"] { color: #fbbf24; border-color: #fbbf24; background: color-mix(in srgb, #fbbf24 13%, transparent); }
+  body.dark #cats .chip[data-cat="Art"] { color: #a78bfa; border-color: #a78bfa; background: color-mix(in srgb, #a78bfa 13%, transparent); }
+  body.dark #cats .chip[data-cat="Cinema"] { color: #2dd4bf; border-color: #2dd4bf; background: color-mix(in srgb, #2dd4bf 13%, transparent); }
+  body.dark #cats .chip[data-cat="Music"] { color: #fb7185; border-color: #fb7185; background: color-mix(in srgb, #fb7185 13%, transparent); }
   body.dark #cats .chip.on[data-cat="Theatre"] { color: #171717; background: #fbbf24; border-color: #fbbf24; }
   body.dark #cats .chip.on[data-cat="Art"] { color: #171717; background: #a78bfa; border-color: #a78bfa; }
   body.dark #cats .chip.on[data-cat="Cinema"] { color: #171717; background: #2dd4bf; border-color: #2dd4bf; }
@@ -362,7 +364,10 @@
   #profileBar .chip { font-size: .72rem; padding: .25rem .6rem; }
   #profilePersonalize { background: #4f46e5; border-color: #4f46e5; color: #fff; font-weight: 600; }
   #profilePersonalize:hover { background: #4338ca; border-color: #4338ca; color: #fff; }
-  #profileChip { background: #eef2ff; border-color: #6366f1; color: #4338ca; }
+  /* white-space: normal (27 Oct 2026, Andrea report: after the global .chip nowrap fix this long VARIABLE-text
+     chip ("Your view: Musica, Arte ...") stopped wrapping and became one endless pill - it is the ONLY chip
+     whose label is a whole sentence, so it must be exempted from the nowrap rule and wrap its text normally. */
+  #profileChip { background: #eef2ff; border-color: #6366f1; color: #4338ca; white-space: normal; }
   body.dark #profileChip { background: #1e1b4b; border-color: #818cf8; color: #c7d2fe; }
   #profileX { margin-left: .45rem; cursor: pointer; font-size: .8rem; opacity: .8; }
   #profileX:hover { opacity: 1; }
@@ -431,6 +436,12 @@
        :focus - iOS Safari checks the font-size AT FOCUS TIME, so a 16px :focus rule still prevents the auto-zoom
        while the pill looks identical to #qrBtn/#themeBtn in idle state. NEVER reduce the :focus 16px on mobile. */
     #langSel:focus { font-size: 1rem; }
+    /* Category chips on ONE row without lateral scroll (27 Oct 2026, Andrea report: after the color tints the
+       category chips still forced horizontal scrolling on phones). Compact size so All + Music + Performing Arts +
+       Art + Cinema (~291px incl. gaps) fit a 360px viewport in one line; the scrollrow stays as a safety net for
+       very narrow devices and for the joined personal-view badge state. Desktop is untouched (already fits). */
+    #cats .chip { font-size: .68rem; padding: .32rem .45rem; }
+    #cats .catview { font-size: .58rem; padding: .18rem .35rem; }
     #q { min-width: 0; }
     #day { width: auto; }
     .chip { min-height: 2.35rem; padding: .35rem .8rem; }
