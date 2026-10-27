@@ -436,12 +436,13 @@
        :focus - iOS Safari checks the font-size AT FOCUS TIME, so a 16px :focus rule still prevents the auto-zoom
        while the pill looks identical to #qrBtn/#themeBtn in idle state. NEVER reduce the :focus 16px on mobile. */
     #langSel:focus { font-size: 1rem; }
-    /* Category chips on ONE row without lateral scroll (27 Oct 2026, Andrea report: after the color tints the
-       category chips still forced horizontal scrolling on phones). Compact size so All + Music + Performing Arts +
-       Art + Cinema (~291px incl. gaps) fit a 360px viewport in one line; the scrollrow stays as a safety net for
-       very narrow devices and for the joined personal-view badge state. Desktop is untouched (already fits). */
-    #cats .chip { font-size: .68rem; padding: .32rem .45rem; }
-    #cats .catview { font-size: .58rem; padding: .18rem .35rem; }
+    /* Category chips on ONE row without lateral scroll (27 Oct 2026, Andrea report; REVISED same day: the first
+       one-size compact rule made the chips look squished on phones where they DID fit - Andrea: "molto schiacciate
+       nonostante ci sia ancora spazio laterale"). TWO-TIER sizing now: normal-ish size up to 640px (fits >= ~390px
+       viewports), compact only on SMALL phones (<= 400px, e.g. 360px Androids / iPhone SE). The scrollrow stays as
+       a safety net for the joined personal-view badge state and very narrow devices. Desktop is untouched. */
+    #cats .chip { font-size: .75rem; padding: .4rem .65rem; }
+    #cats .catview { font-size: .62rem; padding: .22rem .45rem; }
     #q { min-width: 0; }
     #day { width: auto; }
     .chip { min-height: 2.35rem; padding: .35rem .8rem; }
@@ -469,6 +470,13 @@
     .evdate { width: auto; }
     #topBtn { bottom: 1rem; width: 2.6rem; height: 2.6rem; }
     #profileFab { bottom: 4.8rem; padding: .38rem .7rem; font-size: .7rem; max-width: 60vw; }
+  }
+
+  /* Small phones only (<= 400px): the category chips get compact so all five fit one line even on
+     360px viewports (see the TWO-TIER comment above). */
+  @media (max-width: 400px) {
+    #cats .chip { font-size: .68rem; padding: .32rem .45rem; }
+    #cats .catview { font-size: .58rem; padding: .18rem .35rem; }
   }
 
   @media print {
@@ -571,7 +579,7 @@
     <p><span id="tot"></span><span id="totLbl"> events, deduplicated</span></p>
     <p id="stats" class="mini-label" style="margin-bottom:.5rem"></p>
     <p class="disclaimer" id="disclaimerP">&#9888;&#65039; <strong>This site does not claim to list every event in Berlin &#8212; it is compiled automatically from the sources below and tries to cover as much of the scene as possible.</strong><span class="dnotes">Always double-check dates, times and tickets with the organizers or venues.<br>Genres are assigned automatically and may sometimes be inaccurate.<br>Report errors or missing events via the source links.<br>No responsibility is assumed for errors, changes or cancellations.</span></p>
-    <p class="src-title"><b style="font-size:.9rem">*</b> <span id="srcTitle">Sources</span> <span class="updated-badge">(<span class="updLbl">last updated: </span><span class="lastupdated">25 October 2026</span>)</span></p>
+    <p class="src-title"><b style="font-size:.9rem">*</b> <span id="srcTitle">Sources</span> <span class="updated-badge">(<span class="updLbl">last updated: </span><span class="lastupdated">27 October 2026</span>)</span></p>
     <p id="srcGigsP"><strong>Gigs</strong> &#8212; the <em>Berlin-Gigs</em> community pad, a DIY list of concerts with time, price, genre, smoke-free and wheelchair info.</p>
     <p id="srcMtiP"><strong>MTI</strong> &#8212; <a href="https://mytrueintent.blogspot.com" target="_blank" rel="noreferrer">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog, imported from its spreadsheet export.</p>
     <p id="srcMobP"><strong>Mob</strong> &#8212; <a href="https://mobilize.berlin" target="_blank" rel="noreferrer">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.</p>
@@ -774,7 +782,7 @@ const EVENTS = [
   { date: "2026-11-23", time: "19:00", title: "brighter agency presents:", venue: "@ Kantine am Berghain", price: "18-23\u20ac", genre: "Hyper Folk", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-24", time: "20:00", title: "silent green presents: Angela Bat Dawid", venue: "silent green", price: "19,20\u20ac", genre: "", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-11-26", time: "20:00", title: "Trucks + Die Farce Die", venue: "Neue Zukunft (Garage)", price: "", genre: "post-punk, alternative, indie", smokeFree: true, wheelchair: false, source: "cryptpad" },
-  { date: "2026-11-27", time: "19:00", title: "Loge. Kneipenkollekitv presents: Brid Control + Tigerbeat", venue: "Loge.", price: "10-15\u20ac", genre: "Psychedelic Postpunk Rock", smokeFree: true, wheelchair: false, source: "cryptpad" },
+  { date: "2026-11-27", time: "19:00", title: "Loge. Kneipenkollekitv presents: Bird Control + Tigerbeat", venue: "Loge.", price: "10-15\u20ac", genre: "Psychedelic Postpunk Rock", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-27", time: "20:00", title: "Tavare + Sometimes With Others + Lynn Wright", venue: "Kapelle99", price: "", genre: "Ambient, Slowcore, Electric Chamber", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-28", time: "19:00", title: "Loge. Kneipenkollekitv presents: Hi Mum + Nikita Curtis", venue: "Loge.", price: "10-15\u20ac", genre: "Grunge Garage Rock", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-28", time: "20:00", title: "131.2 Punkrock Crew Berlin presents: Zuckerbrot&Peitsche + Don Kanaille + Analkomando", venue: "Sama32", price: "Donation", genre: "Punkrock", smokeFree: false, wheelchair: true, source: "cryptpad" },
@@ -793,7 +801,7 @@ const EVENTS = [
   { date: "2026-12-12", time: "", title: "Crunch Tapes and Positive Transmitter present: Die Wilde Jagd", venue: "Neue Zukunft", price: "", genre: "krautrock, kosmische, art rock", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-12-17", time: "19:00", title: "8MM & Shameless/Limitless present: Spectres", venue: "8mm Bar", price: "15,48 \u20ac", genre: "fiscal catastrophe, logistic catastrophe, never again", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-12-17", time: "19:00", title: "Modern Age presents: Ruth Mac + Lobsterbomb + Lore Vain", venue: "Gibney's Berlin", price: "15 \u20ac", genre: "Indie-pop, Garage, Alternative", smokeFree: true, wheelchair: true, source: "cryptpad" },
-  { date: "2026-12-17", time: "19:00", title: "Loge. Kneipenkollekitv presents: Loser Youth + Support", venue: "Loge.", price: "10-15\u20ac", genre: "Garage Postpunk", smokeFree: true, wheelchair: false, source: "cryptpad" },
+  { date: "2026-12-18", time: "19:00", title: "Loge. Kneipenkollekitv presents: Loser Youth + Support", venue: "Loge.", price: "10-15\u20ac", genre: "Garage Postpunk", smokeFree: true, wheelchair: false, prevDate: "2026-12-17", link: "https://www.loge-berlin.org/tickets", source: "cryptpad" },
   { date: "2026-12-19", time: "20:00", title: "131.2 Punkrock Crew Berlin presents: Verschleisz + Gnatz + Pornscars", venue: "Sama32", price: "Donation", genre: "Punkrock", smokeFree: false, wheelchair: true, source: "cryptpad" },
   { date: "2026-12-19", time: "19:00", title: "Greyzone Concerts pr\u00e4sentiert: D*B*S*", venue: "Neue Zukunft", price: "\u20ac 19,90", genre: "Punk + Stoner Rock", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-12-22", time: "19:00", title: "Crunch Tapes presents: Poledance", venue: "Schokoladen", price: "\u20ac14.97", genre: "alt-pop-rock, emo, pop-punk", smokeFree: false, wheelchair: false, source: "cryptpad" },
@@ -3059,6 +3067,7 @@ const EVENTS = [
   { date: "2026-10-31", time: "18:00", title: "Amor Eterno x Dia de los Muertos: 'Sobre Las Cuatro Casas' Release", venue: "Laden 2", price: "", category: "Music", description: "Release by Do25inco & GEEGEE.", link: "https://laden2.org/", source: "web" },
 
   // \u2500\u2500 B.L.O. Kantine (blo-ateliers.de events, added 26 Oct 2026; venue already existed from cryptpad/MTI) \u2500\u2500
+  { date: "2026-10-30", time: "20:00", title: "Soli f\u00fcr Brigada Callejera", venue: "Loge.", price: "", genre: "punk, synth-punk, garage punk", smokeFree: true, wheelchair: false, category: "Music", description: "Punk benefit night (K\u00fcfa from 18:00, doors 19:00, music 20:00\u201322:00) for Brigada Callejera with Morgen Teuer T\u00f6ten (synth-punk, Berlin), R\u00e4uberin Fotzenrotz (Leipzig), St.Upid (Halle), Maldtix Ausl\u00e4nder (Leipzig) and DJs Peligro Avilez & Luna Negra (garage punk).", link: "https://www.loge-berlin.org/tickets", source: "web" },
   { date: "2026-10-30", time: "20:00", title: "P.A.N.K. presenta: Verde Lejos, Drooving & Friends", venue: "B.L.O. Kantine", price: "", genre: "latin, soul, electronic", smokeFree: true, wheelchair: true, category: "Music", description: "Two live acts and three DJs (doors 19:00). Accompaniment recommended to reach the area.", link: "https://www.blo-ateliers.de/pankpresenta-3/", source: "web" },
   { date: "2026-10-31", time: "20:30", title: "Adriano Celentano Geb\u00e4ckorchester", venue: "B.L.O. Kantine", price: "Ticketed (TixforGigs)", genre: "italo-pop", category: "Music", description: "Italo-pop and canzone night 'Una Notte Dei Morti' with the ACGO, two-set show plus DJ Mugglestones (doors 19:30).", link: "https://www.blo-ateliers.de/acgo-oct2026/", source: "web" },
 
@@ -5399,7 +5408,7 @@ const S = {
 };
 const today = new Date().toISOString().slice(0, 10);
 const $ = (id) => document.getElementById(id);
-const LAST_UPDATED = "26 October 2026";
+const LAST_UPDATED = "27 October 2026";
 // Localized display of the date above (the const itself stays English "D Month YYYY" - weekly automation rule).
 // German "22. Oktober 2026", Italian "22 ottobre 2026"; any other language and parse failures fall back to the const.
 const UPD_MONTHS = {
@@ -6217,7 +6226,7 @@ var IMP_NAME = [65,110,100,114,101,97,32,80,105,114,97,115,60,98,114,62,90,119,1
 var IMP_CONTACT = [69,45,77,97,105,108,58,32,119,111,105,98,46,97,111,51,100,98,64,112,97,115,115,105,110,98,111,120,46,99,111,109];
 var IMP_RESP = [65,110,100,114,101,97,32,80,105,114,97,115,44,32,65,110,115,99,104,114,105,102,116,32,119,105,101,32,111,98,101,110];
 function impStr(a) { var s = ""; for (var i = 0; i < a.length; i++) s += String.fromCharCode(a[i]); return s; }
-$("legalLink").addEventListener("click", function (ev) { ev.preventDefault(); var d = $("legal"); if (!d.dataset.f) { $("impName").innerHTML = impStr(IMP_NAME); $("impContact").innerHTML = impStr(IMP_CONTACT); $("impResp").innerHTML = impStr(IMP_RESP); d.dataset.f = 1; } var open = d.style.display !== "none"; d.style.display = open ? "none" : "block"; if (!open) { renderAllBatches(); /* same progressive-rendering target-shift fix as the srcLink asterisk */ d.scrollIntoView({ behavior: "smooth", block: "nearest" }); } });
+$("legalLink").addEventListener("click", function (ev) { ev.preventDefault(); var d = $("legal"); if (!d.dataset.f) { $("impName").innerHTML = impStr(IMP_NAME); $("impContact").innerHTML = impStr(IMP_CONTACT); $("impResp").innerHTML = impStr(IMP_RESP); d.dataset.f = 1; } var open = d.style.display !== "none"; d.style.display = open ? "none" : "block"; if (!open) { footerJump(d, false); /* same instant+pinning footer jump as the srcLink asterisk (27 Oct 2026) */ } });
 // Feedback line in the footer (23 Oct 2026): the contact email from the Impressum, filled at
 // boot from the obfuscated IMP_CONTACT array so it stays out of scrapers' plain HTML.
 var fbMail = impStr(IMP_CONTACT).replace(/^E-?Mail:\s*/i, "");
@@ -6656,7 +6665,34 @@ $("dayBtn").addEventListener("click", () => { const d = $("day"); try { d.showPi
 // srcLink lands on the DISCLAIMER (23 Oct 2026): scroll target = disclaimer top minus the ACTUAL
 // height of the sticky controls bar (measured at click time, so it works on every screen size and
 // with the genre menu open/closed; a fixed scroll-margin proved insufficient).
-$("srcLink").addEventListener("click", () => { renderAllBatches(); /* progressive rendering: build the full list FIRST, or the growing page moves the target during the smooth scroll (26 Oct 2026 bug report: the asterisk no longer reached the disclaimer) */ var dp = document.getElementById("disclaimerP"); var top = dp.getBoundingClientRect().top + window.scrollY - (document.getElementById("controls").offsetHeight + 14); window.scrollTo({ top: top, behavior: "smooth" }); });
+// Footer jumps (srcLink asterisk + legalLink Impressum): react IMMEDIATELY (27 Oct 2026, Andrea report:
+// "ci mette un po' a reagire prima di andare in fondo al disclaimer"). The 26 Oct fix built the FULL list
+// synchronously BEFORE scrolling (renderAllBatches) - correct landing, but the click looked dead for the
+// few hundred ms of the DOM build. NO debounce anywhere in this path - the delay was pure render cost.
+// New approach: (a) if the list is ALREADY fully expanded, positions are stable -> smooth scroll as before;
+// (b) if batches are missing, JUMP INSTANTLY to the target's CURRENT position (with a partial list the
+// disclaimer is only a few screens below), then grow the remaining batches in requestAnimationFrame chunks
+// while PINNING the scroll by the exact height each chunk adds - the target never moves on screen.
+// Weekly automation: keep footerJump and both handlers on it (do NOT go back to a synchronous
+// renderAllBatches inside a click listener - it blocks the first paint).
+function footerJump(target, goSmooth) {
+  var top = target.getBoundingClientRect().top + window.scrollY - (document.getElementById("controls").offsetHeight + 14);
+  if (RENDERED >= LAST.length) { window.scrollTo({ top: top, behavior: "smooth" }); return; }
+  if (goSmooth) {
+    window.scrollTo({ top: top, behavior: "smooth" });
+  } else {
+    window.scrollTo(0, top);
+  }
+  var lastH = document.documentElement.scrollHeight;
+  (function grow() {
+    if (RENDERED >= LAST.length) return;
+    for (var i = 0; i < 3 && RENDERED < LAST.length; i++) appendBatch();
+    var h = document.documentElement.scrollHeight;
+    if (h > lastH) { window.scrollBy(0, h - lastH); lastH = h; }
+    requestAnimationFrame(grow);
+  })();
+}
+$("srcLink").addEventListener("click", () => { footerJump(document.getElementById("disclaimerP"), false); });
 // QR popover (23 Oct 2026, Andrea request): shows the site QR code so someone next to you can scan
 // it. Pattern of #listenPanel: fixed popover under the button, closes on outside click and scroll.
 $("qrBtn").addEventListener("click", function (ev) {
