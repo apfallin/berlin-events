@@ -96,6 +96,10 @@
   #dayWrap #dayClear:hover { background: #f5f5f5; color: #171717; }
   body.dark #dayWrap #dayClear:hover { background: #262626; color: #f5f5f5; }
   .chip { border: 1px solid #d4d4d4; background: transparent; color: #525252; border-radius: 999px;
+    /* nowrap (27 Oct 2026, Andrea report: the two-word "Performing Arts" chip folded to two lines wherever the
+       chip row could shrink/wrap, e.g. the My-view panel, making that pill TALLER than the others). Keeping each
+       chip label on ONE line guarantees uniform chip height everywhere. */
+    white-space: nowrap;
     padding: .4rem .9rem; font-size: .75rem; font-weight: 500; cursor: pointer; transition: all .15s; }
   .chip:hover { border-color: #737373; color: #171717; }
   .chip.on { background: #171717; color: #fff; border-color: #171717; }
@@ -106,6 +110,27 @@
   #cats .catview + .chip { border-top-left-radius: 0; border-bottom-left-radius: 0; margin-left: 0; }
   body.dark .catview { background: #1e1b4b; border-color: #818cf8; color: #c7d2fe; }
   body.dark .catview:hover { background: #312e81; }
+  /* Category chip tints (27 Oct 2026, Andrea request: light background matched to each category's text color
+     so the chips stand out, and an ACTIVE state that KEEPS the category color instead of the generic black pill.
+     Idle = colored text + soft tinted background; Active = SOLID category color with white (dark: near-black) text.
+     color-mix is progressive enhancement: browsers without it ignore the tint, the colored text still works.
+     Music has NO CAT_COLORS entry on purpose (catColor() also colors event-row text) - the chip tint is hardcoded here. */
+  #cats .chip[data-cat="Theatre"] { color: #b45309; background: color-mix(in srgb, #b45309 9%, transparent); }
+  #cats .chip[data-cat="Art"] { color: #5b21b6; background: color-mix(in srgb, #5b21b6 9%, transparent); }
+  #cats .chip[data-cat="Cinema"] { color: #0f766e; background: color-mix(in srgb, #0f766e 9%, transparent); }
+  #cats .chip[data-cat="Music"] { color: #be123c; background: color-mix(in srgb, #be123c 9%, transparent); }
+  #cats .chip.on[data-cat="Theatre"] { color: #fff; background: #b45309; border-color: #b45309; }
+  #cats .chip.on[data-cat="Art"] { color: #fff; background: #5b21b6; border-color: #5b21b6; }
+  #cats .chip.on[data-cat="Cinema"] { color: #fff; background: #0f766e; border-color: #0f766e; }
+  #cats .chip.on[data-cat="Music"] { color: #fff; background: #be123c; border-color: #be123c; }
+  body.dark #cats .chip[data-cat="Theatre"] { color: #fbbf24; background: color-mix(in srgb, #fbbf24 13%, transparent); }
+  body.dark #cats .chip[data-cat="Art"] { color: #a78bfa; background: color-mix(in srgb, #a78bfa 13%, transparent); }
+  body.dark #cats .chip[data-cat="Cinema"] { color: #2dd4bf; background: color-mix(in srgb, #2dd4bf 13%, transparent); }
+  body.dark #cats .chip[data-cat="Music"] { color: #fb7185; background: color-mix(in srgb, #fb7185 13%, transparent); }
+  body.dark #cats .chip.on[data-cat="Theatre"] { color: #171717; background: #fbbf24; border-color: #fbbf24; }
+  body.dark #cats .chip.on[data-cat="Art"] { color: #171717; background: #a78bfa; border-color: #a78bfa; }
+  body.dark #cats .chip.on[data-cat="Cinema"] { color: #171717; background: #2dd4bf; border-color: #2dd4bf; }
+  body.dark #cats .chip.on[data-cat="Music"] { color: #171717; background: #fb7185; border-color: #fb7185; }
   .hintdot { display: inline-block; width: .42rem; height: .42rem; border-radius: 999px; background: #f59e0b; margin-left: .4rem; vertical-align: middle; }
   body.dark .hintdot { background: #fbbf24; }
   .chipgroup { display: inline-flex; gap: .5rem; align-items: center; }
@@ -400,9 +425,12 @@
     /* iOS zoom fix (26 Oct 2026, Andrea report: on an iPhone the page looked slightly zoomed with empty side space).
        Safari auto-zooms when a form control with font-size < 16px gets focus, and the zoom PERSISTS after the
        keyboard closes. The main inputs are already 1rem (16px) above; these two controls were still below
-       threshold: #langSel (.68rem) and the price inputs (.95rem). Both go to 16px on phones only -
-       #langSel gets slimmer padding so the pill stays visually small. NEVER reduce these below 16px on mobile. */
-    #langSel { font-size: 1rem; padding: .1rem .3rem; }
+       threshold: #langSel (.68rem) and the price inputs (.95rem). The price inputs go to 16px (1rem) on phones only.
+       FIX UPDATE (27 Oct 2026, Andrea report: the always-on 1rem made the langSel text much bigger and NOT
+       uniform with the qr/theme pills): #langSel keeps its normal .68rem trio size; the 16px applies ONLY at
+       :focus - iOS Safari checks the font-size AT FOCUS TIME, so a 16px :focus rule still prevents the auto-zoom
+       while the pill looks identical to #qrBtn/#themeBtn in idle state. NEVER reduce the :focus 16px on mobile. */
+    #langSel:focus { font-size: 1rem; }
     #q { min-width: 0; }
     #day { width: auto; }
     .chip { min-height: 2.35rem; padding: .35rem .8rem; }
@@ -6402,12 +6430,18 @@ function renderChips() {
     $("catViewBadge").addEventListener("click", () => { openProfilePanel(); $("profilePanel").scrollIntoView({ behavior: "smooth", block: "nearest" }); });
   }
   $("cats").querySelectorAll("[data-cat]").forEach((b) => {
-    b.style.color = b.classList.contains("on") ? "" : catColor(b.dataset.cat);
+    // Category chip colors now live in CSS (idle tint + active solid color, 27 Oct 2026) - do NOT set
+    // b.style.color here: an inline color would override the white text of the active colored chips.
     b.addEventListener("click", () => { S.category = b.dataset.cat; S.genre = "All"; S.subGenre = "All"; renderAll(); });
   });
   const gm = $("genreWrap");
   const sg = $("subgenres");
-  if (S.category !== "All" && !S.showFilters) {
+  // Genre chips are a MUSIC filter (27 Oct 2026, Andrea report: non-music categories also showed music-genre
+  // chips - accidental output of the automatic genre inference: e.g. the Theatre reading "Christiane Ro\u0308singer -
+  // Lesung" matched the MusicBrainz artist key, "House of Hopes" matched the /house/ keyword, the Cinema talk
+  // "West Indies" matched /indie/). So the genre chip row now opens ONLY for the Music category; under
+  // Theatre/Art/Cinema it stays closed (the genre never made sense there as a filter).
+  if (S.category === "Music" && !S.showFilters) {
     gm.classList.add("open");
     $("genres").innerHTML = availableMacros().map((g) =>
       `<button class="gchip${S.genre === g ? " on" : ""}" data-g="${esc(g)}">${esc(g)}</button>`).join("");
