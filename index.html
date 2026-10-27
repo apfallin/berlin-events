@@ -3083,7 +3083,7 @@ const EVENTS = [
   { date: "2026-10-31", time: "18:00", title: "Amor Eterno x Dia de los Muertos: 'Sobre Las Cuatro Casas' Release", venue: "Laden 2", price: "", category: "Music", description: "Release by Do25inco & GEEGEE.", link: "https://laden2.org/", source: "web" },
 
   // \u2500\u2500 B.L.O. Kantine (blo-ateliers.de events, added 26 Oct 2026; venue already existed from cryptpad/MTI) \u2500\u2500
-  { date: "2026-10-30", time: "20:00", title: "Soli f\u00fcr Brigada Callejera", venue: "Loge.", price: "", genre: "punk, synth-punk, garage punk", smokeFree: true, wheelchair: false, category: "Music", description: "Punk benefit night (K\u00fcfa from 18:00, doors 19:00, music 20:00\u201322:00) for Brigada Callejera with Morgen Teuer T\u00f6ten (synth-punk, Berlin), R\u00e4uberin Fotzenrotz (Leipzig), St.Upid (Halle), Maldtix Ausl\u00e4nder (Leipzig) and DJs Peligro Avilez & Luna Negra (garage punk).", link: "https://www.loge-berlin.org/tickets", source: "web" },
+  { date: "2026-10-30", time: "20:00", title: "Morgen Teuer T\u00f6ten + R\u00e4uberin Fotzenrotz + St.Upid + Maldtix Ausl\u00e4nder", venue: "Loge.", price: "", genre: "punk, synth-punk, garage punk", smokeFree: true, wheelchair: false, category: "Music", description: "HYDRA Soliparty for Brigada Callejera at Loge. Kneipenkollektiv (K\u00fcfa from 18:00, doors 19:00, music 20:00\u201322:00). With DJs Peligro Avilez & Luna Negra (garage punk).", link: "https://www.loge-berlin.org/tickets", source: "web" },
   { date: "2026-10-30", time: "20:00", title: "P.A.N.K. presenta: Verde Lejos, Drooving & Friends", venue: "B.L.O. Kantine", price: "", genre: "latin, soul, electronic", smokeFree: true, wheelchair: true, category: "Music", description: "Two live acts and three DJs (doors 19:00). Accompaniment recommended to reach the area.", link: "https://www.blo-ateliers.de/pankpresenta-3/", source: "web" },
   { date: "2026-10-31", time: "20:30", title: "Adriano Celentano Geb\u00e4ckorchester", venue: "B.L.O. Kantine", price: "Ticketed (TixforGigs)", genre: "italo-pop", category: "Music", description: "Italo-pop and canzone night 'Una Notte Dei Morti' with the ACGO, two-set show plus DJ Mugglestones (doors 19:30).", link: "https://www.blo-ateliers.de/acgo-oct2026/", source: "web" },
 
@@ -6694,18 +6694,26 @@ $("dayBtn").addEventListener("click", () => { const d = $("day"); try { d.showPi
 function footerJump(target, goSmooth) {
   var top = target.getBoundingClientRect().top + window.scrollY - (document.getElementById("controls").offsetHeight + 14);
   if (RENDERED >= LAST.length) { window.scrollTo({ top: top, behavior: "smooth" }); return; }
-  if (goSmooth) {
-    window.scrollTo({ top: top, behavior: "smooth" });
-  } else {
-    window.scrollTo(0, top);
-  }
-  var lastH = document.documentElement.scrollHeight;
-  (function grow() {
-    if (RENDERED >= LAST.length) return;
-    for (var i = 0; i < 3 && RENDERED < LAST.length; i++) appendBatch();
-    var h = document.documentElement.scrollHeight;
-    if (h > lastH) { window.scrollBy(0, h - lastH); lastH = h; }
-    requestAnimationFrame(grow);
+  // v2 (27 Oct 2026, Andrea bug report: on laptop the click landed mid-list): the instant jump fires a
+  // scroll event -> maybeMore() appends ALL remaining batches at once -> the target moves thousands of px
+  // down. The v1 height-delta pinning missed that (it quit when RENDERED was already full) and never
+  // compensated. v2 pins to the target's ACTUAL viewport position every frame instead of page height:
+  // wherever the target goes (batches, maybeMore, content-visibility reflow), the scroll follows it,
+  // until it stays put for 3 consecutive frames. User input cancels the pinning immediately.
+  window.scrollTo(0, top);
+  var pinned = target.getBoundingClientRect().top;
+  var cancel = false;
+  var onStop = function () { cancel = true; window.removeEventListener("wheel", onStop); window.removeEventListener("touchmove", onStop); };
+  window.addEventListener("wheel", onStop, { passive: true });
+  window.addEventListener("touchmove", onStop, { passive: true });
+  var stable = 0;
+  (function pin() {
+    if (cancel) return;
+    var cur = target.getBoundingClientRect().top;
+    if (Math.abs(cur - pinned) > 0.5) { window.scrollBy(0, cur - pinned); stable = 0; }
+    else { stable++; }
+    if (RENDERED < LAST.length) { for (var i = 0; i < 3 && RENDERED < LAST.length; i++) appendBatch(); }
+    if (stable < 3) requestAnimationFrame(pin);
   })();
 }
 $("srcLink").addEventListener("click", () => { footerJump(document.getElementById("disclaimerP"), false); });
