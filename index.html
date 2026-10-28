@@ -595,7 +595,7 @@
     <p><span id="tot"></span><span id="totLbl"> events, deduplicated</span></p>
     <p id="stats" class="mini-label" style="margin-bottom:.5rem"></p>
     <p class="disclaimer" id="disclaimerP">&#9888;&#65039; <strong>This site does not claim to list every event in Berlin &#8212; it is compiled automatically from the sources below and tries to cover as much of the scene as possible.</strong><span class="dnotes">Always double-check dates, times and tickets with the organizers or venues.<br>Genres are assigned automatically and may sometimes be inaccurate.<br>Report errors or missing events via the source links.<br>No responsibility is assumed for errors, changes or cancellations.</span></p>
-    <p class="src-title"><b style="font-size:.9rem">*</b> <span id="srcTitle">Sources</span> <span class="updated-badge">(<span class="updLbl">last updated: </span><span class="lastupdated">27 October 2026</span>)</span></p>
+    <p class="src-title"><b style="font-size:.9rem">*</b> <span id="srcTitle">Sources</span> <span class="updated-badge">(<span class="updLbl">last updated: </span><span class="lastupdated">28 October 2026</span>)</span></p>
     <p id="srcGigsP"><strong>Gigs</strong> &#8212; the <em>Berlin-Gigs</em> community pad, a DIY list of concerts with time, price, genre, smoke-free and wheelchair info.</p>
     <p id="srcMtiP"><strong>MTI</strong> &#8212; <a href="https://mytrueintent.blogspot.com" target="_blank" rel="noreferrer">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog, imported from its spreadsheet export.</p>
     <p id="srcMobP"><strong>Mob</strong> &#8212; <a href="https://mobilize.berlin" target="_blank" rel="noreferrer">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.</p>
@@ -3087,6 +3087,10 @@ const EVENTS = [
   { date: "2026-10-30", time: "20:00", title: "P.A.N.K. presenta: Verde Lejos, Drooving & Friends", venue: "B.L.O. Kantine", price: "", genre: "latin, soul, electronic", smokeFree: true, wheelchair: true, category: "Music", description: "Two live acts and three DJs (doors 19:00). Accompaniment recommended to reach the area.", link: "https://www.blo-ateliers.de/pankpresenta-3/", source: "web" },
   { date: "2026-10-31", time: "20:30", title: "Adriano Celentano Geb\u00e4ckorchester", venue: "B.L.O. Kantine", price: "Ticketed (TixforGigs)", genre: "italo-pop", category: "Music", description: "Italo-pop and canzone night 'Una Notte Dei Morti' with the ACGO, two-set show plus DJ Mugglestones (doors 19:30).", link: "https://www.blo-ateliers.de/acgo-oct2026/", source: "web" },
 
+  // \u2500\u2500 Slaughterhouse / Kulturfabrik Moabit ('gums in moabit' flyer by gums booking & shows, added 28 Oct 2026; venue already existed) \u2500\u2500
+  { date: "2026-11-20", time: "19:00", title: "funsover + Mone + Die Kn\u00f6pfe", venue: "Slaughterhouse", price: "Free", genre: "shoegaze, alternative rock, punk", category: "Music", description: "'gums in moabit' concert night presented by gums booking & shows in the Kulturfabrik Moabit \u2014 free entry ('Eintritt frei!'), doors 19:00.", link: "https://kulturfabrik-moabit.de/", source: "web" },
+  { date: "2026-12-04", time: "19:00", title: "SCAMPI + Lail&Lomar + SO SORRY", venue: "Slaughterhouse", price: "Free", genre: "drum and bass, alternative jazz, alt-pop", category: "Music", description: "'gums in moabit' concert night presented by gums booking & shows in the Kulturfabrik Moabit \u2014 free entry ('Eintritt frei!'), doors 19:00.", link: "https://kulturfabrik-moabit.de/", source: "web" },
+
   // \u2500\u2500 Cinema: indie & special film events \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
   { date: "2026-10-14", time: "18:00", title: "Ukrainian Film Festival Berlin \u2014 7th edition", venue: "Various cinemas", price: "from \u20ac8", category: "Cinema", description: "Latest contemporary films from Ukraine, theme 'Emergency Spaces', until 18 Oct.", link: "https://uffberlin.de", source: "web" },
   { date: "2026-10-09", time: "19:00", title: "Arsenal Filminstitut \u2014 Ninjin Club film series", venue: "Kino Arsenal, silent green", price: "from \u20ac7", category: "Cinema", description: "October series dedicated to the Japanese studio founded by actresses Ineko Arima, Keiko Kishi and Yoshiko Kuga \u2014 arthouse and experimental cinema all month.", link: "https://arsenal-berlin.de", source: "web" },
@@ -3589,6 +3593,7 @@ var MB_GENRES = {
   "die anstalt": "punk",
   "die fantastischen vier": "hip hop",
   "die happy": "alternative metal",
+  "die kn\u00f6pfe": "punk, synth-punk",
   "die prinzen": "pop",
   "die seilschaft": "rock",
   "die sterne": "hamburger schule, indie pop, indie rock",
@@ -3678,6 +3683,7 @@ var MB_GENRES = {
   "freya skye": "pop",
   "friendly fires": "indie rock, indietronica",
   "frozen soul": "death metal",
+  "funsover": "shoegaze, alternative rock",
   "future palace": "metalcore, alternative rock, post-hardcore",
   "f\u00efx8:s\u00ebd8": "electronic",
   "gavin degraw": "pop, pop rock, singer-songwriter",
@@ -3839,6 +3845,7 @@ var MB_GENRES = {
   "la roux": "electronic, synth-pop",
   "lack": "post-hardcore",
   "lael neale": "folk, pop, singer-songwriter",
+  "lail&lomar": "alternative, indie",
   "lagrimas": "crust punk, emo, neocrust",
   "laibach": "industrial, martial industrial, experimental",
   "lambrini girls": "punk, punk rock, riot grrrl",
@@ -3931,6 +3938,7 @@ var MB_GENRES = {
   "mocky": "electronic, funk, hip hop",
   "mogwai": "post-rock, instrumental, electronic",
   "mollie elizabeth": "pop, singer-songwriter",
+  "mone": "folk, singer-songwriter",
   "monatik": "dance-pop, pop",
   "monet192": "hip hop, pop rap, trap",
   "moneybrother": "indie rock",
@@ -4059,6 +4067,7 @@ var MB_GENRES = {
   "santiano": "folk, schlager, sea shanty",
   "sarah connor": "pop, blue-eyed soul, contemporary r&b",
   "sarah engels": "pop, schlager",
+  "scampi": "drum and bass, acid jazz, indie",
   "schandmaul": "folk rock, medieval rock, folk metal",
   "sdp": "hip hop, pop, reggae",
   "seb lowe": "alternative folk, alternative pop, alternative punk",
@@ -4088,6 +4097,7 @@ var MB_GENRES = {
   "sml": "free improvisation, jazz, jazz fusion",
   "smokie": "rock, glam rock, soft rock",
   "snarky puppy": "jazz, funk, jazz fusion",
+  "so sorry": "jazz, alt-pop",
   "soen": "progressive metal, progressive rock, metal",
   "sofie royer": "italo-disco, soft rock, synth-pop",
   "solar fake": "electronic, gothic",
@@ -5429,7 +5439,7 @@ const S = {
 };
 const today = new Date().toISOString().slice(0, 10);
 const $ = (id) => document.getElementById(id);
-const LAST_UPDATED = "27 October 2026";
+const LAST_UPDATED = "28 October 2026";
 // Localized display of the date above (the const itself stays English "D Month YYYY" - weekly automation rule).
 // German "22. Oktober 2026", Italian "22 ottobre 2026"; any other language and parse failures fall back to the const.
 const UPD_MONTHS = {
