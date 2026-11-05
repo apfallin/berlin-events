@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -594,7 +595,7 @@
     <p><span id="tot"></span><span id="totLbl"> events, deduplicated</span></p>
     <p id="stats" class="mini-label" style="margin-bottom:.5rem"></p>
     <p class="disclaimer" id="disclaimerP">&#9888;&#65039; <strong>This site does not claim to list every event in Berlin &#8212; it is compiled automatically from the sources below and tries to cover as much of the scene as possible.</strong><span class="dnotes">Always double-check dates, times and tickets with the organizers or venues.<br>Genres are assigned automatically and may sometimes be inaccurate.<br>Report errors or missing events via the source links.<br>No responsibility is assumed for errors, changes or cancellations.</span></p>
-    <p class="src-title"><b style="font-size:.9rem">*</b> <span id="srcTitle">Sources</span> <span class="updated-badge">(<span class="updLbl">last updated: </span><span class="lastupdated">28 October 2026</span>)</span></p>
+    <p class="src-title"><b style="font-size:.9rem">*</b> <span id="srcTitle">Sources</span> <span class="updated-badge">(<span class="updLbl">last updated: </span><span class="lastupdated">5 November 2026</span>)</span></p>
     <p id="srcGigsP"><strong>Gigs</strong> &#8212; the <em>Berlin-Gigs</em> community pad, a DIY list of concerts with time, price, genre, smoke-free and wheelchair info.</p>
     <p id="srcMtiP"><strong>MTI</strong> &#8212; <a href="https://mytrueintent.blogspot.com" target="_blank" rel="noreferrer">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog, imported from its spreadsheet export.</p>
     <p id="srcMobP"><strong>Mob</strong> &#8212; <a href="https://mobilize.berlin" target="_blank" rel="noreferrer">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.</p>
@@ -3346,7 +3347,6 @@ const EVENTS = [
   { date: "2026-11-05", title: "Adi Scotheque / Cel Ray", venue: "Trixxter", source: "mytrueintent" },
   { date: "2026-11-05", title: "Kings of Leon: 'O My Beloved' Listening Event", venue: "Rough Trade Berlin", source: "mytrueintent" },
   { date: "2026-11-05", title: "Pro Pain / Punishable Act / Fuck", venue: "SO36", source: "mytrueintent" },
-  { date: "2026-11-05", title: "Zirkel", venue: "Schokoladen", source: "mytrueintent" },
   { date: "2026-11-06", title: "Eilis Frawley: 'Twist My Words' Live + Signing", venue: "Rough Trade Berlin", source: "mytrueintent" },
   { date: "2026-11-06", title: "Frau Mansmann / Driven By Clockwork", venue: "Monarch", source: "mytrueintent" },
   { date: "2026-11-06", title: "Nowar / Necessity / Precious", venue: "K19", source: "mytrueintent" },
@@ -5729,7 +5729,7 @@ const S = {
 };
 const today = new Date().toISOString().slice(0, 10);
 const $ = (id) => document.getElementById(id);
-const LAST_UPDATED = "29 October 2026";
+const LAST_UPDATED = "5 November 2026";
 // Localized display of the date above (the const itself stays English "D Month YYYY" - weekly automation rule).
 // German "22. Oktober 2026", Italian "22 ottobre 2026"; any other language and parse failures fall back to the const.
 const UPD_MONTHS = {
