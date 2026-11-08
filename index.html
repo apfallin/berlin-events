@@ -204,6 +204,21 @@
   .evmain > div { min-width: 0; }
   .evdatecol { width: 5rem; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-start; gap: .2rem; }
   .evdatecol .star { margin: .45rem auto 0 auto; }
+  /* Category chip (8 Nov 2026, Andrea: the typology shown only by title colors was not intuitive): tiny tinted
+     pill with the localized category label, ONLY on non-music events, always in the SAME position - centered
+     under the star in the date column, uniform across every non-music row. Music = the default, no chip.
+     Palette = CAT_COLORS (identical to the title colors AND the category filter chips). Colors by Andrea
+     review: wrap allowed so "Performing Arts" takes 2 lines (shorter labels stay on one), tight lateral
+     padding (no wasted space), slightly squared corners so the 2-line pill looks right. color-mix as usual. */
+  .catchip { display: inline-block; margin: .4rem auto 0 auto; border-radius: .4rem; padding: .1rem .22rem;
+    font-size: .56rem; font-weight: 600; letter-spacing: 0; line-height: 1.3; text-align: center;
+    white-space: normal; max-width: 100%; border: 1px solid; }
+  .catchip[data-c="Theatre"] { color: #b45309; border-color: color-mix(in srgb, #b45309 45%, transparent); background: color-mix(in srgb, #b45309 9%, transparent); }
+  .catchip[data-c="Art"] { color: #5b21b6; border-color: color-mix(in srgb, #5b21b6 45%, transparent); background: color-mix(in srgb, #5b21b6 9%, transparent); }
+  .catchip[data-c="Cinema"] { color: #0f766e; border-color: color-mix(in srgb, #0f766e 45%, transparent); background: color-mix(in srgb, #0f766e 9%, transparent); }
+  body.dark .catchip[data-c="Theatre"] { color: #fbbf24; border-color: color-mix(in srgb, #fbbf24 45%, transparent); background: color-mix(in srgb, #fbbf24 13%, transparent); }
+  body.dark .catchip[data-c="Art"] { color: #a78bfa; border-color: color-mix(in srgb, #a78bfa 45%, transparent); background: color-mix(in srgb, #a78bfa 13%, transparent); }
+  body.dark .catchip[data-c="Cinema"] { color: #2dd4bf; border-color: color-mix(in srgb, #2dd4bf 45%, transparent); background: color-mix(in srgb, #2dd4bf 13%, transparent); }
   .evdate { font-size: .85rem; font-weight: 500; }
   .evtitle { font-size: 1rem; font-weight: 500; }
   .evhead { display: flex; align-items: flex-start; gap: .3rem; }
@@ -6948,6 +6963,9 @@ function eventRow(e, i) {
   const lnk = linkOf(e);
   const faved = FAVS.has(favKey(e));
   const star = `<button class="star${faved ? " on" : ""}" data-i="${i}" title="${esc(T().favTitle)}" aria-label="${esc(T().favTitle)}">${faved ? "\u2b50" : "\u2606"}</button>`;
+  // Category chip (8 Nov 2026, Andrea): non-music events get a small tinted chip with the localized category
+  // label, in a uniform position (under the star in the date column). Music = the default, no chip.
+  const catchip = (e.category && ["Theatre", "Art", "Cinema"].indexOf(e.category) !== -1) ? `<span class="catchip" data-c="${esc(e.category)}">${esc(catLbl(e.category))}</span>` : "";
   const ics = `<button class="icsbtn" data-i="${i}" title="${esc(T().icsTitle)}" aria-label="${esc(T().icsTitle)}">\ud83d\udcc5</button>`;
   const shr = `<button class="sharebtn" data-i="${i}" title="${esc(T().shareTitle)}" aria-label="${esc(T().shareTitle)}">\ud83d\udd17</button>`;
   // Promoter split (17 Oct 2026, Andrea request): "Promoter presents: Artists" renders the artists on a new line under the promoter
@@ -7057,7 +7075,7 @@ function eventRow(e, i) {
     + (vinfo && vinfo.addr ? `<a class="evaddr" href="https://www.openstreetmap.org/search?query=${encodeURIComponent(vinfo.addr)}" target="_blank" rel="noreferrer" title="${esc(T().osmTitle)}">\ud83d\udccd ${esc(vinfo.addr)}</a>` : "")
     + `</div>`;
   return `<li class="${e.postponed ? "postponed" : ""}" data-fk="${esc(favKey(e))}"><div class="ev"><div class="evmain">
-    <div class="evdatecol"><span class="evdate">${fmtDate(e.date)}</span>${star}</div>
+    <div class="evdatecol"><span class="evdate">${fmtDate(e.date)}</span>${star}${catchip}</div>
     <div>
       <div class="evhead"><span class="evtw">${title}</span></div>
       ${(genreOf(e) ? `<p class="genre">${esc(genreOf(e))}</p>` : (isCover(e) ? `<p class="genre genre-cover">${esc(T().coverNote)}</p>` : ((e.category === "Music" || !e.category) ? `<p class="genre genre-unknown">${esc(T().unknownGenre)}</p>` : "")))}
