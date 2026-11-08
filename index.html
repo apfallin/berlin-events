@@ -595,7 +595,7 @@
     <p><span id="tot"></span><span id="totLbl"> events, deduplicated</span></p>
     <p id="stats" class="mini-label" style="margin-bottom:.5rem"></p>
     <p class="disclaimer" id="disclaimerP">&#9888;&#65039; <strong>This site does not claim to list every event in Berlin &#8212; it is compiled automatically from the sources below and tries to cover as much of the scene as possible.</strong><span class="dnotes">Always double-check dates, times and tickets with the organizers or venues.<br>Genres are assigned automatically and may sometimes be inaccurate.<br>Report errors or missing events via the source links.<br>No responsibility is assumed for errors, changes or cancellations.</span></p>
-    <p class="src-title"><b style="font-size:.9rem">*</b> <span id="srcTitle">Sources</span> <span class="updated-badge">(<span class="updLbl">last updated: </span><span class="lastupdated">5 November 2026</span>)</span></p>
+    <p class="src-title"><b style="font-size:.9rem">*</b> <span id="srcTitle">Sources</span> <span class="updated-badge">(<span class="updLbl">last updated: </span><span class="lastupdated">8 November 2026</span>)</span></p>
     <p id="srcGigsP"><strong>Gigs</strong> &#8212; the <em>Berlin-Gigs</em> community pad, a DIY list of concerts with time, price, genre, smoke-free and wheelchair info.</p>
     <p id="srcMtiP"><strong>MTI</strong> &#8212; <a href="https://mytrueintent.blogspot.com" target="_blank" rel="noreferrer">mytrueintent.blogspot.com</a>, a Berlin indie/rock concert blog, imported from its spreadsheet export.</p>
     <p id="srcMobP"><strong>Mob</strong> &#8212; <a href="https://mobilize.berlin" target="_blank" rel="noreferrer">mobilize.berlin</a>, a Berlin Mobilizon instance: federated DIY platform for concerts, parties and community events.</p>
@@ -3698,12 +3698,13 @@ const EVENTS = [
   { date: "2026-11-21", time: "19:00", title: "Solishow f\u00fcr die Berliner Obdachlosenhilfe presents: Briefbombe + Pigeons + I Feel Violent", venue: "K19", price: "8-15 \u20ac", genre: "HC Punk, Punk", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-22", time: "19:00", title: "+1 Punk/HC Shows pres.: Simon Wells (Ex-Snuff) + Taalk", venue: "Trixxter", price: "", genre: "Punkrock, Singer Songwriter, Acoustic", smokeFree: true, wheelchair: false, source: "cryptpad" },
   { date: "2026-11-24", time: "20:00", title: "Gok\u00e9mon Pro & Thermionic Emissions presents: David N\u00e4\u00e4s + Badlands River Clam", venue: "Morphine Raum", price: "15 \u20ac", genre: "arranged solo guitar, improvised solo piano", smokeFree: true, wheelchair: false, source: "cryptpad" },
-  { date: "2026-12-03", time: "19:00", title: "Kombinat Schwarz Metall presents: N\u00e4chtlich (CAN) + Thromos (GER)", venue: "Exil-Klinke", price: "VVK 25 \u20ac / AK 23 \u20ac", genre: "Black Metal", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-12-03", time: "19:00", title: "8MM & Shameless/Limitless present: Debbie Sings", venue: "8mm Bar", price: "15,48 \u20ac", genre: "Escapism, Chaos, Debbie Singing", smokeFree: false, wheelchair: false, source: "cryptpad" },
   { date: "2026-12-04", time: "20:00", title: "Dustown presents: Kuyper + T\u00f8nda + Zeynep", venue: "B.L.O. Kantine", price: "VVK 13,70 \u20ac / AK 15 \u20ac", genre: "Heavy, Psychedelic, St\u00f6ner", smokeFree: false, wheelchair: true, source: "cryptpad" },
   { date: "2026-12-07", time: "19:30", title: "Dancing Shoes Promotion: Lion's Skull Release Party \"Nightmares Unseen\" - The Liminal + Vold + Lion's Skull", venue: "Neue Zukunft", price: "10-15 \u20ac", genre: "Stoner, Doom, Psychedelic", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2026-12-10", time: "19:00", title: "Dustown presents: Hell Fuckin' Yeah + Bl\u00fcst + Schw\u00e4rze", venue: "Orwo 104", price: "VVK 13,70 \u20ac / AK 15 \u20ac", genre: "Metal, Sludge", smokeFree: true, wheelchair: true, source: "cryptpad" },
   { date: "2027-01-09", time: "20:00", title: "DUSTOWNfest Vol.18: Highway Child + Pyrior + Space Raptor + BufoBufo + Sector7g Visuals", venue: "Neue Zukunft", price: "VVK 19,20 \u20ac / AK 20 \u20ac", genre: "Psychedelic, Stoner, Wave", smokeFree: true, wheelchair: true, source: "cryptpad" },
+  // Web import (8 Nov 2026, Andrea: Monarch venue page)
+  { date: "2026-12-03", time: "20:00", title: "City Slang presents: Party Dozen", venue: "Monarch", genre: "noise punk, post-rock", category: "Music", description: "City Slang Xmas Party Dozen: the Sydney noise-punk/post-rock duo Kirsty Tickle (saxophone) and Jonathan Boulet (drums) plays the label's Xmas party.", link: "https://www.kottimonarch.de/programm.php", source: "web" },
 ];
 
 // \u2500\u2500 Helpers (same logic as the React version) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
@@ -4387,6 +4388,7 @@ var MB_GENRES = {
   "paris jackson": "indie folk",
   "paris paloma": "alternative folk, dark folk, indie folk",
   "parra for cuva": "electronica",
+  "party dozen": "noise rock, post-rock",
   "passenger": "indie folk, folk, folk pop",
   "patrick wolf": "folk, singer-songwriter, baroque pop",
   "paul carrack": "blue-eyed soul, pop rock, soft rock",
@@ -5974,7 +5976,7 @@ const S = {
 };
 const today = new Date().toISOString().slice(0, 10);
 const $ = (id) => document.getElementById(id);
-const LAST_UPDATED = "5 November 2026";
+const LAST_UPDATED = "8 November 2026";
 // Localized display of the date above (the const itself stays English "D Month YYYY" - weekly automation rule).
 // German "22. Oktober 2026", Italian "22 ottobre 2026"; any other language and parse failures fall back to the const.
 const UPD_MONTHS = {
