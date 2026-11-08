@@ -347,12 +347,22 @@
   .sharebtn { cursor: pointer; background: none; border: none; padding: 0; font-size: 1.05rem; color: #a3a3a3; vertical-align: baseline; }
   .sharebtn:hover { color: inherit; }
   /* Listen button (20 Oct 2026, Andrea request): play button next to music titles opens streaming-search links */
-  /* Listen button (20 Oct 2026, Andrea request; enlarged 20 Oct after mobile feedback - too easy to hit title/calendar by mistake):
-     visually a bit bigger than ics/share and with an invisible padding halo (negative margin cancels the layout growth),
-     so the TAP TARGET on phones is much larger than the visible triangle */
-  .playbtn { cursor: pointer; background: none; border: none; padding: .3rem .34rem; margin: -.28rem -.2rem; font-size: .75rem; line-height: 1; color: #a3a3a3; vertical-align: baseline; }
-  .playbtn:hover { color: #16a34a; }
-  body.dark .playbtn:hover { color: #4ade80; }
+  /* Listen button v2 (8 Nov 2026, Andrea request: a friend had not noticed the play button; "real button affordance"):
+     visible rose pill (Music accent) with tinted background + border instead of the bare gray triangle, so it reads
+     as a CONTROL at a glance, especially on touch devices where there is no hover. Kept deliberately TINY (just
+     bigger than the glyph) so it never covers adjacent lines when a title wraps to multiple lines, and detached from
+     the artist name (fixed .3rem gap). The negative-margin halo trick is kept (padding cancels the layout growth)
+     so the TAP TARGET stays much larger than the visible pill. color-mix is progressive enhancement, same pattern
+     as the category chips. */
+  .playbtn { cursor: pointer; background: color-mix(in srgb, #be123c 9%, transparent);
+    border: 1px solid color-mix(in srgb, #be123c 40%, transparent); border-radius: 999px;
+    padding: .12rem .17rem; margin: -.3rem 0 -.3rem .3rem; font-size: .66rem; line-height: 1; color: #be123c;
+    vertical-align: baseline; display: inline-flex; align-items: center; justify-content: center;
+    transition: background-color .15s, border-color .15s; }
+  .playbtn:hover { border-color: #be123c; background: color-mix(in srgb, #be123c 16%, transparent); }
+  body.dark .playbtn { background: color-mix(in srgb, #fb7185 11%, transparent);
+    border-color: color-mix(in srgb, #fb7185 40%, transparent); color: #fb7185; }
+  body.dark .playbtn:hover { border-color: #fb7185; background: color-mix(in srgb, #fb7185 20%, transparent); }
   @keyframes evflash { 0% { background: #fef3c7; } 100% { background: transparent; } }
   #list li.flash { animation: evflash 2.2s ease-out 1; }
   .vlink { cursor: pointer; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: .2em; }
@@ -363,8 +373,8 @@
   .icsbtn { opacity: .35; transition: opacity .15s; }
   #list li:hover .icsbtn, #list li:hover .sharebtn, #list li:hover .playbtn { opacity: 1; }
   .sharebtn { opacity: .35; transition: opacity .15s; }
-  .playbtn { opacity: .35; transition: opacity .15s; }
-  @media (hover: none) { .star, .icsbtn, .sharebtn, .playbtn { opacity: .55; } .star.on { opacity: 1; } }
+  .playbtn { opacity: .85; transition: opacity .15s, background-color .15s, border-color .15s; }
+  @media (hover: none) { .star, .icsbtn, .sharebtn, .playbtn { opacity: .55; } .star.on { opacity: 1; } .playbtn { opacity: 1; } }
   /* Expandable row details (address) */
   .morebtn { border: none; background: none; cursor: pointer; color: #a3a3a3; font-size: .75rem;
     padding: .2rem .3rem; flex-shrink: 0; align-self: center; transition: transform .15s; }
@@ -435,6 +445,8 @@
   .hrow { display: flex; align-items: center; gap: .5rem; }
   @media (max-width: 640px) {
     body { -webkit-text-size-adjust: 100%; }
+    /* Playbtn v2 (8 Nov 2026): tiny pill but generous halo on phones = ~44px effective tap target */
+    .playbtn { padding: .2rem .26rem; font-size: .7rem; margin: -.5rem 0 -.5rem .3rem; }
     .wrap { padding: 0 1rem 5rem; }
     header { padding-top: 1.75rem; padding-bottom: 1.25rem; gap: .6rem; flex-wrap: wrap; }
     .hrow { flex-wrap: wrap; justify-content: flex-end; margin-left: auto; }
