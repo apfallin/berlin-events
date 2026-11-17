@@ -68,7 +68,13 @@ function scanRegion(low, from, to) {
   return hits;
 }
 
+// Event-SPECIFIC page: URL points at this event (has /event/ etc. or a date in it).
+// Only those get a "title-not-found" alert; generic venue/calendar pages never do
+// (their titles are often JS-rendered or formatted differently - too noisy).
+const STRICT_EVENT = /\/(event|events|veranstaltung|veranstaltungen|konzert|konzerte|show|shows|gig)s?\/|\d{4}-\d{2}-\d{2}|\d{4}\/\d{2}\/\d{2}/;
+
 function checkPage(ev, body) {
+  const strict = STRICT_EVENT.test(ev.link);
   const low = norm(body);
   const candidates = [norm(ev.title)];
   const head = decodeEsc(ev.title).split(' + ')[0];
@@ -85,7 +91,8 @@ function checkPage(ev, body) {
     if (hits.length) return hits.map(h => ({ type: 'keyword: ' + h.kw, detail: h.snippet }));
     if (found) return []; // title on page, clean neighborhood
   }
-  return [{ type: 'title-not-found', detail: 'event title not on page (JS-rendered page, renamed, or removed?)' }];
+  if (strict) return [{ type: 'title-not-found', detail: 'event title not on its own event page (removed or renamed?)' }];
+  return []; // generic venue/calendar page without the title: stay silent
 }
 
 async function fetchWithTimeout(url, ms) {
