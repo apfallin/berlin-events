@@ -1,6 +1,10 @@
 // Postponement/cancellation sweep for berlin-events.
 // Reads index.html, finds events in the next WINDOW days that have an official
-// link, fetches each page and scans it for reschedule/cancellation keywords.
+// link, fetches each page and checks the event's own status:
+//  - keywords (verschoben/abgesagt/cancelled...) count only NEAR the event
+//    title on the page (venue pages list many events);
+//  - if the title is not on the page at all: soft "title-not-found" alert;
+//  - unreachable pages (4xx / fetch errors) are flagged.
 // Writes alerts.md for the weekly Vibe task (or Andrea) to review manually.
 'use strict';
 const fs = require('fs');
@@ -11,10 +15,13 @@ TODAY.setUTCHours(0, 0, 0, 0);
 const MAX = new Date(TODAY.getTime() + WINDOW_DAYS * 86400000);
 
 const KEYWORDS = [
-  'verschoben auf', 'verschoben', 'verlegt auf', 'verschoben.',
-  'abgesagt', 'ersatztermin', 'neuer termin', 'findet nicht statt',
-  'cancelled', 'canceled', 'postponed', 'rescheduled'
+  'verschoben auf', 'verschoben', 'verlegt auf', 'ersatztermin', 'neuer termin',
+  'findet nicht statt', 'abgesagt', 'cancelled', 'canceled', 'postponed', 'rescheduled'
 ];
+const PROXIMITY = 300; // chars before/after a title occurrence to scan
+
+function decodeEsc(s) { return s.replace(/\\u([0-9a-fA-F]{4})/g, (_, h) => String.fromCharCode(parseInt(h, 16))); }
+function norm(s) { return decodeEsc(s).toLowerCase().replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim(); }
 
 function parseEvents(html) {
   const m = html.match(/const EVENTS = \[([\s\S]*?)\n\];/);
@@ -36,28 +43,63 @@ function inWindow(dateStr) {
   return !isNaN(d) && d >= TODAY && d <= MAX;
 }
 
-function scan(text) {
-  const low = text.toLowerCase();
+// Standalone-word check: reject keyword glued to a longer word (hideCancelledAppointments).
+function standalone(text, kw, i) {
+  const before = i > 0 ? text[i - 1] : ' ';
+  const after = text[i + kw.length] || ' ';
+  return !/[a-z0-9]/.test(before) && !/[a-z0-9]/.test(after);
+}
+
+function scanRegion(low, from, to) {
+  const region = low.slice(Math.max(0, from), to);
   const hits = [];
   for (const kw of KEYWORDS) {
-    const i = low.indexOf(kw);
-    if (i !== -1) hits.push({ kw, snippet: text.slice(Math.max(0, i - 60), i + 100).replace(/\s+/g, ' ').trim() });
+    let i = region.indexOf(kw);
+    while (i !== -1) {
+      const abs = Math.max(0, from) + i;
+      if (standalone(low, kw, abs)) {
+        const t = low.slice(Math.max(0, abs - 60), abs + kw.length + 80).replace(/\s+/g, ' ');
+        hits.push({ kw, snippet: t });
+        break; // one hit per keyword per region is enough
+      }
+      i = region.indexOf(kw, i + kw.length);
+    }
   }
   return hits;
+}
+
+function checkPage(ev, body) {
+  const low = norm(body);
+  const candidates = [norm(ev.title)];
+  const head = decodeEsc(ev.title).split(' + ')[0];
+  if (norm(head) !== candidates[0]) candidates.push(norm(head));
+  for (const cand of candidates) {
+    if (!cand || cand.length < 4) continue;
+    let pos = low.indexOf(cand);
+    const found = pos !== -1;
+    const hits = [];
+    while (pos !== -1 && hits.length === 0) {
+      hits.push(...scanRegion(low, pos - PROXIMITY, pos + cand.length + PROXIMITY));
+      pos = low.indexOf(cand, pos + cand.length);
+    }
+    if (hits.length) return hits.map(h => ({ type: 'keyword: ' + h.kw, detail: h.snippet }));
+    if (found) return []; // title on page, clean neighborhood
+  }
+  return [{ type: 'title-not-found', detail: 'event title not on page (JS-rendered page, renamed, or removed?)' }];
 }
 
 async function fetchWithTimeout(url, ms) {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), ms);
   try {
-    return await fetch(url, { signal: ctrl.signal, redirect: 'follow', headers: { 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 berlin-events-sweep/1.0', 'Accept': 'text/html,*/*' } });
+    return await fetch(url, { signal: ctrl.signal, redirect: 'follow', headers: { 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 berlin-events-sweep/1.1', 'Accept': 'text/html,*/*' } });
   } finally { clearTimeout(t); }
 }
 
 async function check(ev) {
   const out = { ...ev, problems: [] };
   let res = null, body = null, lastErr = null;
-  for (let attempt = 1; attempt <= 2; attempt++) {
+  for (let attempt = 1; attempt <= 3; attempt++) {
     try {
       res = await fetchWithTimeout(ev.link, 20000);
       body = await res.text();
@@ -66,7 +108,7 @@ async function check(ev) {
   }
   if (!res) { out.problems.push({ type: 'fetch-error', detail: String(lastErr && lastErr.message || lastErr).slice(0, 120) }); return out; }
   if (res.status >= 400) { out.problems.push({ type: 'http-' + res.status, detail: 'page unreachable' }); return out; }
-  for (const h of scan(body)) out.problems.push({ type: 'keyword: ' + h.kw, detail: h.snippet });
+  out.problems.push(...checkPage(ev, body));
   return out;
 }
 
@@ -90,13 +132,13 @@ async function check(ev) {
     '',
     `Run: ${new Date().toISOString()} | window: next ${WINDOW_DAYS} days | checked: ${targets.length} linked events | not checked (no link): ${unlinked.length}`,
     '',
-    alerts.length === 0 ? '**No alerts** - no keyword hits, no unreachable pages.' : `${alerts.length} alert(s) - verify each on the official page before changing data:`
+    alerts.length === 0 ? '**No alerts** - every linked event page reachable, titles present, no status keywords near the titles.' : `${alerts.length} alert(s) - verify each on the official page before changing data:`
   ];
   for (const a of alerts) {
     lines.push('', `- **${a.date} - ${a.title}** @${a.venue}  `, `  ${a.link}`);
     for (const p of a.problems) lines.push(`  - [${p.type}] ${p.detail}`);
   }
-  lines.push('', '(Keywords like "verschoben/abgesagt" can appear for OTHER events listed on the same page - always verify.)', '');
+  lines.push('', '(keyword = reschedule/cancellation wording near the event title; title-not-found can be a JS-rendered page; always verify manually)', '');
   fs.writeFileSync('alerts.md', lines.join('\n'));
   console.log('alerts:', alerts.length);
 })().catch(e => { console.error('SWEEP FAILED:', e.message); process.exit(1); });
