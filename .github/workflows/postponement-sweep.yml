@@ -1,0 +1,28 @@
+name: Postponement sweep
+# 3x/week: fetch the OFFICIAL pages of all linked events in the next 14 days
+# and scan them for reschedule/cancellation keywords. Writes alerts.md so the
+# weekly Vibe task (and Andrea) can review and fix the data - independent of
+# whether the MTI aggregator reports the change or not.
+on:
+  schedule:
+    - cron: '30 7 * * 1,3,5'   # Mon/Wed/Fri 07:30 UTC = 08:30 Berlin
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths: [".github/workflows/postponement-sweep.yml"]
+permissions:
+  contents: write
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Sweep linked event pages
+        run: node sweep.js
+      - name: Commit alerts.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node commit-alerts.js
