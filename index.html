@@ -6484,7 +6484,7 @@ const LANGS = {
   en: { upcoming: "Upcoming", archive: "Archive", search: "Search artists, venues, genres\u2026", filters: "Filters", reset: "\u21ba Reset",
     free: "Free / donation only", access: "Accessible or smoke-free only", sfTag: "smoke-free", wcTag: "wheelchair", source: "Source", district: "District",
     price: "Price range (events with a price only)", genre: "Genre", tonight: "Today", favs: "\u2b50 Favorites", all: "All", unknownGenre: "Genre not yet identified",
-    unkHidden: (n) => n + " music events without a known genre are hidden \u2014 include them?", unkInclude: "Include", unkHide: "Hide them", coverNote: "Cover / tribute band", postponedNote: "Postponed \u2014 new date to be announced", venueChanged: (v) => "Venue changed \u2014 previously: " + v, dateChanged: (d) => "Date changed \u2014 previously: " + d, noLink: "No link available for this event \u2014 sorry",
+    unkHidden: (n) => n + " music events without a known genre are hidden \u2014 include them?", unkInclude: "Include", unkHide: "Hide them", coverNote: "Cover / tribute band", postponedNote: "Postponed \u2014 new date to be announced", venueChanged: (v) => "Venue changed \u2014 previously: " + v, dateChanged: (d) => "Date changed \u2014 previously: " + d, under20: "under 20\u20ac", noLink: "No link available for this event \u2014 sorry",
     subTitle: "A minimal digest of concerts, performing arts, art and cinema in Berlin \u2014 gathered from independent sources",
     calHint: "Save any event straight to your calendar",
     count: (v, d) => (d === "archive" ? "Archive" : "Upcoming") + " \u00b7 " + v + " events",
@@ -6521,7 +6521,7 @@ const LANGS = {
   de: { upcoming: "Bevorstehend", archive: "Archiv", search: "K\u00fcnstler, Venues, Genres suchen\u2026", filters: "Filter", reset: "\u21ba Zur\u00fccksetzen",
     free: "Nur frei / Spende", access: "Nur barrierefrei oder rauchfrei", sfTag: "rauchfrei", wcTag: "barrierefrei", source: "Quelle", district: "Bezirk",
     price: "Preisspanne (nur Events mit Preis)", genre: "Genre", tonight: "Heute", favs: "\u2b50 Favoriten", all: "Alle", unknownGenre: "Genre noch nicht identifiziert",
-    unkHidden: (n) => n + " Musik-Events ohne bekanntes Genre sind ausgeblendet \u2014 einblenden?", unkInclude: "Einblenden", unkHide: "Ausblenden", coverNote: "Cover-/Tribute-Band", postponedNote: "Verschoben \u2014 neuer Termin wird bekannt gegeben", venueChanged: (v) => "Ort ge\u00e4ndert \u2014 vorher: " + v, dateChanged: (d) => "Termin ge\u00e4ndert \u2014 vorher: " + d, noLink: "Kein Link f\u00fcr diese Veranstaltung verf\u00fcgbar \u2014 Entschuldigung",
+    unkHidden: (n) => n + " Musik-Events ohne bekanntes Genre sind ausgeblendet \u2014 einblenden?", unkInclude: "Einblenden", unkHide: "Ausblenden", coverNote: "Cover-/Tribute-Band", postponedNote: "Verschoben \u2014 neuer Termin wird bekannt gegeben", venueChanged: (v) => "Ort ge\u00e4ndert \u2014 vorher: " + v, dateChanged: (d) => "Termin ge\u00e4ndert \u2014 vorher: " + d, under20: "unter 20\u20ac", noLink: "Kein Link f\u00fcr diese Veranstaltung verf\u00fcgbar \u2014 Entschuldigung",
     subTitle: "Ein minimales Digest von Konzerten, Performing Arts, Kunst und Kino in Berlin \u2014 aus unabh\u00e4ngigen Quellen zusammengetragen",
     calHint: "Speichere jede Veranstaltung direkt in deinem Kalender",
     count: (v, d) => (d === "archive" ? "Archiv" : "Bevorstehend") + " \u00b7 " + v + " Veranstaltungen",
@@ -6558,7 +6558,7 @@ const LANGS = {
   it: { upcoming: "In arrivo", archive: "Archivio", search: "Cerca artisti, venue, generi\u2026", filters: "Filtri", reset: "\u21ba Azzera",
     free: "Solo gratuiti / offerta", access: "Solo accessibili o senza fumo", sfTag: "senza fumo", wcTag: "accessibile", source: "Fonte", district: "Quartiere",
     price: "Fascia di prezzo (solo eventi con prezzo)", genre: "Genere", tonight: "Oggi", favs: "\u2b50 Preferiti", all: "Tutti", unknownGenre: "Genere non ancora identificato",
-    unkHidden: (n) => n + " eventi musicali senza genere noto sono nascosti \u2014 includerli?", unkInclude: "Includili", unkHide: "Nascondili", coverNote: "Cover / tribute band", postponedNote: "Posticipato \u2014 nuova data da annunciare", venueChanged: (v) => "Venue cambiata \u2014 prima: " + v, dateChanged: (d) => "Data cambiata \u2014 prima: " + d, noLink: "Nessun link disponibile per questo evento \u2014 scusa",
+    unkHidden: (n) => n + " eventi musicali senza genere noto sono nascosti \u2014 includerli?", unkInclude: "Includili", unkHide: "Nascondili", coverNote: "Cover / tribute band", postponedNote: "Posticipato \u2014 nuova data da annunciare", venueChanged: (v) => "Venue cambiata \u2014 prima: " + v, dateChanged: (d) => "Data cambiata \u2014 prima: " + d, under20: "sotto i 20\u20ac", noLink: "Nessun link disponibile per questo evento \u2014 scusa",
     subTitle: "Un digest essenziale di concerti, arti performative, arte e cinema a Berlino \u2014 raccolto da fonti indipendenti",
     calHint: "Salva ogni evento direttamente nel tuo calendario",
     count: (v, d) => (d === "archive" ? "Archivio" : "In arrivo") + " \u00b7 " + v + " eventi",
@@ -7039,7 +7039,8 @@ function icsOf(e) {
   const site = "https://apfallin.github.io/berlin-events/";
   const descParts = [];
   if (e.description) descParts.push(strip(e.description));
-  if (e.price) descParts.push(L.price + ": " + strip(e.price));
+  const priceIcs = e.price || (e.source === "cryptpad" ? T().under20 : "");
+  if (priceIcs) descParts.push(L.price + ": " + strip(priceIcs));
   const g = genreOf(e);
   if (isMusic && g) descParts.push(L.genre + ": " + strip(g));
   if (e.venue) { const vi = venueInfo(e.venue); if (vi && vi.addr) descParts.push(L.venue + ": " + strip(e.venue) + ", " + strip(vi.addr)); }
@@ -7302,13 +7303,16 @@ function eventRow(e, i) {
   const det = `<div class="evdet">`
     + (vinfo && vinfo.addr ? `<a class="evaddr" href="https://www.openstreetmap.org/search?query=${encodeURIComponent(vinfo.addr)}" target="_blank" rel="noreferrer" title="${esc(T().osmTitle)}">\ud83d\udccd ${esc(vinfo.addr)}</a>` : "")
     + `</div>`;
+  // Cryptpad price hint (19 Nov 2026, Andrea request): the community pad lists gigs under 20\u20ac by concept -
+  //  rows imported from it but without an explicit price show the localized "under 20\u20ac" hint in the price slot.
+  const priceTxt = e.price || (e.source === "cryptpad" ? T().under20 : "");
   return `<li class="${e.postponed ? "postponed" : ""}" data-fk="${esc(favKey(e))}"><div class="ev"><div class="evmain">
     <div class="evdatecol"><span class="evdate">${fmtDate(e.date)}</span>${star}${catchip}</div>
     <div>
       <div class="evhead"><span class="evtw">${title}</span></div>
       ${(genreOf(e) ? `<p class="genre">${esc(genreOf(e))}</p>` : (isCover(e) ? `<p class="genre genre-cover">${esc(T().coverNote)}</p>` : ((e.category === "Music" || !e.category) ? `<p class="genre genre-unknown">${esc(T().unknownGenre)}</p>` : "")))}
       ${!isMus ? descP : ""}
-      <p class="meta">${vname}${e.time ? " \u00b7 " + esc(e.time) : ""}${e.price ? " \u00b7 " + esc(e.price) : ""}${flags}</p>
+      <p class="meta">${vname}${e.time ? " \u00b7 " + esc(e.time) : ""}${priceTxt ? " \u00b7 " + esc(priceTxt) : ""}${flags}</p>
       ${e.prevVenue ? `<p class="change-note">\u26a0 ${esc(T().venueChanged(e.prevVenue))}</p>` : ""}
       ${e.prevDate ? `<p class="change-note">\u26a0 ${esc(T().dateChanged(e.prevDate))}</p>` : ""}
       ${e.postponed ? `<p class="postponed-note">\u23f8 ${esc(T().postponedNote)}</p>` : ""}
@@ -7851,5 +7855,4 @@ if (pendingEv) { const fk = pendingEv; pendingEv = null; try { openSharedEvent(f
 </script>
 </body>
 </html>
-
 
