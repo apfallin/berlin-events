@@ -4868,6 +4868,7 @@ var MB_GENRES = {
   "noga erez": "electronic, pop",
   "northern lite": "downtempo, electronica, house",
   "nothing but thieves": "alternative rock, rock, pop rock",
+  "hey nothing": "emo, indie folk",
   "n\u00e9om\u00ed": "folk",
   "oathbreaker": "post-metal, metal, metalcore",
   "obsidian tide": "progressive metal, death metal",
@@ -6410,6 +6411,8 @@ function inferGenre(title) {
   // directly instead of splitting the name into segments that match nothing.
   var joinedBody = body.replace(/\s*&\s*/g, "&");
   if (MB_GENRES[joinedBody] || ARTIST_GENRES[joinedBody]) return MB_GENRES[joinedBody] || ARTIST_GENRES[joinedBody];
+  var commaBody = body.replace(/,\s*/g, " ").replace(/\s+/g, " ");
+  if (MB_GENRES[commaBody] || ARTIST_GENRES[commaBody]) return MB_GENRES[commaBody] || ARTIST_GENRES[commaBody];
   var segs = body.split(/\s*[+\/&,]|\s+w\/|\s+feat\.?\s+|\s+vs\.?\s+/);
   var found = [];
   var pushG = (g) => { if (!g) return; String(g).split(/\s*,\s*/).forEach((p) => { p = p.trim().toLowerCase(); if (p && found.indexOf(p) < 0) found.push(p); }); };
@@ -7629,6 +7632,11 @@ function eventRow(e, i) {
     // spacing the source used, so the play button searches the real name instead of two fragments.
     const joined = raw.replace(/\s*&\s*/g, "&").toLowerCase();
     if (MB_GENRES[joined] || ARTIST_GENRES[joined]) return renderSeg(raw.trim());
+    // Comma-name guard (23 Nov 2026, Andrea report "Hey, Nothing" split into two fake artists):
+    // if the name with the comma REMOVED is a KNOWN artist (e.g. "hey nothing"), the comma is part
+    // of the band name - keep it whole so the play button searches the real name, not "Hey"/"Nothing".
+    const commaJoined = raw.replace(/,\s*/g, " ").replace(/\s+/g, " ").toLowerCase();
+    if (MB_GENRES[commaJoined] || ARTIST_GENRES[commaJoined]) return renderSeg(raw.trim());
     //  Joint-band-name guard (22 Oct 2026, Andrea report "Florian Paul & die Kapelle der letzten Hoffnung"):
     //  "Name & die/der/das ..." is ONE band name (German joint-band pattern), NOT two artists - keep it
     //  whole so the play button searches the full band name instead of two broken fragments.
