@@ -49,10 +49,14 @@
   .sub { font-size: .85rem; color: #737373; margin: .75rem 0 0; line-height: 1.5; }
   .subhint { font-size: .68rem; color: #a3a3a3; margin: .3rem 0 0; line-height: 1.4; }
   .sub small { display: block; margin-top: .25rem; font-size: .68rem; opacity: .75; }
+  /* srcLink asterisk in teal (23 Nov 2026, Andrea request: make the * stand out from the gray subtitle
+     so it invites a click - same teal family as the Cinema category chip, readable in both themes). */
   #srcLink { margin-left: .3rem; font-size: .95rem; font-weight: 700; cursor: pointer; display: inline-block;
-    transform: translateY(-.45em); text-decoration: underline; text-underline-offset: .15em; transition: color .15s; }
-  #srcLink:hover { color: #525252; }
-  body.dark #srcLink:hover { color: #e5e5e5; }
+    transform: translateY(-.45em); text-decoration: underline; text-underline-offset: .15em; transition: color .15s;
+    color: #0d9488; }
+  body.dark #srcLink { color: #2dd4bf; }
+  #srcLink:hover { color: #065f46; }
+  body.dark #srcLink:hover { color: #99f6e4; }
   .nowrap { white-space: nowrap; }
   .seg { display: none; }
   /* Header pill trio (24 Oct 2026, Andrea request: langSel, qrBtn and themeBtn each had a slightly
@@ -1808,7 +1812,7 @@ const EVENTS = [
   { date: "2026-11-24", title: "June Coc\u00f3", venue: "Kulturhaus Insel", source: "mytrueintent" },
   { date: "2026-11-24", title: "Glaive / Kurtains", venue: "Lido", source: "mytrueintent" },
   { date: "2026-11-24", title: "Tophouse / Raynes", venue: "Maschinenhaus", source: "mytrueintent" },
-  { date: "2026-11-24", title: "Hey, Nothing", venue: "Modus", genre: "indie rock", source: "mytrueintent" },
+  { date: "2026-11-24", title: "Hey, Nothing", venue: "Modus", genre: "emo, indie folk", source: "mytrueintent" },
   { date: "2026-11-24", title: "Grace Cummings", venue: "Neue Zukunft", source: "mytrueintent" },
   { date: "2026-11-24", title: "Dorothee Mields, Stefan Temmingh & Capricornus Consort Basel", venue: "Pierre Boulez Saal", source: "mytrueintent" },
   { date: "2026-11-24", title: "Lynnic / Itsarius", venue: "Privatclub", source: "mytrueintent" },
