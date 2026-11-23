@@ -146,6 +146,11 @@
   .hintdot { display: inline-block; width: .42rem; height: .42rem; border-radius: 999px; background: #f59e0b; margin-left: .4rem; vertical-align: middle; }
   body.dark .hintdot { background: #fbbf24; }
   .chipgroup { display: inline-flex; gap: .5rem; align-items: center; }
+  /* Filters chip while filters are ACTIVE but the menu is CLOSED (Andrea, 23 Nov 2026):
+     indigo accent (site accent family, like the category chips) - the signal stays visible
+     until the filters are reset. Placed BEFORE the .on rules: an open menu shows the pill. */
+  .chip.action.has { color: #4338ca; border-color: #818cf8; background: color-mix(in srgb, #4338ca 10%, transparent); font-weight: 600; }
+  body.dark .chip.action.has { color: #c7d2fe; border-color: #818cf8; background: #1e1b4b; }
   /* Active action chips (Filters, Today, Favorites) unified with the standard active pill (.chip.on,
      white border in dark) so the active state is immediately visible (Andrea, 23 Nov 2026). */
   .chip.action.on { background: #171717; color: #fff; border-color: #171717; font-weight: 600; }
@@ -7785,7 +7790,13 @@ function renderAll() {
     S.favOnly || S.accessOnly || S.district !== "All" || S.venue !== "";
   $("panel").classList.toggle("open", S.showFilters);  $("filterBtn").textContent = T().filters + " " + (S.showFilters ? "\u25b4" : "\u25be");
   $("filterBtn").insertAdjacentHTML("beforeend", '<span class="hintdot" style="display:' + ((S.showFilters && (S.genre !== "All" || S.subGenre !== "All")) ? "" : "none") + '"></span>');
-  $("filterBtn").classList.toggle("on", S.showFilters || S.priceMin !== "" || S.priceMax !== "");
+  // Filters-chip state (Andrea, 23 Nov 2026): "on" = menu OPEN (the pill); "has" = PANEL filters are
+  // ACTIVE (genre, subgenre, free, access, district, price, sources) - with the menu closed the chip
+  // keeps the indigo accent so the user always sees that filters are narrowing the list.
+  const panelFiltersActive = S.genre !== "All" || S.subGenre !== "All" || S.freeOnly || S.accessOnly ||
+    S.district !== "All" || S.priceMin !== "" || S.priceMax !== "" || S.sources.length < 4;
+  $("filterBtn").classList.toggle("on", S.showFilters);
+  $("filterBtn").classList.toggle("has", panelFiltersActive);
   $("dayClear").style.display = S.dayFilter ? "" : "none";
   $("dayClear").title = S.lang === "it" ? "Torna alla data odierna" : S.lang === "de" ? "Zur\u00fcck zum heutigen Datum" : "Back to today";
   $("priceClear").style.display = (S.priceMin !== "" || S.priceMax !== "") ? "" : "none";
