@@ -2036,6 +2036,7 @@ const EVENTS = [
   { date: "2026-12-08", title: "BAP", venue: "Uber Arena", source: "mytrueintent" },
   { date: "2026-12-08", title: "Accept", venue: "Uber Eats Music Hall", source: "mytrueintent" },
   { date: "2026-12-08", title: "Afar", venue: "Zeiss-Gro\u00dfplanetarium", source: "mytrueintent" },
+  { date: "2026-12-08", time: "20:00", title: "TRISTANO", venue: "Theater im Delphi", price: "Free entry (donation)", genre: "electro-funk, funk", category: "Music", description: "Delphis Orakel x TRISTANO: the monthly open-community bar night with artistic impulses. Live set by TRISTANO (Tristano Pala), electro-funk Funk'n'Roll with analog instruments over electronic beats. Bar opens 18:00, concert starts 20:00. Free entry, voluntary donation for the artists.", link: "https://theater-im-delphi.de/programm/?prod=569", source: "web" },
   { date: "2026-12-09", title: "Unreleased Berlin", venue: "Astra", genre: "hip hop, rap", source: "mytrueintent" },
   { date: "2026-12-09", title: "Sidos Weihnachtsshow 2026", venue: "Columbiahalle", source: "mytrueintent",  price: "Sold out" },
   { date: "2026-12-09", title: "Herrenmagazin", venue: "Festsaal Kreuzberg", source: "mytrueintent" },
@@ -5937,6 +5938,7 @@ var MB_GENRES = {
   "trettmann": "hip hop",
   "trio gaspard, trio con brio copenhagen, morgenstern trio, ragazze quartet": "classical",
   "tristan brusch": "pop, alternative rock",
+  "tristano": "electro-funk, funk, psychedelic",
   "tusker": "alternative rock, pop",
   "tyla": "pop",
   "tzk": "hip hop",
@@ -6535,7 +6537,7 @@ const S = {
 };
 const today = new Date().toISOString().slice(0, 10);
 const $ = (id) => document.getElementById(id);
-const LAST_UPDATED = "19 November 2026";
+const LAST_UPDATED = "23 November 2026";
 // Localized display of the date above (the const itself stays English "D Month YYYY" - weekly automation rule).
 // German "22. Oktober 2026", Italian "22 ottobre 2026"; any other language and parse failures fall back to the const.
 const UPD_MONTHS = {
