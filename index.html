@@ -154,11 +154,16 @@
   .iconbtn { border: 1px solid #d4d4d4; background: transparent; border-radius: .5rem; padding: .5rem .7rem; font-size: .8rem; color: #525252; cursor: pointer; }
   body.dark .iconbtn { border-color: #404040; }
   .label { font-size: .75rem; color: #404040; display: inline-flex; align-items: center; gap: .35rem; cursor: pointer; margin-left: auto; }
+  /* .label dark override placed together with the .mini-label dark rules above (readability, 23 Nov 2026) */
   #panel { border: 1px solid #e5e5e5; border-radius: .5rem; padding: .8rem; margin-top: .6rem; display: none; }
   #panel.open { display: block; }
   body.dark #panel { border-color: #262626; }
   /* Filter panel labels darkened for readability (Andrea, 23 Nov 2026: the old grays were too light) */
   .mini-label { font-size: .62rem; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: #404040; margin-bottom: .4rem; }
+  /* Dark theme: the explicit light-theme grays above are near-invisible on the dark background -
+     the dark-theme overrides make both label classes readable there too (Andrea, 23 Nov 2026). */
+  body.dark .mini-label { color: #d4d4d4; }
+  body.dark .label { color: #d4d4d4; }
   #genreWrap { margin-top: .6rem; display: none; }
   #genreWrap.open { display: block; }
   #subgenres { margin-top: .4rem; display: flex; flex-wrap: wrap; gap: .35rem; }
