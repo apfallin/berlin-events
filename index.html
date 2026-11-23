@@ -146,18 +146,21 @@
   .hintdot { display: inline-block; width: .42rem; height: .42rem; border-radius: 999px; background: #f59e0b; margin-left: .4rem; vertical-align: middle; }
   body.dark .hintdot { background: #fbbf24; }
   .chipgroup { display: inline-flex; gap: .5rem; align-items: center; }
-  .chip.action.on { background: #f5f5f5; color: #171717; border-color: #171717; font-weight: 600; }
+  /* Active action chips (Filters, Today, Favorites) unified with the standard active pill (.chip.on,
+     white border in dark) so the active state is immediately visible (Andrea, 23 Nov 2026). */
+  .chip.action.on { background: #171717; color: #fff; border-color: #171717; font-weight: 600; }
   body.dark .chip { border-color: #404040; color: #d4d4d4; }
   body.dark .chip:hover { border-color: #737373; color: #fff; }
   body.dark .chip.on { background: #fff; color: #171717; border-color: #fff; }
-  body.dark .chip.action.on { background: #1f1f1f; color: #fff; border-color: #fff; font-weight: 600; }
+  body.dark .chip.action.on { background: #fff; color: #171717; border-color: #fff; font-weight: 600; }
   .iconbtn { border: 1px solid #d4d4d4; background: transparent; border-radius: .5rem; padding: .5rem .7rem; font-size: .8rem; color: #525252; cursor: pointer; }
   body.dark .iconbtn { border-color: #404040; }
   .label { font-size: .75rem; color: #404040; display: inline-flex; align-items: center; gap: .35rem; cursor: pointer; margin-left: auto; }
   /* .label dark override placed together with the .mini-label dark rules above (readability, 23 Nov 2026) */
   #panel { border: 1px solid #e5e5e5; border-radius: .5rem; padding: .8rem; margin-top: .6rem; display: none; }
   #panel.open { display: block; }
-  body.dark #panel { border-color: #262626; }
+  /* Dark theme: panel frame white, matching the white fill of the active Filters chip (Andrea, 23 Nov 2026). */
+  body.dark #panel { border-color: #fff; }
   /* Filter panel labels darkened for readability (Andrea, 23 Nov 2026: the old grays were too light) */
   .mini-label { font-size: .62rem; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: #404040; margin-bottom: .4rem; }
   /* Dark theme: the explicit light-theme grays above are near-invisible on the dark background -
