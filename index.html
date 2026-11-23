@@ -153,11 +153,12 @@
   body.dark .chip.action.on { background: #1f1f1f; color: #fff; border-color: #fff; font-weight: 600; }
   .iconbtn { border: 1px solid #d4d4d4; background: transparent; border-radius: .5rem; padding: .5rem .7rem; font-size: .8rem; color: #525252; cursor: pointer; }
   body.dark .iconbtn { border-color: #404040; }
-  .label { font-size: .75rem; color: #737373; display: inline-flex; align-items: center; gap: .35rem; cursor: pointer; margin-left: auto; }
+  .label { font-size: .75rem; color: #404040; display: inline-flex; align-items: center; gap: .35rem; cursor: pointer; margin-left: auto; }
   #panel { border: 1px solid #e5e5e5; border-radius: .5rem; padding: .8rem; margin-top: .6rem; display: none; }
   #panel.open { display: block; }
   body.dark #panel { border-color: #262626; }
-  .mini-label { font-size: .62rem; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: #525252; margin-bottom: .4rem; }
+  /* Filter panel labels darkened for readability (Andrea, 23 Nov 2026: the old grays were too light) */
+  .mini-label { font-size: .62rem; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: #404040; margin-bottom: .4rem; }
   #genreWrap { margin-top: .6rem; display: none; }
   #genreWrap.open { display: block; }
   #subgenres { margin-top: .4rem; display: flex; flex-wrap: wrap; gap: .35rem; }
@@ -448,7 +449,10 @@
   #weekStrip .chip.today { border-color: #059669; }
   #weekStrip .chip.past { opacity: .45; border-style: dashed; }
   #weekStrip .chip.past:hover, #weekStrip .chip.past.on { opacity: 1; border-style: solid; }
-  .controls.scrolled #panel, .controls.scrolled #genreWrap, .controls.scrolled #weekStrip { display: none; }
+  /* Filters panel stays OPEN anywhere in the page: it opens on click and closes ONLY on the
+     filter button's re-click - scrolling must never hide it (Andrea, 23 Nov 2026). The genre bar
+     and the week strip keep the old scroll-collapse behavior. */
+  .controls.scrolled #genreWrap, .controls.scrolled #weekStrip { display: none; }
 
   /* \u2500\u2500 Decluttered, mobile-first controls \u2500\u2500 */
   .row.scrollrow { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
@@ -7466,7 +7470,11 @@ function filtered() {
     //  of subgenre labels (or "All"). An event matches if it hits ANY of the selected subgenres (OR).
     const subSel = S.subGenre === "All" ? [] : S.subGenre.split(",").map((s) => s.trim()).filter((s) => SUB_RE[s]);
     const okSub = S.subGenre === "All" || unknownMusic || multiG || (subSel.length > 0 && splitGenres(genreOf(e)).some((g) => { const gl = g.toLowerCase(); return subSel.some((s) => SUB_RE[s].test(gl)); }));
-    const okFree = !S.freeOnly || /free|0 \u20ac|donation|spende/i.test(e.price || "");
+    // Free/donation filter (fixed 23 Nov 2026): the old inline regex "/free|0 \u20ac|donation|spende/i"
+    // matched "0 \u20ac" as a SUBSTRING, so any price ending in 0 passed the filter ("10 \u20ac", "ab 26,50 \u20ac",
+    // "AK 20 \u20ac" - 34 false positives). New rule: free/donation keywords, OR a standalone 0 price
+    // (the 0 must not be the tail of a bigger number: preceded by start or a non-digit).
+    const okFree = !S.freeOnly || (!!e.price && (/free|donation|spende|freiwillig|eintritt frei|freier eintritt/i.test(e.price) || /(^|\D)0([.,]\d{2})?\s*\u20ac/i.test(e.price)));
     // Price filter (19 Nov 2026, Andrea request): cryptpad events without an explicit price carry
     //  the "under 20\u20ac" hint (see priceTxt in renderList) - they must MATCH the price filter too,
     //  as an estimated 0-20 range (the pad is under-20\u20ac by concept). They still do not match
@@ -8019,11 +8027,12 @@ window.addEventListener("scroll", () => {
   scrollTicking = true;
   maybeMore(); // progressive list: append the next batch when the bottom comes near
   requestAnimationFrame(() => {
-    //  Menu-stay-open rule (22 Oct 2026, Andrea request): while the genre bar or the filters panel
-    //  is OPEN, the controls must NOT collapse at the first pixel of scroll (the user may still be
-    //  picking genres/subgenres) - a HIGHER threshold applies; once the user really scrolls into
-    //  the list the menu gets out of the way (and reappears when scrolling back above it).
-    const menuOpen = $("genreWrap").classList.contains("open") || $("panel").classList.contains("open");
+    //  Menu-stay-open rule (22 Oct 2026, Andrea request): while the genre bar is OPEN the controls
+    //  must NOT collapse at the first pixel of scroll (the user may still be picking genres) - a
+    //  HIGHER threshold applies. The FILTERS PANEL (#panel) no longer takes part in the scroll
+    //  collapse at all (Andrea, 23 Nov 2026): it opens on click at ANY scroll position and closes
+    //  only on the filter button's re-click, never on scroll.
+    const menuOpen = $("genreWrap").classList.contains("open");
     $("controls").classList.toggle("scrolled", window.scrollY > (menuOpen ? 340 : 120));
     updateProfileFab();
     //  Auto-close the Impressum when the user scrolls back up past it (20 Oct 2026, Andrea request):
