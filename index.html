@@ -5550,7 +5550,6 @@ var MB_GENRES = {
   "john vincent iii": "alternative rock",
   "jonny mahoro": "pop",
   "jonny5": "hip hop",
-  "josh thomas": "rock",
   "joshua idehen": "dance, alternative rock",
   "jud": "hip hop",
   "judiciary": "rock, metal",
@@ -6423,7 +6422,10 @@ function inferGenre(title) {
 // venue to this map ONLY if its programme is single-genre (like the Boulez Saal), never for
 // mixed-programme halls, or the genre would be wrong for some of their events.
 const VENUE_GENRE = { "Pierre Boulez Saal": "Classical, Chamber Music" };
-const genreOf = (e) => e.genre || VENUE_GENRE[e.venue] || inferGenre(e.title);
+// Genre is a MUSIC feature only (Andrea, 23 Nov 2026): non-music categories (Theatre/Art/Cinema)
+// never get a venue or title-inferred genre chip - lesungen/authors' comedians etc. stay genre-free.
+// An explicit e.genre on a non-music row would still win (none today).
+const genreOf = (e) => (e.category && e.category !== "Music") ? (e.genre || "") : (e.genre || VENUE_GENRE[e.venue] || inferGenre(e.title));
 // Cover/tribute acts are NOT "genre unknown": the genre question doesn't apply to them (out of editorial scope for enrichment).
 // Exception: "Tribute To Nothing" is a real band name, not a tribute act.
 const isCover = (e) => /tribute|cover band/i.test(e.title || "") && !/^tribute to nothing/i.test(e.title || "");
