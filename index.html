@@ -149,8 +149,10 @@
   /* Filters chip while filters are ACTIVE but the menu is CLOSED (Andrea, 23 Nov 2026):
      indigo accent (site accent family, like the category chips) - the signal stays visible
      until the filters are reset. Placed BEFORE the .on rules: an open menu shows the pill. */
-  .chip.action.has { color: #4338ca; border-color: #818cf8; background: color-mix(in srgb, #4338ca 10%, transparent); font-weight: 600; }
-  body.dark .chip.action.has { color: #c7d2fe; border-color: #818cf8; background: #1e1b4b; }
+  .chip.action.has { color: #fff; border-color: #4338ca; background: #4338ca; font-weight: 600; }
+  .chip.action.has::after { content: ""; display: inline-block; width: .42rem; height: .42rem; border-radius: 999px; background: #fbbf24; margin-left: .45rem; vertical-align: middle; }
+  body.dark .chip.action.has { color: #1e1b4b; border-color: #c7d2fe; background: #c7d2fe; }
+  body.dark .chip.action.has::after { background: #b45309; }
   /* Active action chips (Filters, Today, Favorites) unified with the standard active pill (.chip.on,
      white border in dark) so the active state is immediately visible (Andrea, 23 Nov 2026). */
   .chip.action.on { background: #171717; color: #fff; border-color: #171717; font-weight: 600; }
