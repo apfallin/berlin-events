@@ -6819,7 +6819,7 @@ const LANGS = {
   en: { upcoming: "Upcoming", archive: "Archive", search: "Search artists, venues, genres\u2026", filters: "Filters", reset: "\u21ba Reset",
     free: "Free / donation only", access: "Accessible or smoke-free only", sfTag: "smoke-free", wcTag: "wheelchair", source: "Source", district: "District",
     price: "Price range (events with price info only)", genre: "Genre", tonight: "Today", favs: "\u2b50 Favorites", all: "All", unknownGenre: "Genre not yet identified",
-    unkHidden: (n) => n + " music events without a known genre are hidden \u2014 include them?", unkInclude: "Include", unkHide: "Hide them", coverNote: "Cover / tribute band", postponedNote: "Postponed \u2014 new date to be announced", venueChanged: (v) => "Venue changed \u2014 previously: " + v, dateChanged: (d) => "Date changed \u2014 previously: " + d, under20: "under 20\u20ac", noLink: "No link available for this event \u2014 sorry",
+    unkHidden: (n) => n + " music events without a known genre are hidden \u2014 include them?", unkInclude: "Include", unkHide: "Hide them", coverNote: "Cover / tribute band", postponedNote: "Postponed \u2014 new date to be announced", venueChanged: (v) => "Venue changed \u2014 previously: " + v, dateChanged: (d) => "Date changed \u2014 previously: " + d, under20: "up to 20\u20ac", noLink: "No link available for this event \u2014 sorry",
     subTitle: "A minimal digest of concerts, performing arts, art and cinema in Berlin \u2014 gathered from independent sources",
     calHint: "Save any event straight to your calendar",
     count: (v, d) => (d === "archive" ? "Archive" : "Upcoming") + " \u00b7 " + v + " events",
@@ -6856,7 +6856,7 @@ const LANGS = {
   de: { upcoming: "Bevorstehend", archive: "Archiv", search: "K\u00fcnstler, Venues, Genres suchen\u2026", filters: "Filter", reset: "\u21ba Zur\u00fccksetzen",
     free: "Nur frei / Spende", access: "Nur barrierefrei oder rauchfrei", sfTag: "rauchfrei", wcTag: "barrierefrei", source: "Quelle", district: "Bezirk",
     price: "Preisspanne (nur Events mit Preisinfo)", genre: "Genre", tonight: "Heute", favs: "\u2b50 Favoriten", all: "Alle", unknownGenre: "Genre noch nicht identifiziert",
-    unkHidden: (n) => n + " Musik-Events ohne bekanntes Genre sind ausgeblendet \u2014 einblenden?", unkInclude: "Einblenden", unkHide: "Ausblenden", coverNote: "Cover-/Tribute-Band", postponedNote: "Verschoben \u2014 neuer Termin wird bekannt gegeben", venueChanged: (v) => "Ort ge\u00e4ndert \u2014 vorher: " + v, dateChanged: (d) => "Termin ge\u00e4ndert \u2014 vorher: " + d, under20: "unter 20\u20ac", noLink: "Kein Link f\u00fcr diese Veranstaltung verf\u00fcgbar \u2014 Entschuldigung",
+    unkHidden: (n) => n + " Musik-Events ohne bekanntes Genre sind ausgeblendet \u2014 einblenden?", unkInclude: "Einblenden", unkHide: "Ausblenden", coverNote: "Cover-/Tribute-Band", postponedNote: "Verschoben \u2014 neuer Termin wird bekannt gegeben", venueChanged: (v) => "Ort ge\u00e4ndert \u2014 vorher: " + v, dateChanged: (d) => "Termin ge\u00e4ndert \u2014 vorher: " + d, under20: "bis 20\u20ac", noLink: "Kein Link f\u00fcr diese Veranstaltung verf\u00fcgbar \u2014 Entschuldigung",
     subTitle: "Ein minimales Digest von Konzerten, Performing Arts, Kunst und Kino in Berlin \u2014 aus unabh\u00e4ngigen Quellen zusammengetragen",
     calHint: "Speichere jede Veranstaltung direkt in deinem Kalender",
     count: (v, d) => (d === "archive" ? "Archiv" : "Bevorstehend") + " \u00b7 " + v + " Veranstaltungen",
@@ -6893,7 +6893,7 @@ const LANGS = {
   it: { upcoming: "In arrivo", archive: "Archivio", search: "Cerca artisti, venue, generi\u2026", filters: "Filtri", reset: "\u21ba Azzera",
     free: "Solo gratuiti / offerta", access: "Solo accessibili o senza fumo", sfTag: "senza fumo", wcTag: "accessibile", source: "Fonte", district: "Quartiere",
     price: "Fascia di prezzo (solo eventi con prezzo indicato)", genre: "Genere", tonight: "Oggi", favs: "\u2b50 Preferiti", all: "Tutti", unknownGenre: "Genere non ancora identificato",
-    unkHidden: (n) => n + " eventi musicali senza genere noto sono nascosti \u2014 includerli?", unkInclude: "Includili", unkHide: "Nascondili", coverNote: "Cover / tribute band", postponedNote: "Posticipato \u2014 nuova data da annunciare", venueChanged: (v) => "Venue cambiata \u2014 prima: " + v, dateChanged: (d) => "Data cambiata \u2014 prima: " + d, under20: "sotto i 20\u20ac", noLink: "Nessun link disponibile per questo evento \u2014 scusa",
+    unkHidden: (n) => n + " eventi musicali senza genere noto sono nascosti \u2014 includerli?", unkInclude: "Includili", unkHide: "Nascondili", coverNote: "Cover / tribute band", postponedNote: "Posticipato \u2014 nuova data da annunciare", venueChanged: (v) => "Venue cambiata \u2014 prima: " + v, dateChanged: (d) => "Data cambiata \u2014 prima: " + d, under20: "entro 20\u20ac", noLink: "Nessun link disponibile per questo evento \u2014 scusa",
     subTitle: "Un digest essenziale di concerti, arti performative, arte e cinema a Berlino \u2014 raccolto da fonti indipendenti",
     calHint: "Salva ogni evento direttamente nel tuo calendario",
     count: (v, d) => (d === "archive" ? "Archivio" : "In arrivo") + " \u00b7 " + v + " eventi",
@@ -7491,7 +7491,7 @@ function filtered() {
     // (the 0 must not be the tail of a bigger number: preceded by start or a non-digit).
     const okFree = !S.freeOnly || (!!e.price && (/free|donation|spende|freiwillig|eintritt frei|freier eintritt/i.test(e.price) || /(^|\D)0([.,]\d{2})?\s*\u20ac/i.test(e.price)));
     // Price filter (19 Nov 2026, Andrea request): cryptpad events without an explicit price carry
-    //  the "under 20\u20ac" hint (see priceTxt in renderList) - they must MATCH the price filter too,
+    //  the "up to 20\u20ac" hint (see priceTxt in renderList) - they must MATCH the price filter too,
     //  as an estimated 0-20 range (the pad is under-20\u20ac by concept). They still do not match
     //  the free/donation filter (freeOnly), which stays based on real price data.
     const p = parsePrice(e.price) || (e.source === "cryptpad" && !e.price ? { min: 0, max: 20 } : null);
@@ -7654,8 +7654,8 @@ function eventRow(e, i) {
   const det = `<div class="evdet">`
     + (vinfo && vinfo.addr ? `<a class="evaddr" href="https://www.openstreetmap.org/search?query=${encodeURIComponent(vinfo.addr)}" target="_blank" rel="noreferrer" title="${esc(T().osmTitle)}">\ud83d\udccd ${esc(vinfo.addr)}</a>` : "")
     + `</div>`;
-  // Cryptpad price hint (19 Nov 2026, Andrea request): the community pad lists gigs under 20\u20ac by concept -
-  //  rows imported from it but without an explicit price show the localized "under 20\u20ac" hint in the price slot.
+  // Cryptpad price hint (19 Nov 2026, Andrea request): the community pad lists gigs up to 20\u20ac by concept -
+  //  rows imported from it but without an explicit price show the localized "up to 20\u20ac" hint in the price slot.
   const priceTxt = e.price || (e.source === "cryptpad" ? T().under20 : "");
   return `<li class="${e.postponed ? "postponed" : ""}" data-fk="${esc(favKey(e))}"><div class="ev"><div class="evmain">
     <div class="evdatecol"><span class="evdate">${fmtDate(e.date)}</span>${star}${catchip}</div>
