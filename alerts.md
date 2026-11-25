@@ -1,6 +1,6 @@
 # Postponement / cancellation sweep
 
-Run: 2026-11-23T19:24:23.048Z | window: next 14 days | checked: 31 linked events | not checked (no link): 347
+Run: 2026-11-25T18:06:13.729Z | window: next 14 days | checked: 32 linked events | not checked (no link): 330
 
 2 alert(s) - verify each on the official page before changing data:
 
