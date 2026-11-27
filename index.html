@@ -3486,7 +3486,7 @@ const EVENTS = [
   { date: "2026-11-26", title: "Suma / Piece / Kavrila", venue: "Neue Zukunft", source: "mytrueintent" },
   { date: "2026-11-27", time: "20:00", title: "Berliner Philharmoniker + Kirill Petrenko", venue: "Philharmonie", genre: "classical", description: "Mit Kirill Petrenko und Ottorino Respighi durch Rom - Respighi 'Fontane di Roma', 'Feste romane', 'Pini di Roma' and Martucci Notturno op. 70/1. Conductor: Kirill Petrenko.", link: "https://www.berliner-philharmoniker.de/konzerte/kalender/57063/", source: "mytrueintent" },
   { date: "2026-11-27", title: "RAWSIDE / PIGEONS / DYSTOMB", venue: "Lindenpark Potsdam", source: "mytrueintent" },
-  { date: "2026-11-27", title: "Lena + Linus", venue: "Rough Trade Berlin", description: "'Wo F\u00fchrt Das Hin?' - live and signing.", source: "mytrueintent" },
+  { date: "2026-11-27", title: "Lena & Linus", venue: "Rough Trade Berlin", description: "'Wo F\u00fchrt Das Hin?' - live and signing.", source: "mytrueintent" },
   { date: "2026-11-28", time: "19:00", title: "Berliner Philharmoniker + Kirill Petrenko", venue: "Philharmonie", genre: "classical", description: "Mit Kirill Petrenko und Ottorino Respighi durch Rom - Respighi 'Fontane di Roma', 'Feste romane', 'Pini di Roma' and Martucci Notturno op. 70/1. Conductor: Kirill Petrenko.", link: "https://www.berliner-philharmoniker.de/konzerte/kalender/57063/", source: "mytrueintent" },
   { date: "2026-11-28", title: "Demo Tape Nr. 6 mit Peggy M\u00e4dler", venue: "Roter Salon", source: "mytrueintent" },
   { date: "2026-11-28", title: "Schrotthagen", venue: "Uber Eats Music Hall", source: "mytrueintent" },
@@ -6560,6 +6560,16 @@ var MB_GENRES = {
   "sophia stel": "singer-songwriter, indie pop",
   "yungpalo": "hip hop",
   "theo vandenhoff": "post-punk",
+  // Genre sweep nearest-first, 27 Nov 2026 (batch 1: events 27-29 Nov 2026, web-verified on venue/artist pages)
+  "lena&linus": "indie pop, german pop",
+  "frytz": "hip hop",
+  "lia lia": "punk, grunge, indie pop",
+  "planet pankow": "indie punk",
+  "gfr": "progressive rock",
+  "david john hull": "folk, singer-songwriter",
+  "maria portugal": "jazz, experimental",
+  "t\u00e4ra": "r&b, alternative pop",
+  "streichelt": "pop rock, singer-songwriter",
 };
 
 function inferGenre(title) {
@@ -6727,7 +6737,7 @@ const S = {
 };
 const today = new Date().toISOString().slice(0, 10);
 const $ = (id) => document.getElementById(id);
-const LAST_UPDATED = "26 November 2026";
+const LAST_UPDATED = "27 November 2026";
 // Localized display of the date above (the const itself stays English "D Month YYYY" - weekly automation rule).
 // German "22. Oktober 2026", Italian "22 ottobre 2026"; any other language and parse failures fall back to the const.
 const UPD_MONTHS = {
